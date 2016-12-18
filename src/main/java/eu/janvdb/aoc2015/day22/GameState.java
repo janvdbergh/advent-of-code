@@ -1,10 +1,9 @@
 package eu.janvdb.aoc2015.day22;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import javaslang.collection.HashMap;
+import javaslang.collection.List;
+import javaslang.collection.Map;
+import javaslang.control.Option;
 
 public class GameState implements Cloneable {
 
@@ -30,8 +29,8 @@ public class GameState implements Cloneable {
 		this.heroArmor = 0;
 		this.heroHitPoints = HERO_HITPOINTS;
 		this.bossHitPoints = BOSS_HITPOINTS;
-		this.magicItemLastCast = new HashMap<>();
-		this.magicCast = new ArrayList<>();
+		this.magicItemLastCast = HashMap.empty();
+		this.magicCast = List.empty();
 	}
 
 	public GameState(GameState previousGameState) {
@@ -41,8 +40,8 @@ public class GameState implements Cloneable {
 		this.heroArmor = previousGameState.heroArmor;
 		this.heroHitPoints = previousGameState.heroHitPoints;
 		this.bossHitPoints = previousGameState.bossHitPoints;
-		this.magicItemLastCast = new HashMap<>(previousGameState.magicItemLastCast);
-		this.magicCast = new ArrayList<>(previousGameState.magicCast);
+		this.magicItemLastCast = previousGameState.magicItemLastCast;
+		this.magicCast = previousGameState.magicCast;
 
 		this.previousGameState = previousGameState;
 	}
@@ -106,15 +105,14 @@ public class GameState implements Cloneable {
 	}
 
 	public void markMagicItemCast(MagicItem magicItem) {
-		magicItemLastCast.put(magicItem, turn);
-		magicCast.add(magicItem);
+		magicItemLastCast = magicItemLastCast.put(magicItem, turn);
+		magicCast = magicCast.append(magicItem);
 	}
 
-	public Optional<Integer> getTurnsSinceMagicItemCast(MagicItem magicItem) {
-		if (magicItemLastCast.containsKey(magicItem)) {
-			return Optional.of(turn - magicItemLastCast.get(magicItem));
-		}
-		return Optional.empty();
+	public Option<Integer> getTurnsSinceMagicItemCast(MagicItem magicItem) {
+		return magicItemLastCast
+				.get(magicItem)
+				.map(result -> turn - result);
 	}
 
 	@Override

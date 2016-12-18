@@ -1,12 +1,10 @@
 package eu.janvdb.aoc2016.day4;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import eu.janvdb.util.Histogram;
+import javaslang.collection.Stream;
 
 public class Puzzle {
 
@@ -15,7 +13,7 @@ public class Puzzle {
 	}
 
 	private void execute() {
-		Arrays.stream(Input.ROOM_NAMES)
+		Stream.of(Input.ROOM_NAMES)
 				.map(RoomName::new)
 				.filter(RoomName::isValid)
 				.map(RoomName::getUnshiftedName)
@@ -46,13 +44,12 @@ public class Puzzle {
 		public int getIndex() {
 			return index;
 		}
-		
+
 		public String getUnshiftedName() {
-			return name.chars()
-					.map(i -> i=='-' ? ' ' : ((i - 'a') + index) % 26 + 'a')
-					.collect(
-							() -> new StringBuilder(index + ": "),
-							(stringBuilder, ch) -> stringBuilder.append((char) ch),
+			return Stream.ofAll(name.toCharArray())
+					.map(i -> i == '-' ? ' ' : ((i - 'a') + index) % 26 + 'a')
+					.foldLeft(
+							new StringBuilder(),
 							StringBuilder::append
 					)
 					.toString();
@@ -60,24 +57,20 @@ public class Puzzle {
 		}
 
 		public boolean isValid() {
-			List<Integer> characters = name.chars()
-					.filter(ch -> ch != '-')
-					.mapToObj(ch -> ch)
-					.collect(Collectors.toList());
+			Stream<Character> characters = Stream
+					.ofAll(name.toCharArray())
+					.filter(ch -> ch != '-');
 
-			List<Histogram.HistogramEntry<Integer>> histogram = Histogram.createHistogram(characters);
-			String calculatedChecksum = histogram.stream()
-					.limit(5)
-					.collect(
-							StringBuilder::new,
-							(stringBuilder, histogramEntry) -> stringBuilder.append((char) histogramEntry.getItem().intValue()),
+			String calculatedChecksum = Histogram.createHistogram(characters)
+					.take(5)
+					.map(Histogram.HistogramEntry::getItem)
+					.foldLeft(
+							new StringBuilder(),
 							StringBuilder::append
-					)
-					.toString();
+					).toString();
 
 			return calculatedChecksum.equals(checksum);
 		}
-
 	}
 
 }

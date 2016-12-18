@@ -1,13 +1,13 @@
 package eu.janvdb.aoc2016.day10;
 
-import java.util.ArrayList;
-import java.util.List;
+
+import javaslang.collection.List;
 
 public class Bot extends Receiver {
 
 	private Instruction instruction;
 	private boolean hasMoved;
-	private final List<Integer> values = new ArrayList<>();
+	private List<Integer> values = List.empty();
 
 	public Bot(int number) {
 		super(number);
@@ -25,7 +25,7 @@ public class Bot extends Receiver {
 		if (values.size()==2) {
 			throw new IllegalStateException();
 		}
-		values.add(value);
+		values = values.append(value);
 	}
 
 	public List<Integer> getValues() {

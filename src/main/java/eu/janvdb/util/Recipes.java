@@ -1,38 +1,29 @@
 package eu.janvdb.util;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.IntStream;
+import javaslang.collection.LinkedHashMap;
+import javaslang.collection.List;
+import javaslang.collection.Map;
+import javaslang.collection.Stream;
 
 public class Recipes {
 
-	public static <T> List<Map<T, Integer>> getRecipes(List<T> items, int total) {
-		List<Map<T, Integer>> result = new ArrayList<>();
-		getRecipes(items, total, new LinkedHashMap<>(), result);
-
-		return result;
+	public static <T> Stream<Map<T, Integer>> getRecipes(List<T> items, int total) {
+		return getRecipes(items, total, LinkedHashMap.empty());
 	}
 
-	private static <T> void getRecipes(List<T> items, int totalRemaining, Map<T, Integer> itemsSet, List<Map<T, Integer>> result) {
+	private static <T> Stream<Map<T, Integer>> getRecipes(List<T> items, int totalRemaining, Map<T, Integer> itemsSet) {
 		if (itemsSet.size() == items.size()) {
-			result.add(itemsSet);
+			return Stream.of(itemsSet);
 		} else {
 			T item = items.get(itemsSet.size());
-			if (itemsSet.size() == items.size() - 1) {
-				Map<T, Integer> newItemsSet = new LinkedHashMap<>(itemsSet);
-				newItemsSet.put(item, totalRemaining);
-				getRecipes(items, 0, newItemsSet, result);
-			} else {
-				IntStream.range(0, totalRemaining + 1).forEach(amount -> {
-					Map<T, Integer> newItemsSet = new HashMap<>(itemsSet);
-					newItemsSet.put(item, amount);
-					getRecipes(items, totalRemaining - amount, newItemsSet, result);
-				});
-			}
+
+			Stream<Integer> range = itemsSet.size() == items.size() - 1
+					? Stream.range(totalRemaining, totalRemaining + 1)
+					: Stream.range(0, totalRemaining + 1);
+			return range
+					.flatMap(
+							numberAdded -> getRecipes(items, totalRemaining - numberAdded, itemsSet.put(item, numberAdded))
+					);
 		}
 	}
-
 }

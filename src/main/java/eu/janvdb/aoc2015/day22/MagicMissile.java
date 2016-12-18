@@ -18,6 +18,6 @@ public class MagicMissile extends MagicItem {
 	public void doActionAtEnd(GameState gameState) {
 		gameState.getTurnsSinceMagicItemCast(this)
 				.filter(numberOfTurns -> numberOfTurns == 0)
-				.ifPresent(x -> gameState.removeBossHitPoints(DAMAGE));
+				.forEach(x -> gameState.removeBossHitPoints(DAMAGE));
 	}
 }

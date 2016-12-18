@@ -1,11 +1,11 @@
 package eu.janvdb.aoc2015.day12;
 
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import javaslang.collection.HashSet;
+import javaslang.collection.Set;
+import javaslang.collection.Stream;
 
 public class Puzzle {
 
@@ -18,75 +18,66 @@ public class Puzzle {
 	}
 
 	private static void removeRed(JSONArray array) {
-		for (int i = 0; i < array.length(); i++) {
-			Object value = array.get(i);
-			if (value instanceof JSONObject) {
-				removeRed((JSONObject) value);
-			}
-			if (value instanceof JSONArray) {
-				removeRed((JSONArray) value);
-			}
-		}
+		Stream.range(0, array.length())
+				.map(array::get)
+				.forEach((value) -> {
+					if (value instanceof JSONObject) {
+						removeRed((JSONObject) value);
+					}
+					if (value instanceof JSONArray) {
+						removeRed((JSONArray) value);
+					}
+				});
 	}
 
 	private static void removeRed(JSONObject object) {
-		List<String> keys = getKeys(object);
-		for (String key : keys) {
-			Object value = object.get(key);
-			if ("red".equals(value)) {
-				for (String key2 : keys) {
-					object.remove(key2);
-				}
-				break;
-			}
-			if (value instanceof JSONObject) {
-				removeRed((JSONObject) value);
-			}
-			if (value instanceof JSONArray) {
-				removeRed((JSONArray) value);
-			}
-		}
+		Set<String> keys = getKeys(object);
+		keys.map(object::get)
+				.forEach(value -> {
+					if ("red".equals(value)) {
+						for (String key2 : keys) {
+							object.remove(key2);
+						}
+					}
+					if (value instanceof JSONObject) {
+						removeRed((JSONObject) value);
+					}
+					if (value instanceof JSONArray) {
+						removeRed((JSONArray) value);
+					}
+				});
 	}
 
 	private static int getSum(JSONArray array) {
-		int sum = 0;
-		for (int i = 0; i < array.length(); i++) {
-			Object value = array.get(i);
-			if (value instanceof JSONObject) {
-				sum += getSum((JSONObject) value);
-			}
-			if (value instanceof JSONArray) {
-				sum += getSum((JSONArray) value);
-			}
-			if (value instanceof Integer) {
-				sum += (Integer) value;
-			}
-		}
-
-		return sum;
+		return Stream.range(0, array.length())
+				.map(array::get)
+				.map(Puzzle::getSum)
+				.sum()
+				.intValue();
 	}
 
 	private static int getSum(JSONObject object) {
-		int sum = 0;
-		List<String> keys = getKeys(object);
-		for (String key : keys) {
-			Object value = object.get(key);
-			if (value instanceof Integer) {
-				sum += (Integer) value;
-			}
-			if (value instanceof JSONObject) {
-				sum += getSum((JSONObject) value);
-			}
-			if (value instanceof JSONArray) {
-				sum += getSum((JSONArray) value);
-			}
-		}
-
-		return sum;
+		return getKeys(object).toStream()
+				.map(key -> getSum(object.get(key)))
+				.sum()
+				.intValue();
 	}
 
-	private static List<String> getKeys(JSONObject object) {
-		Set<?> keySet = object.keySet();
-		return keySet.stream().map(String.class::cast).collect(Collectors.toList());
+	private static Integer getSum(Object value) {
+		if (value instanceof Integer) {
+			return (Integer) value;
+		}
+		if (value instanceof JSONObject) {
+			return getSum((JSONObject) value);
+		}
+		if (value instanceof JSONArray) {
+			return getSum((JSONArray) value);
+		}
+		return 0;
+	}
+
+	private static Set<String> getKeys(JSONObject object) {
+		Set<?> keySet = HashSet.ofAll(object.keySet());
+		return keySet.map(String.class::cast);
 	}
 }

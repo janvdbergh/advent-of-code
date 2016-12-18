@@ -1,23 +1,24 @@
 package eu.janvdb.aoc2015.day9;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javaslang.collection.HashMap;
+import javaslang.collection.HashSet;
+import javaslang.collection.List;
+import javaslang.collection.Map;
+import javaslang.collection.Set;
+import javaslang.collection.Stream;
+
 public class Puzzle {
 
-	private static final String[] INPUT0 = {
+	private static final List<String> INPUT0 = List.of(
 			"London to Dublin = 464",
 			"London to Belfast = 518",
 			"Dublin to Belfast = 141"
-	};
+	);
 
-	private static final String[] INPUT = {
+	private static final List<String> INPUT = List.of(
 			"Faerun to Norrath = 129",
 			"Faerun to Tristram = 58",
 			"Faerun to AlphaCentauri = 13",
@@ -46,19 +47,25 @@ public class Puzzle {
 			"Snowdin to Tambi = 15",
 			"Snowdin to Straylight = 99",
 			"Tambi to Straylight = 70"
-	};
+	);
 
 	private static final Pattern INPUT_PATTERN = Pattern.compile("([a-zA-Z]+) to ([a-zA-Z]+) = ([\\d]+)");
 
 	public static void main(String[] args) {
 		DistanceMap distanceMap = buildDistanceMap(INPUT);
-		List<Route> routes = findRoutes(distanceMap);
+		List<Route> routes = findRoutes(distanceMap).toList();
 
 		routes.forEach(System.out::println);
-		System.out.println(routes.stream().mapToInt(Route::getDistance).max().orElse(-1));
+
+		System.out.println(
+				routes.toStream()
+						.map(Route::getDistance)
+						.max()
+						.getOrElse(-1)
+		);
 	}
 
-	private static DistanceMap buildDistanceMap(String[] data) {
+	private static DistanceMap buildDistanceMap(List<String> data) {
 		DistanceMap distanceMap = new DistanceMap();
 		for (String item : data) {
 			Matcher matcher = INPUT_PATTERN.matcher(item);
@@ -71,25 +78,17 @@ public class Puzzle {
 		return distanceMap;
 	}
 
-	private static List<Route> findRoutes(DistanceMap distanceMap) {
-		List<Route> result = new ArrayList<>();
-		List<String> usedPlaces = new ArrayList<>();
-
-		findRoutes(distanceMap, usedPlaces, result);
-		return result;
+	private static Stream<Route> findRoutes(DistanceMap distanceMap) {
+		return findRoutes(distanceMap, List.empty());
 	}
 
-	private static void findRoutes(DistanceMap distanceMap, List<String> usedPlaces, List<Route> result) {
+	private static Stream<Route> findRoutes(DistanceMap distanceMap, List<String> usedPlaces) {
 		if (usedPlaces.size() == distanceMap.places.size()) {
-			result.add(new Route(usedPlaces, getDistance(distanceMap, usedPlaces)));
+			return Stream.of(new Route(usedPlaces, getDistance(distanceMap, usedPlaces)));
 		} else {
-			distanceMap.places.stream()
+			return distanceMap.places.toStream()
 					.filter(place -> !usedPlaces.contains(place))
-					.forEach(place -> {
-						List<String> newPlaces = new ArrayList<>(usedPlaces);
-						newPlaces.add(place);
-						findRoutes(distanceMap, newPlaces, result);
-					});
+					.flatMap(place -> findRoutes(distanceMap, usedPlaces.append(place)));
 		}
 	}
 
@@ -104,14 +103,17 @@ public class Puzzle {
 
 	private static class DistanceMap {
 
-		private Set<String> places = new HashSet<>();
-		private Map<String, Integer> distances = new HashMap<>();
+		private Set<String> places = HashSet.empty();
+		private Map<String, Integer> distances = HashMap.empty();
 
 		public void storeDistance(String from, String to, int distance) {
-			places.add(from);
-			places.add(to);
-			distances.put(getKey(from, to), distance);
-			distances.put(getKey(to, from), distance);
+			places = places
+					.add(from)
+					.add(to);
+
+			distances = distances
+					.put(getKey(from, to), distance)
+					.put(getKey(to, from), distance);
 		}
 
 		private String getKey(String from, String to) {
@@ -119,7 +121,10 @@ public class Puzzle {
 		}
 
 		public int getDistance(String from, String to) {
-			return distances.get(getKey(from, to));
+			String key = getKey(from, to);
+			return distances
+					.get(key)
+					.getOrElseThrow(() -> new RuntimeException("Unknown key " + key));
 		}
 	}
 
@@ -142,6 +147,4 @@ public class Puzzle {
 			return distance;
 		}
 	}
-
-
 }

@@ -1,10 +1,10 @@
 package eu.janvdb.aoc2015.day19;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
+
+import javaslang.collection.List;
+import javaslang.collection.Stream;
 
 public class Puzzle {
 
@@ -75,10 +75,10 @@ public class Puzzle {
 	private static List<Formula> formulas;
 
 	public static void main(String[] args) {
-		formulas = Arrays.stream(INPUT)
+		formulas = Stream.of(INPUT)
 				.map(Formula::new)
 				.sorted()
-				.collect(Collectors.toList());
+				.toList();
 
 		int steps = reduce(START);
 		System.out.println(steps);

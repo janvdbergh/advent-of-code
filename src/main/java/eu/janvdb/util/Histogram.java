@@ -1,33 +1,31 @@
 package eu.janvdb.util;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import static javaslang.Function1.identity;
+
+import javaslang.Tuple;
+import javaslang.Tuple2;
+import javaslang.collection.List;
+import javaslang.collection.Traversable;
 
 public class Histogram {
 
-	public static <T extends Comparable<T>> List<HistogramEntry<T>> createHistogram(Collection<T> items) {
-		Map<T, Integer> histogram = items.stream()
-				.collect(Collectors.groupingBy(
-						Function.identity(),
-						Collectors.mapping(t -> 1, Collectors.summingInt(s -> s))
-				));
-
-		return histogram.keySet().stream()
-				.map(t -> new HistogramEntry<>(t, histogram.get(t)))
+	public static <T extends Comparable<T>> List<HistogramEntry<T>> createHistogram(Traversable<T> items) {
+		return items
+				.groupBy(identity())
+				.map((key, keyItems) -> Tuple.of(key, keyItems.size()))
+				.toStream()
+				.map(HistogramEntry::new)
 				.sorted()
-				.collect(Collectors.toList());
+				.toList();
 	}
 
 	public static class HistogramEntry<T extends Comparable<T>> implements Comparable<HistogramEntry<T>> {
 		private final T item;
 		private final int count;
 
-		public HistogramEntry(T item, int count) {
-			this.item = item;
-			this.count = count;
+		public HistogramEntry(Tuple2<T, Integer> item) {
+			this.item = item._1;
+			this.count = item._2;
 		}
 
 		@Override

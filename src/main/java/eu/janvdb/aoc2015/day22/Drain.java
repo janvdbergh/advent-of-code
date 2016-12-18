@@ -18,7 +18,7 @@ public class Drain extends MagicItem {
 	public void doActionAtEnd(GameState gameState) {
 		gameState.getTurnsSinceMagicItemCast(this)
 				.filter(numberOfTurns -> numberOfTurns == 0)
-				.ifPresent(x -> {
+				.forEach(x -> {
 					gameState.removeBossHitPoints(DAMAGE);
 					gameState.addHeroHitPoints(DAMAGE);
 				});

@@ -1,15 +1,14 @@
 package eu.janvdb.aoc2015.day15;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.OptionalInt;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import eu.janvdb.util.Recipes;
+import javaslang.collection.List;
+import javaslang.collection.Map;
+import javaslang.collection.Stream;
+import javaslang.control.Option;
 
 public class Puzzle {
 
@@ -29,17 +28,16 @@ public class Puzzle {
 	};
 
 	public static void main(String[] args) {
-		List<Ingredient> ingredients = Arrays.stream(INPUT)
+		List<Ingredient> ingredients = Stream.of(INPUT)
 				.map(Ingredient::new)
-				.collect(Collectors.toList());
+				.toList();
 
-		List<Map<Ingredient, Integer>> combinations = Recipes.getRecipes(ingredients, TOTAL);
-		System.out.println(combinations.size() + " sets calculated.");
+		Stream<Map<Ingredient, Integer>> combinations = Recipes.getRecipes(ingredients, TOTAL);
 
-		OptionalInt max = combinations.stream()
+		Option<Integer> max = combinations
 				.map(Recipe::new)
 				.filter(recipe -> recipe.getCalories()==CALORIES)
-				.mapToInt(Recipe::getScore)
+				.map(Recipe::getCalories)
 				.max();
 
 		System.out.println(max);
@@ -132,12 +130,10 @@ public class Puzzle {
 		}
 
 		private int sumProductWithMin0(Function<Ingredient, Integer> extractor) {
-			int result = 0;
-			for (Map.Entry<Ingredient, Integer> item : amounts.entrySet()) {
-				result += extractor.apply(item.getKey()) * item.getValue();
-			}
-
-			return result >= 0 ? result : 0;
+			return amounts.toStream()
+					.map(entry -> extractor.apply(entry._1) * entry._2)
+					.sum()
+					.intValue();
 		}
 	}
 }

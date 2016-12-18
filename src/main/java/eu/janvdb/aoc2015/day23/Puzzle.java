@@ -1,28 +1,26 @@
 package eu.janvdb.aoc2015.day23;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.Arrays;
-import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import org.apache.commons.io.IOUtils;
 
-import eu.janvdb.util.Pair;
+import javaslang.Tuple;
+import javaslang.Tuple2;
+import javaslang.collection.List;
 
 public class Puzzle {
 
-	private static final List<Pair<Pattern, BiConsumer<State, Matcher>>> INSTRUCTIONS = Arrays.asList(
-			new Pair<Pattern, BiConsumer<State, Matcher>>(Pattern.compile("hlf ([ab])"), Puzzle::hlf),
-			new Pair<Pattern, BiConsumer<State, Matcher>>(Pattern.compile("tpl ([ab])"), Puzzle::tpl),
-			new Pair<Pattern, BiConsumer<State, Matcher>>(Pattern.compile("inc ([ab])"), Puzzle::inc),
-			new Pair<Pattern, BiConsumer<State, Matcher>>(Pattern.compile("jmp ([+-]\\d+)"), Puzzle::jmp),
-			new Pair<Pattern, BiConsumer<State, Matcher>>(Pattern.compile("jie ([ab]), ([+-]\\d+)"), Puzzle::jie),
-			new Pair<Pattern, BiConsumer<State, Matcher>>(Pattern.compile("jio ([ab]), ([+-]\\d+)"), Puzzle::jio)
+	private static final List<Tuple2<Pattern, BiConsumer<State, Matcher>>> INSTRUCTIONS = List.of(
+			new Tuple2<>(Pattern.compile("hlf ([ab])"), Puzzle::hlf),
+			new Tuple2<>(Pattern.compile("tpl ([ab])"), Puzzle::tpl),
+			new Tuple2<>(Pattern.compile("inc ([ab])"), Puzzle::inc),
+			new Tuple2<>(Pattern.compile("jmp ([+-]\\d+)"), Puzzle::jmp),
+			new Tuple2<>(Pattern.compile("jie ([ab]), ([+-]\\d+)"), Puzzle::jie),
+			new Tuple2<>(Pattern.compile("jio ([ab]), ([+-]\\d+)"), Puzzle::jio)
 	);
 
 	private static void hlf(State state, Matcher matcher) {
@@ -116,9 +114,8 @@ public class Puzzle {
 	}
 
 	private void execute() throws IOException {
-		List<Consumer<State>> program = IOUtils.readLines(getClass().getResourceAsStream("code.txt"), Charset.forName("UTF-8")).stream()
-				.map(this::assemble)
-				.collect(Collectors.toList());
+		List<Consumer<State>> program = List.ofAll(IOUtils.readLines(getClass().getResourceAsStream("code.txt"), "UTF-8"))
+				.map(this::assemble);
 
 		State state = new State();
 		while (state.pc < program.size()) {
@@ -128,14 +125,11 @@ public class Puzzle {
 	}
 
 	private Consumer<State> assemble(String line) {
-		for (Pair<Pattern, BiConsumer<State, Matcher>> instruction : INSTRUCTIONS) {
-			Matcher matcher = instruction.getV1().matcher(line);
-			if (matcher.matches()) {
-				return state -> instruction.getV2().accept(state, matcher);
-			}
-		}
-
-		throw new IllegalArgumentException(line);
+		return INSTRUCTIONS
+				.map(instruction -> Tuple.of(instruction._1.matcher(line), instruction._2))
+				.find(matcherInstructionTuple -> matcherInstructionTuple._1.matches())
+				.map(matcherInstructionTuple -> (Consumer<State>) state -> matcherInstructionTuple._2.accept(state, matcherInstructionTuple._1))
+				.getOrElseThrow(() -> new IllegalArgumentException(line));
 	}
 
 	private static class State {

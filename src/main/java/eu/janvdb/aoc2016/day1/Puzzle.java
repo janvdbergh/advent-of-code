@@ -1,7 +1,6 @@
 package eu.janvdb.aoc2016.day1;
 
-import java.util.ArrayList;
-import java.util.List;
+import javaslang.collection.List;
 
 public class Puzzle {
 
@@ -19,12 +18,10 @@ public class Puzzle {
 	public static void main(String[] args) {
 		String[] steps = INPUT.split("\\s*,\\s*");
 
-		List<Location> locations = new ArrayList<>();
-		Direction currentDirection = Direction.NORTH;
 		Location currentLocation = new Location(0, 0);
+		Direction currentDirection = Direction.NORTH;
 
-		locations.add(currentLocation);
-
+		List<Location> locations = List.of(currentLocation);
 
 		for (String step : steps) {
 			switch (step.charAt(0)) {
@@ -44,7 +41,7 @@ public class Puzzle {
 				if (locations.contains(currentLocation)) {
 					System.out.println(currentLocation);
 				}
-				locations.add(currentLocation);
+				locations = locations.append(currentLocation);
 			}
 		}
 	}

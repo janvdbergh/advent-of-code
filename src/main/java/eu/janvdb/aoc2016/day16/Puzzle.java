@@ -47,7 +47,6 @@ public class Puzzle {
 		return result.toString();
 	}
 
-
 	String calculateChecksum(String s) {
 		do {
 			StringBuilder result = new StringBuilder(s.length() / 2);

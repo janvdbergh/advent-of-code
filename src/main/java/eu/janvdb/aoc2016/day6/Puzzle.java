@@ -1,11 +1,7 @@
 package eu.janvdb.aoc2016.day6;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
 import eu.janvdb.util.Histogram;
+import javaslang.collection.Stream;
 
 public class Puzzle {
 
@@ -14,14 +10,11 @@ public class Puzzle {
 	}
 
 	private void execute() {
-		IntStream.range(0, Input.WORDS[0].length()).forEach(position -> {
-			List<Character> characters = Arrays.stream(Input.WORDS)
-					.map(word -> word.charAt(position))
-					.collect(Collectors.toList());
-
-			List<Histogram.HistogramEntry<Character>> histogram = Histogram.createHistogram(characters);
-
-			System.out.println(histogram.get(histogram.size()-1).getItem());
-		});
+		int wordLength = Input.WORDS[0].length();
+		Stream.range(0, wordLength)
+				.map(index -> Stream.of(Input.WORDS).map(word -> word.charAt(index)))
+				.map(Histogram::createHistogram)
+				.map(histogram -> histogram.get(histogram.size() - 1).getItem())
+				.forEach(System.out::println);
 	}
 }

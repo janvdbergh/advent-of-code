@@ -1,17 +1,13 @@
 package eu.janvdb.aoc2016.day11;
 
 import static eu.janvdb.aoc2016.day11.State.Builder.aState;
-import static java.util.Collections.singleton;
 
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
-import eu.janvdb.util.Holder;
+import javaslang.Function1;
+import javaslang.Tuple;
+import javaslang.collection.LinkedHashMap;
+import javaslang.collection.LinkedHashSet;
+import javaslang.collection.Map;
+import javaslang.collection.Set;
 
 public class Puzzle {
 
@@ -58,18 +54,17 @@ public class Puzzle {
 
 	private Map<State, Set<State>> getConnectedStates(State initialState) {
 		int step = 0;
-		Set<State> statesToVisit = new LinkedHashSet<>(singleton(initialState));
-		Map<State, Set<State>> connectedStates = new LinkedHashMap<>();
+		Set<State> statesToVisit = LinkedHashSet.of(initialState);
+		Map<State, Set<State>> connectedStates = LinkedHashMap.empty();
 		while (!statesToVisit.isEmpty()) {
 			State currentState = statesToVisit.iterator().next();
-			statesToVisit.remove(currentState);
+			statesToVisit = statesToVisit.remove(currentState);
 
 			Set<State> connections = currentState.getConnectedStates();
-			connectedStates.put(currentState, connections);
+			connectedStates = connectedStates.put(currentState, connections);
 
-			Set<State> newStates = new HashSet<>(connections);
-			newStates.removeAll(connectedStates.keySet());
-			statesToVisit.addAll(newStates);
+			Set<State> newStates = connections.removeAll(connectedStates.keySet());
+			statesToVisit = statesToVisit.addAll(newStates);
 
 			if (++step % 1000 == 0) {
 				System.out.println(statesToVisit.size() + " / " + connectedStates.size());
@@ -81,32 +76,30 @@ public class Puzzle {
 
 	private Map<State, Integer> getDistanceMap(State initialState, Map<State, Set<State>> connectedStates) {
 		Set<State> states = connectedStates.keySet();
-		Map<State, Integer> distances = states.stream()
-				.collect(Collectors.toMap(Function.identity(), (state) -> MAX));
-		distances.put(initialState, 0);
+		Map<State, Integer> distances = states
+				.toMap(state -> Tuple.of(state, MAX))
+				.put(initialState, 0);
 
-		Holder<Integer> numberChanged = new Holder<>(1);
-		while (numberChanged.getValue() != 0) {
-			numberChanged.setValue(0);
+		boolean retry = true;
+		while (retry) {
+			Map<State, Integer> tempDistances = distances;
+			distances = states
+					.flatMap(state -> connectedStates.get(state).get()
+							.flatMap(tempDistances::get)
+							.min()
+							.map(min -> Tuple.of(state, Math.min(tempDistances.get(state).getOrElse(MAX), min + 1)))
+					)
+					.toMap(Function1.identity());
 
-			states.forEach(state -> {
-				int minDistance = 1 + connectedStates.get(state).stream()
-						.mapToInt(distances::get)
-						.min().orElse(MAX);
-
-				if (minDistance < distances.get(state)) {
-					distances.put(state, minDistance);
-					numberChanged.setValue(numberChanged.getValue()+1);
-				}
-			});
+			retry = !tempDistances.equals(distances);
 		}
 
 		return distances;
 	}
 
 	private void printEndPositions(Map<State, Integer> distances) {
-		distances.entrySet().stream()
-				.filter(entry -> entry.getKey().isSolved())
+		distances.toStream()
+				.filter(entry -> entry._1.isSolved())
 				.forEach(System.out::println);
 	}
 

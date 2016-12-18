@@ -1,85 +1,103 @@
 package eu.janvdb.aoc2016.day11;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.function.Function;
+import static javaslang.Function1.identity;
 
-import eu.janvdb.util.ComparablePair;
+import java.util.Comparator;
+
+import javaslang.collection.LinkedHashSet;
+import javaslang.collection.List;
+import javaslang.collection.Set;
 
 public class State {
 
+	private static final int BOTTOM_FLOOR = 1;
 	private static final int TOP_FLOOR = 4;
 
 	private final int elevatorFloor;
-	private final List<ComparablePair<Integer, Integer>> floorsForChipAndGenerator;
+	private final List<Floors> floorsList;
 
-	public State(int elevatorFloor, List<ComparablePair<Integer, Integer>> floorsForChipAndGenerator) {
+	public State(int elevatorFloor, List<Floors> floorsList) {
 		this.elevatorFloor = elevatorFloor;
 
-		floorsForChipAndGenerator.sort(Comparator.comparing(Function.identity()));
-		this.floorsForChipAndGenerator = Collections.unmodifiableList(floorsForChipAndGenerator);
+		this.floorsList = floorsList
+				.sorted(Comparator.comparing(identity()));
 	}
 
 	public boolean isSolved() {
 		return elevatorFloor == TOP_FLOOR &&
-				floorsForChipAndGenerator.stream()
-						.allMatch(pair -> pair.getV1() == 4 && pair.getV2() == TOP_FLOOR);
+				floorsList.foldLeft(true, (previousResult, floors) -> previousResult && floors.isSolved());
 	}
 
 	public Set<State> getConnectedStates() {
-		List<Integer> itemsOnElevatorFloor = new ArrayList<>();
-		for (int i = 0; i < floorsForChipAndGenerator.size(); i++) {
-			ComparablePair<Integer, Integer> pair = floorsForChipAndGenerator.get(i);
-			if (pair.getV1() == elevatorFloor) itemsOnElevatorFloor.add(i+1);
-			if (pair.getV2() == elevatorFloor) itemsOnElevatorFloor.add(-i-1);
-		}
+		List<Integer> itemsOnElevatorFloor = getCodedListOfItemsOnElevatorFloor();
 
-		Set<State> result = new LinkedHashSet<>();
-		if (elevatorFloor > 1) {
-			itemsOnElevatorFloor.stream()
-					.flatMap(item1 -> itemsOnElevatorFloor.stream().map(item2 -> moveItems(item1, item2, elevatorFloor - 1)))
-					.filter(State::isValid)
-					.forEach(result::add);
+		Set<State> result = LinkedHashSet.empty();
+		if (elevatorFloor > BOTTOM_FLOOR) {
+			result = result.addAll(
+					itemsOnElevatorFloor.toStream()
+							.flatMap(item1 -> itemsOnElevatorFloor.toStream()
+									.map(item2 -> moveItems(item1, item2, elevatorFloor - 1))
+							)
+							.filter(State::isValid)
+			);
 		}
 		if (elevatorFloor < TOP_FLOOR) {
-			itemsOnElevatorFloor.stream()
-					.flatMap(item1 -> itemsOnElevatorFloor.stream().map(item2 -> moveItems(item1, item2, elevatorFloor + 1)))
-					.filter(State::isValid)
-					.forEach(result::add);
+			result = result.addAll(
+					itemsOnElevatorFloor.toStream()
+							.flatMap(item1 -> itemsOnElevatorFloor.toStream()
+									.map(item2 -> moveItems(item1, item2, elevatorFloor + 1))
+							)
+							.filter(State::isValid)
+			);
 		}
 
 		return result;
 	}
 
-	private boolean isValid() {
-		return floorsForChipAndGenerator.stream()
-				.allMatch(this::isItemValid);
+	private List<Integer> getCodedListOfItemsOnElevatorFloor() {
+		List<Integer> itemsOnElevatorFloor = List.empty();
+		for (int i = 0; i < floorsList.size(); i++) {
+			Floors floors = floorsList.get(i);
+			if (floors.getChipFloor() == elevatorFloor) itemsOnElevatorFloor = itemsOnElevatorFloor.append(i + 1);
+			if (floors.getGeneratorFloor() == elevatorFloor) itemsOnElevatorFloor = itemsOnElevatorFloor.append(-i - 1);
+		}
+		return itemsOnElevatorFloor;
 	}
 
-	private boolean isItemValid(ComparablePair<Integer, Integer> item) {
-		return item.getV1().equals(item.getV2()) ||
-				floorsForChipAndGenerator.stream().noneMatch(otherItem -> item.getV1().equals(otherItem.getV2()));
+	private boolean isValid() {
+		return floorsList
+				.find(this::isItemInvalid)
+				.isEmpty();
+	}
+
+	private boolean isItemInvalid(Floors item) {
+		return item.getChipFloor() != item.getGeneratorFloor() &&
+				floorsList
+						.find(otherItem -> item.chipFloor == otherItem.generatorFloor)
+						.isDefined();
 	}
 
 	private State moveItems(Integer item1, Integer item2, int newElevatorFloor) {
-		List<ComparablePair<Integer, Integer>> newFloorsForChipAndGenerator = new ArrayList<>(floorsForChipAndGenerator);
-		moveOneItem(newFloorsForChipAndGenerator, item1, newElevatorFloor);
-		moveOneItem(newFloorsForChipAndGenerator, item2, newElevatorFloor);
+		List<Floors> newFloorsForChipAndGenerator = floorsList;
+		newFloorsForChipAndGenerator = moveOneItem(newFloorsForChipAndGenerator, item1, newElevatorFloor);
+		newFloorsForChipAndGenerator = moveOneItem(newFloorsForChipAndGenerator, item2, newElevatorFloor);
 
 		return new State(newElevatorFloor, newFloorsForChipAndGenerator);
 	}
 
-	private void moveOneItem(List<ComparablePair<Integer, Integer>> floorsForChipAndGenerator, Integer item, int newFloor) {
-		if (item < 0) {
-			ComparablePair<Integer, Integer> oldPair = floorsForChipAndGenerator.remove(-item-1);
-			floorsForChipAndGenerator.add(-item-1, new ComparablePair<>(oldPair.getV1(), newFloor));
+	private List<Floors> moveOneItem(List<Floors> floorsList, Integer codedItem, int newFloor) {
+		if (codedItem < 0) {
+			int index = -codedItem - 1;
+			Floors tempFloors = floorsList.get(index);
+			return floorsList
+					.removeAt(index)
+					.insert(index, new Floors(tempFloors.chipFloor, newFloor));
 		} else {
-			ComparablePair<Integer, Integer> oldPair = floorsForChipAndGenerator.remove(item-1);
-			floorsForChipAndGenerator.add(item-1, new ComparablePair<>(newFloor, oldPair.getV2()));
+			int index = codedItem - 1;
+			Floors tempFloors = floorsList.get(index);
+			return floorsList
+					.removeAt(index)
+					.insert(index, new Floors(newFloor, tempFloors.generatorFloor));
 		}
 	}
 
@@ -89,13 +107,13 @@ public class State {
 		if (o == null || getClass() != o.getClass()) return false;
 
 		State state = (State) o;
-		return elevatorFloor == state.elevatorFloor && floorsForChipAndGenerator.equals(state.floorsForChipAndGenerator);
+		return elevatorFloor == state.elevatorFloor && floorsList.equals(state.floorsList);
 	}
 
 	@Override
 	public int hashCode() {
 		int result = elevatorFloor;
-		result = 31 * result + floorsForChipAndGenerator.hashCode();
+		result = 31 * result + floorsList.hashCode();
 		return result;
 	}
 
@@ -103,13 +121,13 @@ public class State {
 	public String toString() {
 		return "State{" +
 				"elevatorFloor=" + elevatorFloor +
-				", floorsForChipAndGenerator=" + floorsForChipAndGenerator +
+				", floorsList=" + floorsList +
 				'}';
 	}
 
 	public static class Builder {
 
-		private List<ComparablePair<Integer, Integer>> floorsForChipAndGenerator = new ArrayList<>();
+		private List<Floors> floorsForChipAndGenerator = List.empty();
 		private int elevatorFloor = 1;
 
 		public static Builder aState() {
@@ -117,7 +135,8 @@ public class State {
 		}
 
 		public Builder withItem(int floorOfChip, int floorOfGenerator) {
-			floorsForChipAndGenerator.add(new ComparablePair<>(floorOfChip, floorOfGenerator));
+			floorsForChipAndGenerator = floorsForChipAndGenerator
+					.append(new Floors(floorOfChip, floorOfGenerator));
 			return this;
 		}
 
@@ -128,6 +147,57 @@ public class State {
 
 		public State build() {
 			return new State(elevatorFloor, floorsForChipAndGenerator);
+		}
+	}
+
+	private static class Floors implements Comparable<Floors> {
+		private final int chipFloor, generatorFloor;
+
+		private Floors(int chipFloor, int generatorFloor) {
+			this.chipFloor = chipFloor;
+			this.generatorFloor = generatorFloor;
+		}
+
+		public int getChipFloor() {
+			return chipFloor;
+		}
+
+		public int getGeneratorFloor() {
+			return generatorFloor;
+		}
+
+		public boolean isSolved() {
+			return chipFloor == TOP_FLOOR && generatorFloor == TOP_FLOOR;
+		}
+
+		@Override
+		public boolean equals(Object o) {
+			if (this == o) return true;
+			if (o == null || getClass() != o.getClass()) return false;
+
+			Floors other = (Floors) o;
+			return chipFloor == other.chipFloor && generatorFloor == other.generatorFloor;
+		}
+
+		@Override
+		public int hashCode() {
+			int result = chipFloor;
+			result = 31 * result + generatorFloor;
+			return result;
+		}
+
+		@Override
+		public int compareTo(Floors o) {
+			int compare1 = chipFloor - o.chipFloor;
+			return compare1 != 0 ? compare1 : generatorFloor - o.generatorFloor;
+		}
+
+		@Override
+		public String toString() {
+			return "Floors{" +
+					"chipFloor=" + chipFloor +
+					", generatorFloor=" + generatorFloor +
+					'}';
 		}
 	}
 }

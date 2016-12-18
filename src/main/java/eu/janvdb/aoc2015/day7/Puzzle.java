@@ -1,18 +1,17 @@
 package eu.janvdb.aoc2015.day7;
 
-import java.util.ArrayList;
-import java.util.List;
+import javaslang.collection.List;
 
 public class Puzzle {
 
 	public static final int START = 14146;
 
 	public static void main(String[] args) {
-		List<Integer> numbersFound = new ArrayList<>();
+		List<Integer> numbersFound = List.empty();
 		int current = START;
 
 		while(!numbersFound.contains(current)) {
-			numbersFound.add(current);
+			numbersFound = numbersFound.append(current);
 			current = calc(current);
 		}
 

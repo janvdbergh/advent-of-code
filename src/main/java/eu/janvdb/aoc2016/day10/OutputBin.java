@@ -1,11 +1,10 @@
 package eu.janvdb.aoc2016.day10;
 
-import java.util.ArrayList;
-import java.util.List;
+import javaslang.collection.List;
 
 public class OutputBin extends Receiver {
 
-	private final List<Integer> values = new ArrayList<>();
+	private List<Integer> values = List.empty();
 
 	public OutputBin(int number) {
 		super(number);
@@ -13,7 +12,7 @@ public class OutputBin extends Receiver {
 
 	@Override
 	public void receive(int value) {
-		values.add(value);
+		values = values.append(value);
 	}
 
 	public List<Integer> getValues() {

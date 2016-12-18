@@ -1,10 +1,10 @@
 package eu.janvdb.aoc2016.day7;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javaslang.collection.List;
+import javaslang.collection.Stream;
 
 public class Puzzle {
 
@@ -18,9 +18,8 @@ public class Puzzle {
 		System.out.println(matchesPattern1("aaaa[qwer]tyui"));
 		System.out.println(matchesPattern1("ioxxoj[asdfgh]zxcvbn"));
 
-		long count1 = Arrays.stream(Input.INPUT)
-				.filter(this::matchesPattern1)
-				.count();
+		long count1 = Stream.of(Input.INPUT)
+				.count(this::matchesPattern1);
 		System.out.println(count1);
 		System.out.println();
 
@@ -29,55 +28,50 @@ public class Puzzle {
 		System.out.println(matchesPattern2("aaa[kek]eke"));
 		System.out.println(matchesPattern2("zazbz[bzb]cdb"));
 
-		long count2 = Arrays.stream(Input.INPUT)
-				.filter(this::matchesPattern2)
-				.count();
+		long count2 = Stream.of(Input.INPUT)
+				.count(this::matchesPattern2);
 
 		System.out.println(count2);
 	}
 
 	private boolean matchesPattern1(String line) {
-		Pattern PATTERN1 = Pattern.compile(("\\[[a-z]*([a-z])([a-z])\\2\\1[a-z]*\\]"));
-		Pattern PATTERN2 = Pattern.compile(("([a-z])([a-z])\\2\\1"));
+		Pattern pattern1 = Pattern.compile(("\\[[a-z]*([a-z])([a-z])\\2\\1[a-z]*\\]"));
+		Pattern pattern2 = Pattern.compile(("([a-z])([a-z])\\2\\1"));
 
-		Matcher matcher1 = PATTERN1.matcher(line);
-		Matcher matcher2 = PATTERN2.matcher(line);
+		Matcher matcher1 = pattern1.matcher(line);
+		Matcher matcher2 = pattern2.matcher(line);
 		return !matcher1.find() && matcher2.find() && !matcher2.group(1).equals(matcher2.group(2));
 	}
 
 	private boolean matchesPattern2(String line) {
-		List<String> nonBracketParts = new ArrayList<>();
-		List<String> bracketParts = new ArrayList<>();
+		List<String> nonBracketParts = List.empty();
+		List<String> bracketParts = List.empty();
 
 		boolean inBracketPart = false;
 		int start = 0;
 		for (int i = 0; i < line.length(); i++) {
 			if (line.charAt(i) == '[') {
 				if (inBracketPart) throw new IllegalArgumentException("Nested brackets.");
-				nonBracketParts.add(line.substring(start, i));
+				nonBracketParts = nonBracketParts.append(line.substring(start, i));
 
 				inBracketPart = true;
 				start = i + 1;
 			} else if (line.charAt(i) == ']') {
 				if (!inBracketPart) throw new IllegalArgumentException("Non-matching closing brackerts.");
-				bracketParts.add(line.substring(start, i));
+				bracketParts=bracketParts.append(line.substring(start, i));
 
 				inBracketPart = false;
 				start = i + 1;
 			}
 		}
 		if (inBracketPart) throw new IllegalArgumentException("Non-matching closing brackerts.");
-		nonBracketParts.add(line.substring(start));
+		nonBracketParts = nonBracketParts.append(line.substring(start));
 
-		for (String nonBracketPart : nonBracketParts) {
-			for (String bracketPart : bracketParts) {
-				if (matches2(nonBracketPart, bracketPart)) {
-					return true;
-				}
-			}
-		}
-
-		return false;
+		List<String> finalBracketParts = bracketParts;
+		return nonBracketParts.toStream()
+				.flatMap(nonBracketPart -> finalBracketParts.map(bracketPart -> matches2(nonBracketPart, bracketPart)))
+				.find(x -> x)
+				.isDefined();
 	}
 
 	private boolean matches2(String nonBracketPart, String bracketPart) {

@@ -1,14 +1,14 @@
 package eu.janvdb.aoc2015.day13;
 
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import eu.janvdb.util.Matrix;
 import eu.janvdb.util.Permutations;
+import javaslang.collection.HashSet;
+import javaslang.collection.List;
+import javaslang.collection.Set;
 
 public class Puzzle {
 
@@ -22,11 +22,11 @@ public class Puzzle {
 		Arrays.stream(Input.INPUT)
 				.forEach(Puzzle::parseLine);
 
-		Set<String> persons = new HashSet<>(happinessMatrix.getKeys());
+		Set<String> persons = HashSet.ofAll(happinessMatrix.keys());
 		persons.add("ME");
-		int totalHappiness = Permutations.getAllPermutations(persons).stream()
-				.mapToInt(Puzzle::getTotalHappiness)
-				.max().orElseThrow(IllegalArgumentException::new);
+		int totalHappiness = Permutations.getAllPermutations(persons).toStream()
+				.map(Puzzle::getTotalHappiness)
+				.max().getOrElseThrow(IllegalArgumentException::new);
 
 		System.out.println(totalHappiness);
 	}

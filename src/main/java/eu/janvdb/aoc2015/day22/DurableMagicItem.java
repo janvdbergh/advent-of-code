@@ -7,7 +7,7 @@ public abstract class DurableMagicItem extends MagicItem {
 	@Override
 	public boolean canBeCast(GameState gameState) {
 		return super.canBeCast(gameState) &&
-				gameState.getTurnsSinceMagicItemCast(this).orElse(getDuration()) >= getDuration();
+				gameState.getTurnsSinceMagicItemCast(this).getOrElse(getDuration()) >= getDuration();
 	}
 
 	@Override
@@ -27,6 +27,6 @@ public abstract class DurableMagicItem extends MagicItem {
 	private void doIfActive(GameState gameState, Runnable action) {
 		gameState.getTurnsSinceMagicItemCast(this)
 				.filter(numberOfTurns -> numberOfTurns <= getDuration() && numberOfTurns > 0)
-				.ifPresent(x -> action.run());
+				.forEach(x -> action.run());
 	}
 }

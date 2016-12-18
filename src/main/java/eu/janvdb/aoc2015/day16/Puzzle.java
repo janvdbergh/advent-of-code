@@ -1,22 +1,22 @@
 package eu.janvdb.aoc2015.day16;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
+
+import javaslang.Function1;
+import javaslang.collection.HashMap;
+import javaslang.collection.List;
+import javaslang.collection.Map;
+import javaslang.collection.Stream;
 
 public class Puzzle {
 
 	public static void main(String[] args) {
-		List<Sue> sues = Arrays.stream(Input.INPUT)
+		List<Sue> sues = Stream.of(Input.INPUT)
 				.map(Sue::new)
-				.collect(Collectors.toList());
+				.toList();
 
-		sues.stream()
+		sues.toStream()
 				.filter(sue -> sue.matches("children", x -> x == 3))
 				.filter(sue -> sue.matches("cats", x -> x > 7))
 				.filter(sue -> sue.matches("samoyeds", x -> x == 2))
@@ -35,7 +35,7 @@ public class Puzzle {
 		private static final Pattern SUE_PROPERTY_PATTERN = Pattern.compile("(\\w+): (\\d+)");
 
 		private int index;
-		private Map<String, Integer> properties = new HashMap<>();
+		private Map<String, Integer> properties = HashMap.empty();
 
 		public Sue(String description) {
 			Matcher matcher1 = SUE_INDEX_PATTERN.matcher(description);
@@ -46,18 +46,17 @@ public class Puzzle {
 
 			Matcher matcher2 = SUE_PROPERTY_PATTERN.matcher(description);
 			while (matcher2.find()) {
-				properties.put(
+				properties = properties.put(
 						matcher2.group(1),
 						Integer.parseInt(matcher2.group(2))
 				);
 			}
 		}
 
-		public boolean matches(String name, Function<Integer, Boolean> evaluator) {
-			if (!properties.containsKey(name)) {
-				return true;
-			}
-			return evaluator.apply(properties.get(name));
+		public boolean matches(String name, Function1<Integer, Boolean> evaluator) {
+			return properties.get(name)
+					.map(evaluator)
+					.getOrElse(true);
 		}
 
 		@Override

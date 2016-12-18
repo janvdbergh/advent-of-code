@@ -1,11 +1,9 @@
 package eu.janvdb.aoc2015.day21;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
-import java.util.List;
-import java.util.function.ToIntFunction;
-import java.util.stream.Collectors;
+
+import javaslang.Function1;
+import javaslang.collection.List;
 
 public class Puzzle {
 
@@ -15,14 +13,14 @@ public class Puzzle {
 
 	private static final int HERO_HIT_POINTS = 100;
 
-	private static final List<Item> WEAPONS = Arrays.asList(
+	private static final List<Item> WEAPONS = List.of(
 			new Item("Dagger", 8, 4, 0),
 			new Item("Shortsword", 10, 5, 0),
 			new Item("Warhammer", 25, 6, 0),
 			new Item("Longsword", 40, 7, 0),
 			new Item("Greataxe", 74, 8, 0)
 	);
-	private static final List<Item> ARMORS = Arrays.asList(
+	private static final List<Item> ARMORS = List.of(
 			new Item("None", 0, 0, 0),
 			new Item("Leather", 13, 0, 1),
 			new Item("Chainmail", 31, 0, 2),
@@ -30,7 +28,7 @@ public class Puzzle {
 			new Item("Bandedmail", 75, 0, 4),
 			new Item("Platemail", 102, 0, 5)
 	);
-	private static final List<Item> RINGS = Arrays.asList(
+	private static final List<Item> RINGS = List.of(
 			new Item("None", 0, 0, 0),
 			new Item("None", 0, 0, 0),
 			new Item("Ring Damage +1", 25, 1, 0),
@@ -46,24 +44,20 @@ public class Puzzle {
 	}
 
 	private void execute() {
-		List<CombinedItem> combinedItems = new ArrayList<>();
-		WEAPONS.forEach(weapon ->
-				ARMORS.forEach(armor ->
-						RINGS.forEach(ring1 ->
-								RINGS.stream()
-								.filter(ring2 -> ring2 != ring1)
-								.forEach(ring2 -> {
-									combinedItems.add(new CombinedItem(weapon, armor, ring1, ring2));
-								})
+		List<CombinedItem> combinedItems = WEAPONS.flatMap(
+						weapon -> ARMORS.flatMap(
+								armor -> RINGS.flatMap(
+										ring1 -> RINGS.filter(ring2 -> ring2 != ring1)
+												.map(ring2 -> new CombinedItem(weapon, armor, ring1, ring2)
+												)
+								)
 						)
 				)
-		);
+				.sorted(Comparator.comparing(CombinedItem::getCost).reversed());
 
-		combinedItems.stream()
-				.sorted(Comparator.comparing(CombinedItem::getCost).reversed())
-				.filter(combinedItem -> !combinedItem.canWin())
-				.findFirst()
-				.ifPresent(System.out::println);
+		combinedItems.toStream()
+				.find(combinedItem -> !combinedItem.canWin())
+				.forEach(System.out::println);
 	}
 
 	private static class Item {
@@ -99,14 +93,14 @@ public class Puzzle {
 	private static class CombinedItem {
 		private final List<Item> items;
 
-		public CombinedItem(Item ...items) {
-			this.items = Arrays.asList(items);
+		public CombinedItem(Item... items) {
+			this.items = List.of(items);
 		}
 
 		public String getName() {
-			return items.stream()
+			return items.toStream()
 					.map(Item::getName)
-					.collect(Collectors.joining("/"));
+					.mkString("/");
 		}
 
 		public int getCost() {
@@ -137,10 +131,11 @@ public class Puzzle {
 			return heroTurnsToWin <= bossTurnsToWin;
 		}
 
-		private int doSum(ToIntFunction<Item> extractor) {
-			return items.stream()
-					.mapToInt(extractor)
-					.sum();
+		private int doSum(Function1<Item, Integer> extractor) {
+			return items.toStream()
+					.map(extractor)
+					.sum()
+					.intValue();
 		}
 	}
 }

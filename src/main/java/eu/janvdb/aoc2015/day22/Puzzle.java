@@ -1,8 +1,7 @@
 package eu.janvdb.aoc2015.day22;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import javaslang.collection.List;
+import javaslang.control.Option;
 
 public class Puzzle {
 
@@ -12,7 +11,7 @@ public class Puzzle {
 	private static final Poison POISON = new Poison();
 	private static final Recharge RECHARGE = new Recharge();
 
-	private static final List<MagicItem> MAGIC_ITEMS = Arrays.asList(
+	private static final List<MagicItem> MAGIC_ITEMS = List.of(
 			MAGIC_MISSILE,
 			DRAIN,
 			SHIELD,
@@ -27,11 +26,12 @@ public class Puzzle {
 	}
 
 	private void execute() {
-		List<GameState> gameStates = new ArrayList<>();
-		gameStates.add(new GameState());
+		List<GameState> gameStates = List.of(new GameState());
 
 		while (!gameStates.isEmpty()) {
-			GameState gameState = gameStates.remove(gameStates.size() - 1);
+			GameState gameState = gameStates.last();
+			gameStates = gameStates.remove(gameState);
+
 			if (gameStateWithLeastMannaUsed != null && gameState.getTotalMannaUsed() >= gameStateWithLeastMannaUsed.getTotalMannaUsed()) {
 				continue;
 			}
@@ -42,23 +42,27 @@ public class Puzzle {
 			}
 
 			gameState.startTurn();
-			MAGIC_ITEMS.stream()
+			gameStates = gameStates.appendAll(MAGIC_ITEMS.toStream()
 					.filter(item -> item.canBeCast(gameState))
-					.forEach(item -> {
+					.flatMap(item -> {
 						GameState newGameState = new GameState(gameState);
 						item.cast(newGameState);
 						newGameState.endTurn();
 						newGameState.startTurn();
+
 						if (newGameState.hasHeroWon()) {
 							updateLeastMannaUsed(newGameState);
 						} else {
 							newGameState.performBossAttack();
 							newGameState.endTurn();
 							if (!newGameState.hasBossWon()) {
-								gameStates.add(newGameState);
+								return Option.of(newGameState);
 							}
 						}
-					});
+
+						return Option.none();
+					})
+			);
 		}
 
 		if (gameStateWithLeastMannaUsed != null) {
@@ -66,10 +70,10 @@ public class Puzzle {
 			gameStateWithLeastMannaUsed.getMagicCast()
 					.forEach(item -> System.out.println(item.getClass().getName()));
 
-			List<String> output = new ArrayList<>();
+			List<String> output = List.empty();
 			GameState gameState = gameStateWithLeastMannaUsed;
 			while(gameState!=null) {
-				output.add(0, gameState.toString());
+				output = output.insert(0, gameState.toString());
 				gameState = gameState.getPreviousGameState();
 			}
 			output.forEach(System.out::println);

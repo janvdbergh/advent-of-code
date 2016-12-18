@@ -1,24 +1,23 @@
 package eu.janvdb.aoc2015.day14;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.OptionalInt;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+
+import javaslang.collection.List;
+import javaslang.collection.Stream;
+import javaslang.control.Option;
 
 public class Puzzle {
 
 //	private static final int DURATION = 1000;
 	private static final int DURATION = 2503;
 
-	private static final String[] INPUT0 = {
+	private static final List<String> INPUT0 = List.of(
 			"Comet can fly 14 km/s for 10 seconds, but then must rest for 127 seconds.",
 			"Dancer can fly 16 km/s for 11 seconds, but then must rest for 162 seconds."
-	};
+	);
 
-	private static final String[] INPUT = {
+	private static final List<String> INPUT = List.of(
 			"Dancer can fly 27 km/s for 5 seconds, but then must rest for 132 seconds.",
 			"Cupid can fly 22 km/s for 2 seconds, but then must rest for 41 seconds.",
 			"Rudolph can fly 11 km/s for 5 seconds, but then must rest for 48 seconds.",
@@ -28,26 +27,24 @@ public class Puzzle {
 			"Prancer can fly 3 km/s for 21 seconds, but then must rest for 40 seconds.",
 			"Comet can fly 18 km/s for 6 seconds, but then must rest for 103 seconds.",
 			"Vixen can fly 18 km/s for 5 seconds, but then must rest for 84 seconds."
-	};
+	);
 
 	public static void main(String[] args) {
-		List<Reindeer> reindeers = Arrays.stream(INPUT)
-				.map(Reindeer::new)
-				.collect(Collectors.toList());
+		List<Reindeer> reindeers = INPUT.map(Reindeer::new);
 
-		IntStream.range(1, DURATION).forEach(
+		Stream.range(1, DURATION).forEach(
 				time -> {
-					int max = reindeers.stream()
-							.mapToInt(reindeer -> reindeer.getDistance(time))
-							.max().orElse(-1);
-					reindeers.stream()
+					int max = reindeers.toStream()
+							.map(reindeer -> reindeer.getDistance(time))
+							.max().getOrElse(-1);
+					reindeers.toStream()
 							.filter(reindeer -> reindeer.getDistance(time) == max)
 							.forEach(Reindeer::addPoint);
 				}
 		);
 
-		OptionalInt max = reindeers.stream()
-				.mapToInt(Reindeer::getPoints)
+		Option<Integer> max = reindeers.toStream()
+				.map(Reindeer::getPoints)
 				.max();
 
 		System.out.println(max);
