@@ -5,13 +5,13 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import javaslang.collection.List;
-import javaslang.collection.Set;
+import javaslang.collection.Stream;
 
 public class PermutationsTest {
 
 	@Test
 	public void returnsCorrectPermutations() {
-		Set<List<Integer>> result = Permutations.getAllPermutations(List.of(1, 2, 3));
+		Stream<List<Integer>> result = Permutations.getAllPermutations(List.of(1, 2, 3));
 
 		assertTrue(result.containsAll(List.of(
 				List.of(1, 2, 3),

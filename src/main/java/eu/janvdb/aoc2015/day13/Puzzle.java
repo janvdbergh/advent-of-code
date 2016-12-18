@@ -24,7 +24,7 @@ public class Puzzle {
 
 		Set<String> persons = HashSet.ofAll(happinessMatrix.keys());
 		persons.add("ME");
-		int totalHappiness = Permutations.getAllPermutations(persons).toStream()
+		int totalHappiness = Permutations.getAllPermutations(persons)
 				.map(Puzzle::getTotalHappiness)
 				.max().getOrElseThrow(IllegalArgumentException::new);
 

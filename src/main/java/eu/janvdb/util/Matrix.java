@@ -1,6 +1,5 @@
 package eu.janvdb.util;
 
-
 import javaslang.Tuple;
 import javaslang.Tuple2;
 import javaslang.collection.HashMap;
