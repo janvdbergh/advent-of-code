@@ -16,7 +16,7 @@ public class Puzzle {
 			"(\\w+) would (gain|lose) (\\d+) happiness units by sitting next to (\\w+)."
 	);
 
-	private static Matrix<String, Integer> happinessMatrix = new Matrix<>(0);
+	private static Matrix<String, Integer> happinessMatrix = new Matrix<>((x, y) -> 0);
 
 	public static void main(String[] args) {
 		Arrays.stream(Input.INPUT)
@@ -42,7 +42,7 @@ public class Puzzle {
 		boolean gainOrLose = matcher.group(2).equals("gain");
 		int points = Integer.parseInt(matcher.group(3));
 
-		happinessMatrix.set(name1, name2, gainOrLose ? points : -points);
+		happinessMatrix = happinessMatrix.set(name1, name2, gainOrLose ? points : -points);
 	}
 
 	private static int getTotalHappiness(List<String> names) {
