@@ -1,4 +1,4 @@
-package eu.janvdb.day7;
+package eu.janvdb.aoc2017.day7;
 
 import javaslang.collection.Map;
 import javaslang.collection.Set;

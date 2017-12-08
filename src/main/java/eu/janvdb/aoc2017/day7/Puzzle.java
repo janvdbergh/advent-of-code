@@ -1,4 +1,4 @@
-package eu.janvdb.day7;
+package eu.janvdb.aoc2017.day7;
 
 import eu.janvdb.util.InputReader;
 import javaslang.Tuple;
@@ -23,7 +23,7 @@ public class Puzzle {
 	}
 
 	private static Map<String, Program> loadPrograms() {
-		Map<String, Program> programsByName = InputReader.readInput(Puzzle.class.getResource("/eu/janvdb/aoc2017/day7/input.txt"))
+		Map<String, Program> programsByName = InputReader.readInput(Puzzle.class.getResource("input.txt"))
 				.map(Puzzle::parseProgram)
 				.toMap(program -> Tuple.of(program.getName(), program));
 		programsByName.values().forEach(program -> program.mapPrograms(programsByName));
