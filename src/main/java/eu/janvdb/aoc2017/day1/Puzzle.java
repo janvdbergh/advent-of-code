@@ -1,4 +1,4 @@
-package eu.janvdb.aoc2015.aoc2017.day1;
+package eu.janvdb.aoc2017.day1;
 
 import java.util.function.Function;
 
@@ -19,7 +19,7 @@ public class Puzzle {
 		countAndPrint(INPUT);
 	}
 
-	public static void countAndPrint(String input) {
+	private static void countAndPrint(String input) {
 		int length = input.length();
 		System.out.printf("%s: %d / %d\n",
 				input,
@@ -28,7 +28,7 @@ public class Puzzle {
 		);
 	}
 
-	public static int count(String input, Function<Integer, Integer> nextFunction) {
+	private static int count(String input, Function<Integer, Integer> nextFunction) {
 		int sum = 0;
 		for(int i=0; i<input.length(); i++) {
 			int next = nextFunction.apply(i);
