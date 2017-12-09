@@ -1,11 +1,11 @@
 package eu.janvdb.aoc2015.day14;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import javaslang.collection.List;
 import javaslang.collection.Stream;
 import javaslang.control.Option;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Puzzle {
 
@@ -60,7 +60,7 @@ public class Puzzle {
 		private final int restingTime;
 		private int points;
 
-		public Reindeer(String description) {
+		Reindeer(String description) {
 			Matcher matcher = PATTERN.matcher(description);
 			if (!matcher.matches()) {
 				throw new IllegalArgumentException(description);
@@ -72,7 +72,7 @@ public class Puzzle {
 			restingTime = Integer.parseInt(matcher.group(4));
 		}
 
-		public int getDistance(int time) {
+		int getDistance(int time) {
 			int totalTime = flightTime + restingTime;
 			int fullCycles = time / totalTime;
 			int remainingFlightTime = Math.min(flightTime, time % totalTime);
@@ -80,11 +80,11 @@ public class Puzzle {
 			return (fullCycles * flightTime + remainingFlightTime) * speed;
 		}
 
-		public void addPoint() {
+		void addPoint() {
 			points++;
 		}
 
-		public int getPoints() {
+		int getPoints() {
 			return points;
 		}
 	}

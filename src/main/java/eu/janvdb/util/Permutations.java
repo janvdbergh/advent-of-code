@@ -1,10 +1,6 @@
 package eu.janvdb.util;
 
-import javaslang.collection.HashSet;
-import javaslang.collection.List;
-import javaslang.collection.Set;
-import javaslang.collection.Stream;
-import javaslang.collection.Traversable;
+import javaslang.collection.*;
 
 public class Permutations {
 

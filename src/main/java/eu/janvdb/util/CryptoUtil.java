@@ -1,9 +1,9 @@
 package eu.janvdb.util;
 
+import org.apache.commons.codec.binary.Hex;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
-import org.apache.commons.codec.binary.Hex;
 
 public class CryptoUtil {
 

@@ -1,13 +1,13 @@
 package eu.janvdb.aoc2015.day16;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import javaslang.Function1;
 import javaslang.collection.HashMap;
 import javaslang.collection.List;
 import javaslang.collection.Map;
 import javaslang.collection.Stream;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Puzzle {
 
@@ -37,7 +37,7 @@ public class Puzzle {
 		private int index;
 		private Map<String, Integer> properties = HashMap.empty();
 
-		public Sue(String description) {
+		Sue(String description) {
 			Matcher matcher1 = SUE_INDEX_PATTERN.matcher(description);
 			if (!matcher1.find()) {
 				throw new IllegalArgumentException(description);

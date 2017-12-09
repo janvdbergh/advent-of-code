@@ -1,8 +1,6 @@
 package eu.janvdb.aoc2017.day6;
 
-import javaslang.collection.HashSet;
 import javaslang.collection.List;
-import javaslang.collection.Set;
 import javaslang.collection.Vector;
 
 public class Puzzle {

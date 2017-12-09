@@ -1,9 +1,9 @@
 package eu.janvdb.aoc2015.day21;
 
-import java.util.Comparator;
-
 import javaslang.Function1;
 import javaslang.collection.List;
+
+import java.util.Comparator;
 
 public class Puzzle {
 
@@ -66,7 +66,7 @@ public class Puzzle {
 		private final int damage;
 		private final int armor;
 
-		public Item(String name, int cost, int damage, int armor) {
+		Item(String name, int cost, int damage, int armor) {
 			this.name = name;
 			this.cost = cost;
 			this.damage = damage;
@@ -93,7 +93,7 @@ public class Puzzle {
 	private static class CombinedItem {
 		private final List<Item> items;
 
-		public CombinedItem(Item... items) {
+		CombinedItem(Item... items) {
 			this.items = List.of(items);
 		}
 
@@ -103,16 +103,16 @@ public class Puzzle {
 					.mkString("/");
 		}
 
-		public int getCost() {
+		int getCost() {
 			return doSum(Item::getCost);
 		}
 
-		public int getDamage() {
+		int getDamage() {
 			return doSum(Item::getDamage);
 
 		}
 
-		public int getArmor() {
+		int getArmor() {
 			return doSum(Item::getArmor);
 		}
 
@@ -121,7 +121,7 @@ public class Puzzle {
 			return getName() + ": " + getCost();
 		}
 
-		public boolean canWin() {
+		boolean canWin() {
 			int heroLoss = Math.max(1, BOSS_DAMAGE - getArmor());
 			int bossLoss = Math.max(1, getDamage() - BOSS_ARMOR);
 

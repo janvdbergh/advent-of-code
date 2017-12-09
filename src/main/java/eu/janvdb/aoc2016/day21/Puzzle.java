@@ -1,8 +1,5 @@
 package eu.janvdb.aoc2016.day21;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import eu.janvdb.util.InputReader;
 import eu.janvdb.util.Permutations;
 import javaslang.Function1;
@@ -11,6 +8,9 @@ import javaslang.Tuple2;
 import javaslang.collection.HashMap;
 import javaslang.collection.List;
 import javaslang.collection.Map;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Puzzle {
 

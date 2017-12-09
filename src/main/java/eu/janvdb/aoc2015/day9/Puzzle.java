@@ -1,14 +1,9 @@
 package eu.janvdb.aoc2015.day9;
 
+import javaslang.collection.*;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javaslang.collection.HashMap;
-import javaslang.collection.HashSet;
-import javaslang.collection.List;
-import javaslang.collection.Map;
-import javaslang.collection.Set;
-import javaslang.collection.Stream;
 
 public class Puzzle {
 
@@ -106,7 +101,7 @@ public class Puzzle {
 		private Set<String> places = HashSet.empty();
 		private Map<String, Integer> distances = HashMap.empty();
 
-		public void storeDistance(String from, String to, int distance) {
+		void storeDistance(String from, String to, int distance) {
 			places = places
 					.add(from)
 					.add(to);
@@ -120,7 +115,7 @@ public class Puzzle {
 			return from + "-" + to;
 		}
 
-		public int getDistance(String from, String to) {
+		int getDistance(String from, String to) {
 			String key = getKey(from, to);
 			return distances
 					.get(key)
@@ -133,7 +128,7 @@ public class Puzzle {
 		private final List<String> places;
 		private int distance;
 
-		public Route(List<String> places, int distance) {
+		Route(List<String> places, int distance) {
 			this.places = places;
 			this.distance = distance;
 		}
@@ -143,7 +138,7 @@ public class Puzzle {
 			return String.join("-", places) + ": " + distance;
 		}
 
-		public int getDistance() {
+		int getDistance() {
 			return distance;
 		}
 	}

@@ -1,15 +1,14 @@
 package eu.janvdb.aoc2016.day14;
 
-import java.security.MessageDigest;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.apache.commons.codec.binary.Hex;
-
 import javaslang.Tuple3;
 import javaslang.collection.HashMap;
 import javaslang.collection.Map;
 import javaslang.control.Option;
+import org.apache.commons.codec.binary.Hex;
+
+import java.security.MessageDigest;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Puzzle {
 

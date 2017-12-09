@@ -1,10 +1,10 @@
 package eu.janvdb.aoc2015.day19;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import javaslang.collection.List;
 import javaslang.collection.Stream;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Puzzle {
 
@@ -70,7 +70,7 @@ public class Puzzle {
 	private static final String[] INPUT = INPUT1;
 	public static final String START = START1;
 	private static final String RESULT = RESULT1;
-	public static final int NO_RESULT = 20000;
+	private static final int NO_RESULT = 20000;
 
 	private static List<Formula> formulas;
 
@@ -125,7 +125,7 @@ public class Puzzle {
 			this.to = matcher.group(1);
 		}
 
-		public String getFrom() {
+		String getFrom() {
 			return from;
 		}
 

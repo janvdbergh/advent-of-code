@@ -1,11 +1,11 @@
 package eu.janvdb.aoc2016.day9;
 
+import org.apache.commons.io.FileUtils;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.apache.commons.io.FileUtils;
 
 public class Puzzle {
 
@@ -40,7 +40,6 @@ public class Puzzle {
 		int groupEnd = matcher.end();
 		int length = Integer.parseInt(matcher.group(1));
 		int number = Integer.parseInt(matcher.group(2));
-
 
 		return groupStart
 				+ number * (recurse ? getDecompressedLength(input.substring(groupEnd, groupEnd + length), recurse) : length)

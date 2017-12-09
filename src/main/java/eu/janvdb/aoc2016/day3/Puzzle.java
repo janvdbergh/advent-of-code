@@ -1,8 +1,8 @@
 package eu.janvdb.aoc2016.day3;
 
-import static eu.janvdb.aoc2016.day3.Input.INPUT;
-
 import java.util.Arrays;
+
+import static eu.janvdb.aoc2016.day3.Input.INPUT;
 
 public class Puzzle {
 

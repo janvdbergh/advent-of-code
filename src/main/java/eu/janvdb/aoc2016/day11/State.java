@@ -1,12 +1,12 @@
 package eu.janvdb.aoc2016.day11;
 
-import static javaslang.Function1.identity;
-
-import java.util.Comparator;
-
 import javaslang.collection.LinkedHashSet;
 import javaslang.collection.List;
 import javaslang.collection.Set;
+
+import java.util.Comparator;
+
+import static javaslang.Function1.identity;
 
 public class State {
 
@@ -130,7 +130,7 @@ public class State {
 		private List<Floors> floorsForChipAndGenerator = List.empty();
 		private int elevatorFloor = 1;
 
-		public static Builder aState() {
+		static Builder aState() {
 			return new Builder();
 		}
 
@@ -158,15 +158,15 @@ public class State {
 			this.generatorFloor = generatorFloor;
 		}
 
-		public int getChipFloor() {
+		int getChipFloor() {
 			return chipFloor;
 		}
 
-		public int getGeneratorFloor() {
+		int getGeneratorFloor() {
 			return generatorFloor;
 		}
 
-		public boolean isSolved() {
+		boolean isSolved() {
 			return chipFloor == TOP_FLOOR && generatorFloor == TOP_FLOOR;
 		}
 

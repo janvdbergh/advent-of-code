@@ -1,14 +1,14 @@
 package eu.janvdb.aoc2015.day13;
 
-import java.util.Arrays;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import eu.janvdb.util.Matrix;
 import eu.janvdb.util.Permutations;
 import javaslang.collection.HashSet;
 import javaslang.collection.List;
 import javaslang.collection.Set;
+
+import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Puzzle {
 

@@ -1,13 +1,14 @@
 package eu.janvdb.aoc2016.day20;
 
-import static java.lang.Math.*;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 
 public class Block implements Comparable<Block> {
 
 	private final long from;
 	private final long to;
 
-	public Block(String input) {
+	Block(String input) {
 		String[] parts = input.split("\\s*-\\s*");
 		if (parts.length != 2) {
 			throw new IllegalArgumentException(input);
@@ -17,19 +18,17 @@ public class Block implements Comparable<Block> {
 		this.to = Long.parseLong(parts[1]);
 	}
 
-	public Block(long from, long to) {
+	Block(long from, long to) {
 		this.from = from;
 		this.to = to;
 	}
 
 	public boolean canBeCombined(Block o) {
 		if (from <= o.from) {
-			if (o.from <= to + 1) return true;
+			return o.from <= to + 1;
 		} else {
-			if (from <= o.to + 1) return true;
+			return from <= o.to + 1;
 		}
-
-		return false;
 	}
 
 	public Block combine(Block o) {

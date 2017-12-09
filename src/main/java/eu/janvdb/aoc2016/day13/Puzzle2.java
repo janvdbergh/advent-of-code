@@ -1,12 +1,10 @@
 package eu.janvdb.aoc2016.day13;
 
-import static eu.janvdb.aoc2016.day13.Constants.MAX_STEPS;
-import static eu.janvdb.aoc2016.day13.Constants.NOT_CONNECTED;
-import static eu.janvdb.aoc2016.day13.Constants.START;
-
 import javaslang.collection.HashMap;
 import javaslang.collection.List;
 import javaslang.collection.Map;
+
+import static eu.janvdb.aoc2016.day13.Constants.*;
 
 public class Puzzle2 {
 

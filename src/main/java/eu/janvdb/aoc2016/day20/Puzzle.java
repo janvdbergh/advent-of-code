@@ -1,12 +1,11 @@
 package eu.janvdb.aoc2016.day20;
 
-import java.io.File;
-import java.io.IOException;
-
-import org.apache.commons.io.FileUtils;
-
 import javaslang.collection.List;
 import javaslang.collection.Stream;
+import org.apache.commons.io.FileUtils;
+
+import java.io.File;
+import java.io.IOException;
 
 public class Puzzle {
 

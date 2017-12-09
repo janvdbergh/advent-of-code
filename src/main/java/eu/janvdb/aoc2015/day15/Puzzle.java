@@ -1,14 +1,14 @@
 package eu.janvdb.aoc2015.day15;
 
-import java.util.function.Function;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import eu.janvdb.util.Recipes;
 import javaslang.collection.List;
 import javaslang.collection.Map;
 import javaslang.collection.Stream;
 import javaslang.control.Option;
+
+import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Puzzle {
 
@@ -52,7 +52,7 @@ public class Puzzle {
 		private final String name;
 		private final int capacity, durability, flavor, texture, calories;
 
-		public Ingredient(String description) {
+		Ingredient(String description) {
 			Matcher matcher = PATTERN.matcher(description);
 			if (!matcher.matches()) {
 				throw new IllegalArgumentException(description);
@@ -114,7 +114,7 @@ public class Puzzle {
 
 		private Map<Ingredient, Integer> amounts;
 
-		public Recipe(Map<Ingredient, Integer> amounts) {
+		Recipe(Map<Ingredient, Integer> amounts) {
 			this.amounts = amounts;
 		}
 
@@ -125,7 +125,7 @@ public class Puzzle {
 					* sumProductWithMin0(Ingredient::getTexture);
 		}
 
-		public int getCalories() {
+		int getCalories() {
 			return sumProductWithMin0(Ingredient::getCalories);
 		}
 

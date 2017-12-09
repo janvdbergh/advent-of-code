@@ -1,11 +1,11 @@
 package eu.janvdb.util;
 
-import static javaslang.Function1.identity;
-
 import javaslang.Tuple;
 import javaslang.Tuple2;
 import javaslang.collection.List;
 import javaslang.collection.Traversable;
+
+import static javaslang.Function1.identity;
 
 public class Histogram {
 
@@ -23,7 +23,7 @@ public class Histogram {
 		private final T item;
 		private final int count;
 
-		public HistogramEntry(Tuple2<T, Integer> item) {
+		HistogramEntry(Tuple2<T, Integer> item) {
 			this.item = item._1;
 			this.count = item._2;
 		}

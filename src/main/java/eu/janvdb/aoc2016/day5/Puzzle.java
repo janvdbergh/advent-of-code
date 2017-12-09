@@ -1,8 +1,8 @@
 package eu.janvdb.aoc2016.day5;
 
-import java.security.MessageDigest;
-
 import org.apache.commons.codec.binary.Hex;
+
+import java.security.MessageDigest;
 
 public class Puzzle {
 

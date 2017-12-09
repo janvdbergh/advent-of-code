@@ -1,11 +1,10 @@
 package eu.janvdb.aoc2015.day12;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import javaslang.collection.HashSet;
 import javaslang.collection.Set;
 import javaslang.collection.Stream;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class Puzzle {
 

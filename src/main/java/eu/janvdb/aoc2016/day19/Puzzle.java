@@ -1,13 +1,12 @@
 package eu.janvdb.aoc2016.day19;
 
+import javaslang.Tuple2;
+import javaslang.collection.Queue;
+import org.apache.commons.collections4.list.TreeList;
+
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
-import org.apache.commons.collections4.list.TreeList;
-
-import javaslang.Tuple2;
-import javaslang.collection.Queue;
 
 public class Puzzle {
 
@@ -40,7 +39,7 @@ public class Puzzle {
 	}
 
 	private void execute2() {
-		List<Integer> elves = IntStream.range(1, NUMBER_OF_ELVES+1).mapToObj(x -> x).collect(Collectors.toCollection(TreeList::new));
+		List<Integer> elves = IntStream.range(1, NUMBER_OF_ELVES+1).boxed().collect(Collectors.toCollection(TreeList::new));
 
 		while (elves.size() != 1) {
 			int otherIndex = elves.size() / 2;

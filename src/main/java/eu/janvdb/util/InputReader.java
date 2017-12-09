@@ -1,13 +1,12 @@
 package eu.janvdb.util;
 
+import javaslang.collection.Stream;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-
-import org.apache.commons.io.FileUtils;
-
-import javaslang.collection.Stream;
-import org.apache.commons.lang3.StringUtils;
 
 public class InputReader {
 

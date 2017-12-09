@@ -1,9 +1,9 @@
 package eu.janvdb.aoc2016.day17;
 
-import static eu.janvdb.aoc2016.day17.Position.START;
-
 import javaslang.collection.List;
 import javaslang.control.Option;
+
+import static eu.janvdb.aoc2016.day17.Position.START;
 
 public class Puzzle2 {
 

@@ -1,5 +1,7 @@
 package eu.janvdb.aoc2016.day10;
 
+import org.apache.commons.io.FileUtils;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
@@ -10,8 +12,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
-import org.apache.commons.io.FileUtils;
 
 public class Puzzle {
 

@@ -1,10 +1,10 @@
 package eu.janvdb.aoc2016.day7;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import javaslang.collection.List;
 import javaslang.collection.Stream;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Puzzle {
 
@@ -35,7 +35,7 @@ public class Puzzle {
 	}
 
 	private boolean matchesPattern1(String line) {
-		Pattern pattern1 = Pattern.compile(("\\[[a-z]*([a-z])([a-z])\\2\\1[a-z]*\\]"));
+		Pattern pattern1 = Pattern.compile(("\\[[a-z]*([a-z])([a-z])\\2\\1[a-z]*]"));
 		Pattern pattern2 = Pattern.compile(("([a-z])([a-z])\\2\\1"));
 
 		Matcher matcher1 = pattern1.matcher(line);

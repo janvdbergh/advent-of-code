@@ -1,18 +1,17 @@
 package eu.janvdb.aoc2016.day12;
 
+import javaslang.Tuple;
+import javaslang.Tuple2;
+import javaslang.collection.List;
+import javaslang.collection.Stream;
+import org.apache.commons.io.IOUtils;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.apache.commons.io.IOUtils;
-
-import javaslang.Tuple;
-import javaslang.Tuple2;
-import javaslang.collection.List;
-import javaslang.collection.Stream;
 
 public class Puzzle {
 
@@ -113,8 +112,8 @@ public class Puzzle {
 	}
 
 	private static class State {
-		public int[] registers = new int[4];
-		public int pc;
+		int[] registers = new int[4];
+		int pc;
 
 		@Override
 		public String toString() {

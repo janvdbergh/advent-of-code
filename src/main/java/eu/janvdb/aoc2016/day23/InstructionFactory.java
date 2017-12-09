@@ -1,13 +1,13 @@
 package eu.janvdb.aoc2016.day23;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import javaslang.Function1;
 import javaslang.Tuple;
 import javaslang.Tuple2;
 import javaslang.collection.List;
 import javaslang.control.Option;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class InstructionFactory {
 
@@ -50,7 +50,7 @@ public class InstructionFactory {
 	}
 
 	private static class Cpy extends Instruction {
-		public Cpy(Matcher matcher) {
+		Cpy(Matcher matcher) {
 			super(matcher);
 		}
 
@@ -72,7 +72,7 @@ public class InstructionFactory {
 	}
 
 	private static class Inc extends Instruction {
-		public Inc(Matcher matcher) {
+		Inc(Matcher matcher) {
 			super(matcher);
 		}
 
@@ -94,7 +94,7 @@ public class InstructionFactory {
 	}
 
 	private static class Dec extends Instruction {
-		public Dec(Matcher matcher) {
+		Dec(Matcher matcher) {
 			super(matcher);
 		}
 
@@ -116,7 +116,7 @@ public class InstructionFactory {
 	}
 
 	private static class Jnz extends Instruction {
-		public Jnz(Matcher matcher) {
+		Jnz(Matcher matcher) {
 			super(matcher);
 		}
 
@@ -138,7 +138,7 @@ public class InstructionFactory {
 	}
 
 	private static class Tgl extends Instruction {
-		public Tgl(Matcher matcher) {
+		Tgl(Matcher matcher) {
 			super(matcher);
 		}
 
@@ -159,7 +159,7 @@ public class InstructionFactory {
 	}
 
 	private static class AddMul extends Instruction {
-		public AddMul(Matcher matcher) {
+		AddMul(Matcher matcher) {
 			super(matcher);
 		}
 
@@ -181,7 +181,7 @@ public class InstructionFactory {
 	}
 
 	private static class Nop extends Instruction {
-		public Nop(Matcher matcher) {
+		Nop(Matcher matcher) {
 			super(matcher);
 		}
 

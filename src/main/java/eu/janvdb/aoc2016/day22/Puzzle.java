@@ -1,11 +1,11 @@
 package eu.janvdb.aoc2016.day22;
 
-import java.io.File;
-
 import eu.janvdb.util.InputReader;
 import eu.janvdb.util.Matrix;
 import javaslang.Tuple;
 import javaslang.collection.List;
+
+import java.io.File;
 
 public class Puzzle {
 

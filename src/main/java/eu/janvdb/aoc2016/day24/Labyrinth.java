@@ -1,11 +1,11 @@
 package eu.janvdb.aoc2016.day24;
 
-import java.net.URL;
-
 import eu.janvdb.util.InputReader;
 import javaslang.collection.Array;
 import javaslang.collection.HashMap;
 import javaslang.collection.Map;
+
+import java.net.URL;
 
 public class Labyrinth {
 

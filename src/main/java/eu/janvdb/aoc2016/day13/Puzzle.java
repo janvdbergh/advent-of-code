@@ -1,11 +1,11 @@
 package eu.janvdb.aoc2016.day13;
 
-import static eu.janvdb.aoc2016.day13.Constants.*;
-import static eu.janvdb.aoc2016.day13.Constants.NOT_CONNECTED;
-
 import javaslang.collection.HashMap;
 import javaslang.collection.List;
 import javaslang.collection.Map;
+
+import static eu.janvdb.aoc2016.day13.Constants.NOT_CONNECTED;
+import static eu.janvdb.aoc2016.day13.Constants.START;
 
 public class Puzzle {
 

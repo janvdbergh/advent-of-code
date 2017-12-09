@@ -1,10 +1,10 @@
 package eu.janvdb.aoc2016.day4;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import eu.janvdb.util.Histogram;
 import javaslang.collection.Stream;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Puzzle {
 
@@ -30,7 +30,7 @@ public class Puzzle {
 				"([-a-z]+)-(\\d+)\\[([a-z]{5})]"
 		);
 
-		public RoomName(String description) {
+		RoomName(String description) {
 			Matcher matcher = ROOM_NAME_PATTERN.matcher(description);
 			if (!matcher.matches()) {
 				throw new IllegalArgumentException(description);
@@ -41,11 +41,7 @@ public class Puzzle {
 			this.checksum = matcher.group(3);
 		}
 
-		public int getIndex() {
-			return index;
-		}
-
-		public String getUnshiftedName() {
+		String getUnshiftedName() {
 			return Stream.ofAll(name.toCharArray())
 					.map(i -> i == '-' ? ' ' : ((i - 'a') + index) % 26 + 'a')
 					.foldLeft(
@@ -56,7 +52,7 @@ public class Puzzle {
 
 		}
 
-		public boolean isValid() {
+		boolean isValid() {
 			Stream<Character> characters = Stream
 					.ofAll(name.toCharArray())
 					.filter(ch -> ch != '-');

@@ -1,13 +1,13 @@
 package eu.janvdb.aoc2016.day11;
 
-import static eu.janvdb.aoc2016.day11.State.Builder.aState;
-
 import javaslang.Function1;
 import javaslang.Tuple;
 import javaslang.collection.LinkedHashMap;
 import javaslang.collection.LinkedHashSet;
 import javaslang.collection.Map;
 import javaslang.collection.Set;
+
+import static eu.janvdb.aoc2016.day11.State.Builder.aState;
 
 public class Puzzle {
 
