@@ -1,9 +1,9 @@
 package eu.janvdb.aoc2016.day14;
 
-import javaslang.Tuple3;
-import javaslang.collection.HashMap;
-import javaslang.collection.Map;
-import javaslang.control.Option;
+import io.vavr.Tuple3;
+import io.vavr.collection.HashMap;
+import io.vavr.collection.Map;
+import io.vavr.control.Option;
 import org.apache.commons.codec.binary.Hex;
 
 import java.security.MessageDigest;

@@ -1,6 +1,6 @@
 package eu.janvdb.aoc2015.day7;
 
-import javaslang.collection.List;
+import io.vavr.collection.List;
 
 public class Puzzle {
 

@@ -1,7 +1,7 @@
 package eu.janvdb.aoc2016.day7;
 
-import javaslang.collection.List;
-import javaslang.collection.Stream;
+import io.vavr.collection.List;
+import io.vavr.collection.Stream;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

@@ -1,7 +1,7 @@
 package eu.janvdb.aoc2016.day25;
 
-import javaslang.collection.Array;
-import javaslang.collection.Stream;
+import io.vavr.collection.Array;
+import io.vavr.collection.Stream;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;

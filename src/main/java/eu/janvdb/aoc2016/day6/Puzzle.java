@@ -1,7 +1,7 @@
 package eu.janvdb.aoc2016.day6;
 
 import eu.janvdb.util.Histogram;
-import javaslang.collection.Stream;
+import io.vavr.collection.Stream;
 
 public class Puzzle {
 

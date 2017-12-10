@@ -1,6 +1,6 @@
 package eu.janvdb.util;
 
-import javaslang.collection.Stream;
+import io.vavr.collection.Stream;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 

@@ -1,7 +1,7 @@
 package eu.janvdb.util;
 
-import javaslang.collection.List;
-import javaslang.collection.Stream;
+import io.vavr.collection.List;
+import io.vavr.collection.Stream;
 
 public class Sets {
 

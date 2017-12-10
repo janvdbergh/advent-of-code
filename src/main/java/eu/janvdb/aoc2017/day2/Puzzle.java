@@ -1,9 +1,9 @@
 package eu.janvdb.aoc2017.day2;
 
 import eu.janvdb.util.InputReader;
-import javaslang.Tuple;
-import javaslang.collection.List;
-import javaslang.collection.Stream;
+import io.vavr.Tuple;
+import io.vavr.collection.List;
+import io.vavr.collection.Stream;
 
 public class Puzzle {
 

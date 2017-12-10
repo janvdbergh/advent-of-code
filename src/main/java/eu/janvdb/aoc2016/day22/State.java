@@ -1,11 +1,11 @@
 package eu.janvdb.aoc2016.day22;
 
-import javaslang.Tuple;
-import javaslang.Tuple2;
-import javaslang.collection.Map;
-import javaslang.collection.Seq;
-import javaslang.collection.Stream;
-import javaslang.collection.Vector;
+import io.vavr.Tuple;
+import io.vavr.Tuple2;
+import io.vavr.collection.Map;
+import io.vavr.collection.Seq;
+import io.vavr.collection.Stream;
+import io.vavr.collection.Vector;
 
 public class State {
 
@@ -46,7 +46,7 @@ public class State {
 				.map(node -> moveData(node, emptyNode));
 	}
 
-	public State moveData(Node fromNode, Node toNode) {
+	private State moveData(Node fromNode, Node toNode) {
 		Map<Location, Node> newNodeMap = nodeMap
 				.put(fromNode.getLocation(), fromNode.emptied())
 				.put(toNode.getLocation(), toNode.withExtraData(fromNode.getUse()));

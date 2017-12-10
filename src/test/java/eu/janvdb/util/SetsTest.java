@@ -1,11 +1,10 @@
 package eu.janvdb.util;
 
-import static org.junit.Assert.assertEquals;
-
+import io.vavr.collection.List;
+import io.vavr.collection.Stream;
 import org.junit.Test;
 
-import javaslang.collection.List;
-import javaslang.collection.Stream;
+import static org.junit.Assert.assertEquals;
 
 public class SetsTest {
 

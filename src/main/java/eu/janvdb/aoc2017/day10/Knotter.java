@@ -1,7 +1,7 @@
 package eu.janvdb.aoc2017.day10;
 
-import javaslang.collection.Stream;
-import javaslang.collection.Vector;
+import io.vavr.collection.Stream;
+import io.vavr.collection.Vector;
 
 import java.util.stream.Collectors;
 

@@ -1,7 +1,7 @@
 package eu.janvdb.aoc2017.day4;
 
 import eu.janvdb.util.InputReader;
-import javaslang.collection.List;
+import io.vavr.collection.List;
 
 import java.util.Arrays;
 import java.util.Objects;

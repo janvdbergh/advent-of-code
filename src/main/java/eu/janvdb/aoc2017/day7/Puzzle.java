@@ -1,10 +1,10 @@
 package eu.janvdb.aoc2017.day7;
 
 import eu.janvdb.util.InputReader;
-import javaslang.Tuple;
-import javaslang.collection.HashSet;
-import javaslang.collection.Map;
-import javaslang.collection.Set;
+import io.vavr.Tuple;
+import io.vavr.collection.HashSet;
+import io.vavr.collection.Map;
+import io.vavr.collection.Set;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

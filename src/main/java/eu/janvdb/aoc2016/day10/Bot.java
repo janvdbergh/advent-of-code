@@ -1,7 +1,7 @@
 package eu.janvdb.aoc2016.day10;
 
 
-import javaslang.collection.List;
+import io.vavr.collection.List;
 
 public class Bot extends Receiver {
 
@@ -9,7 +9,7 @@ public class Bot extends Receiver {
 	private boolean hasMoved;
 	private List<Integer> values = List.empty();
 
-	public Bot(int number) {
+	Bot(int number) {
 		super(number);
 	}
 

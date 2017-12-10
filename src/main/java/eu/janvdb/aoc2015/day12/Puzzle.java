@@ -1,8 +1,8 @@
 package eu.janvdb.aoc2015.day12;
 
-import javaslang.collection.HashSet;
-import javaslang.collection.Set;
-import javaslang.collection.Stream;
+import io.vavr.collection.HashSet;
+import io.vavr.collection.Set;
+import io.vavr.collection.Stream;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

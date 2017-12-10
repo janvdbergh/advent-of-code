@@ -1,8 +1,8 @@
 package eu.janvdb.aoc2016.day13;
 
-import javaslang.collection.HashMap;
-import javaslang.collection.List;
-import javaslang.collection.Map;
+import io.vavr.collection.HashMap;
+import io.vavr.collection.List;
+import io.vavr.collection.Map;
 
 import static eu.janvdb.aoc2016.day13.Constants.NOT_CONNECTED;
 import static eu.janvdb.aoc2016.day13.Constants.START;

@@ -1,8 +1,8 @@
 package eu.janvdb.aoc2016.day15;
 
-import javaslang.Tuple;
-import javaslang.collection.List;
-import javaslang.control.Option;
+import io.vavr.Tuple;
+import io.vavr.collection.List;
+import io.vavr.control.Option;
 
 public class Puzzle {
 

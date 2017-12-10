@@ -1,12 +1,12 @@
 package eu.janvdb.aoc2016.day10;
 
-import javaslang.collection.List;
+import io.vavr.collection.List;
 
 public class OutputBin extends Receiver {
 
 	private List<Integer> values = List.empty();
 
-	public OutputBin(int number) {
+	OutputBin(int number) {
 		super(number);
 	}
 

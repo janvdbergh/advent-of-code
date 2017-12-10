@@ -1,7 +1,7 @@
 package eu.janvdb.aoc2017.day3;
 
-import javaslang.collection.HashMap;
-import javaslang.collection.Map;
+import io.vavr.collection.HashMap;
+import io.vavr.collection.Map;
 
 public class Puzzle {
 

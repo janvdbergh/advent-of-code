@@ -1,10 +1,10 @@
 package eu.janvdb.aoc2015.day15;
 
 import eu.janvdb.util.Recipes;
-import javaslang.collection.List;
-import javaslang.collection.Map;
-import javaslang.collection.Stream;
-import javaslang.control.Option;
+import io.vavr.collection.List;
+import io.vavr.collection.Map;
+import io.vavr.collection.Stream;
+import io.vavr.control.Option;
 
 import java.util.function.Function;
 import java.util.regex.Matcher;

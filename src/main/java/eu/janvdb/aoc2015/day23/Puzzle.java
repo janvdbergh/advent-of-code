@@ -1,8 +1,8 @@
 package eu.janvdb.aoc2015.day23;
 
-import javaslang.Tuple;
-import javaslang.Tuple2;
-import javaslang.collection.List;
+import io.vavr.Tuple;
+import io.vavr.Tuple2;
+import io.vavr.collection.List;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;

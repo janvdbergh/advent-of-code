@@ -1,7 +1,7 @@
 package eu.janvdb.aoc2016.day25;
 
-import javaslang.collection.Array;
-import javaslang.control.Option;
+import io.vavr.collection.Array;
+import io.vavr.control.Option;
 
 class State {
 

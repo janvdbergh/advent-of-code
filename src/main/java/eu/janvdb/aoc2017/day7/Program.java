@@ -1,7 +1,7 @@
 package eu.janvdb.aoc2017.day7;
 
-import javaslang.collection.Map;
-import javaslang.collection.Set;
+import io.vavr.collection.Map;
+import io.vavr.collection.Set;
 
 import java.util.Objects;
 

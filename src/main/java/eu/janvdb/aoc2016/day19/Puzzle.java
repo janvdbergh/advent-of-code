@@ -1,7 +1,7 @@
 package eu.janvdb.aoc2016.day19;
 
-import javaslang.Tuple2;
-import javaslang.collection.Queue;
+import io.vavr.Tuple2;
+import io.vavr.collection.Queue;
 import org.apache.commons.collections4.list.TreeList;
 
 import java.util.List;

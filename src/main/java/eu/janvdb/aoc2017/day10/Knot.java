@@ -1,6 +1,6 @@
 package eu.janvdb.aoc2017.day10;
 
-import javaslang.collection.Vector;
+import io.vavr.collection.Vector;
 
 public class Knot {
 

@@ -1,9 +1,9 @@
 package eu.janvdb.util;
 
-import javaslang.collection.LinkedHashMap;
-import javaslang.collection.List;
-import javaslang.collection.Map;
-import javaslang.collection.Stream;
+import io.vavr.collection.LinkedHashMap;
+import io.vavr.collection.List;
+import io.vavr.collection.Map;
+import io.vavr.collection.Stream;
 
 public class Recipes {
 

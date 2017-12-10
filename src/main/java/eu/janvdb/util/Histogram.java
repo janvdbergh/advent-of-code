@@ -1,11 +1,11 @@
 package eu.janvdb.util;
 
-import javaslang.Tuple;
-import javaslang.Tuple2;
-import javaslang.collection.List;
-import javaslang.collection.Traversable;
+import io.vavr.Tuple;
+import io.vavr.Tuple2;
+import io.vavr.collection.List;
+import io.vavr.collection.Traversable;
 
-import static javaslang.Function1.identity;
+import static io.vavr.Function1.identity;
 
 public class Histogram {
 

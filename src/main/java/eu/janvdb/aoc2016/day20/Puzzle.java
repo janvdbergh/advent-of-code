@@ -1,7 +1,7 @@
 package eu.janvdb.aoc2016.day20;
 
-import javaslang.collection.List;
-import javaslang.collection.Stream;
+import io.vavr.collection.List;
+import io.vavr.collection.Stream;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;

@@ -1,6 +1,6 @@
 package eu.janvdb.aoc2016.day1;
 
-import javaslang.collection.List;
+import io.vavr.collection.List;
 
 public class Puzzle {
 
@@ -90,7 +90,7 @@ public class Puzzle {
 			this.y = y;
 		}
 
-		public Location step(Direction direction) {
+		Location step(Direction direction) {
 			switch (direction) {
 				case NORTH:
 					return new Location(x, y + 1);

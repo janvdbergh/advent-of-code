@@ -2,8 +2,8 @@ package eu.janvdb.aoc2015.day17;
 
 
 import eu.janvdb.util.Sets;
-import javaslang.collection.List;
-import javaslang.collection.Traversable;
+import io.vavr.collection.List;
+import io.vavr.collection.Traversable;
 
 public class Puzzle {
 

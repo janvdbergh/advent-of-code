@@ -1,6 +1,6 @@
 package eu.janvdb.aoc2016.day24;
 
-import javaslang.collection.Stream;
+import io.vavr.collection.Stream;
 
 public class ShortestPath {
 

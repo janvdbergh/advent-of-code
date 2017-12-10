@@ -1,7 +1,7 @@
 package eu.janvdb.aoc2015.day21;
 
-import javaslang.Function1;
-import javaslang.collection.List;
+import io.vavr.Function1;
+import io.vavr.collection.List;
 
 import java.util.Comparator;
 

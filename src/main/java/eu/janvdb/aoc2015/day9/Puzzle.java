@@ -1,6 +1,6 @@
 package eu.janvdb.aoc2015.day9;
 
-import javaslang.collection.*;
+import io.vavr.collection.*;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

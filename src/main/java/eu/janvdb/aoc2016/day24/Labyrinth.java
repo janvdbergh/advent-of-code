@@ -1,9 +1,9 @@
 package eu.janvdb.aoc2016.day24;
 
 import eu.janvdb.util.InputReader;
-import javaslang.collection.Array;
-import javaslang.collection.HashMap;
-import javaslang.collection.Map;
+import io.vavr.collection.Array;
+import io.vavr.collection.HashMap;
+import io.vavr.collection.Map;
 
 import java.net.URL;
 

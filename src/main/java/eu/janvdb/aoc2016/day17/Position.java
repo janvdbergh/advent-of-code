@@ -1,7 +1,7 @@
 package eu.janvdb.aoc2016.day17;
 
 import eu.janvdb.util.CryptoUtil;
-import javaslang.collection.List;
+import io.vavr.collection.List;
 
 public class Position {
 

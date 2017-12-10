@@ -1,10 +1,10 @@
 package eu.janvdb.aoc2016.day24;
 
 import eu.janvdb.util.Permutations;
-import javaslang.Tuple;
-import javaslang.collection.List;
-import javaslang.collection.Map;
-import javaslang.collection.Seq;
+import io.vavr.Tuple;
+import io.vavr.collection.List;
+import io.vavr.collection.Map;
+import io.vavr.collection.Seq;
 
 public class Puzzle {
 

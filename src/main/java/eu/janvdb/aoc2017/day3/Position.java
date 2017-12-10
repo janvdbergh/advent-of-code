@@ -1,6 +1,6 @@
 package eu.janvdb.aoc2017.day3;
 
-import javaslang.collection.Vector;
+import io.vavr.collection.Vector;
 
 import java.util.Objects;
 

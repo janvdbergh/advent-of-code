@@ -1,10 +1,10 @@
 package eu.janvdb.aoc2015.day16;
 
-import javaslang.Function1;
-import javaslang.collection.HashMap;
-import javaslang.collection.List;
-import javaslang.collection.Map;
-import javaslang.collection.Stream;
+import io.vavr.Function1;
+import io.vavr.collection.HashMap;
+import io.vavr.collection.List;
+import io.vavr.collection.Map;
+import io.vavr.collection.Stream;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

@@ -1,12 +1,12 @@
 package eu.janvdb.aoc2016.day11;
 
-import javaslang.collection.LinkedHashSet;
-import javaslang.collection.List;
-import javaslang.collection.Set;
+import io.vavr.collection.LinkedHashSet;
+import io.vavr.collection.List;
+import io.vavr.collection.Set;
 
 import java.util.Comparator;
 
-import static javaslang.Function1.identity;
+import static io.vavr.Function1.identity;
 
 public class State {
 

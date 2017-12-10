@@ -1,11 +1,11 @@
 package eu.janvdb.aoc2016.day11;
 
-import javaslang.Function1;
-import javaslang.Tuple;
-import javaslang.collection.LinkedHashMap;
-import javaslang.collection.LinkedHashSet;
-import javaslang.collection.Map;
-import javaslang.collection.Set;
+import io.vavr.Function1;
+import io.vavr.Tuple;
+import io.vavr.collection.LinkedHashMap;
+import io.vavr.collection.LinkedHashSet;
+import io.vavr.collection.Map;
+import io.vavr.collection.Set;
 
 import static eu.janvdb.aoc2016.day11.State.Builder.aState;
 

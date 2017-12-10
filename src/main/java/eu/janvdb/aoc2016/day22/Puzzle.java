@@ -2,8 +2,8 @@ package eu.janvdb.aoc2016.day22;
 
 import eu.janvdb.util.InputReader;
 import eu.janvdb.util.Matrix;
-import javaslang.Tuple;
-import javaslang.collection.List;
+import io.vavr.Tuple;
+import io.vavr.collection.List;
 
 import java.io.File;
 

@@ -1,7 +1,7 @@
 package eu.janvdb.aoc2016.day4;
 
 import eu.janvdb.util.Histogram;
-import javaslang.collection.Stream;
+import io.vavr.collection.Stream;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

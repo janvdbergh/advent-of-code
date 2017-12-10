@@ -1,8 +1,8 @@
 package eu.janvdb.aoc2015.day14;
 
-import javaslang.collection.List;
-import javaslang.collection.Stream;
-import javaslang.control.Option;
+import io.vavr.collection.List;
+import io.vavr.collection.Stream;
+import io.vavr.control.Option;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

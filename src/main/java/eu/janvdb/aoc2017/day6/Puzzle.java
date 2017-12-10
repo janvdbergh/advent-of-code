@@ -1,7 +1,7 @@
 package eu.janvdb.aoc2017.day6;
 
-import javaslang.collection.List;
-import javaslang.collection.Vector;
+import io.vavr.collection.List;
+import io.vavr.collection.Vector;
 
 public class Puzzle {
 

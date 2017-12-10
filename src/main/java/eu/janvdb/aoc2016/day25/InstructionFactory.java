@@ -1,10 +1,10 @@
 package eu.janvdb.aoc2016.day25;
 
-import javaslang.Function1;
-import javaslang.Tuple;
-import javaslang.Tuple2;
-import javaslang.collection.List;
-import javaslang.control.Option;
+import io.vavr.Function1;
+import io.vavr.Tuple;
+import io.vavr.Tuple2;
+import io.vavr.collection.List;
+import io.vavr.control.Option;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

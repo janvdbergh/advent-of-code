@@ -1,9 +1,9 @@
 package eu.janvdb.aoc2017.day8;
 
 import eu.janvdb.util.InputReader;
-import javaslang.collection.List;
-import javaslang.collection.Map;
-import javaslang.collection.TreeMap;
+import io.vavr.collection.List;
+import io.vavr.collection.Map;
+import io.vavr.collection.TreeMap;
 
 public class Puzzle {
 

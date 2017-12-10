@@ -1,9 +1,9 @@
 package eu.janvdb.aoc2015.day22;
 
-import javaslang.collection.HashMap;
-import javaslang.collection.List;
-import javaslang.collection.Map;
-import javaslang.control.Option;
+import io.vavr.collection.HashMap;
+import io.vavr.collection.List;
+import io.vavr.collection.Map;
+import io.vavr.control.Option;
 
 public class GameState implements Cloneable {
 
@@ -22,7 +22,7 @@ public class GameState implements Cloneable {
 	private List<MagicItem> magicCast;
 	private GameState previousGameState;
 
-	public GameState() {
+	GameState() {
 		this.turn = 0;
 		this.heroManna = HERO_MANNA;
 		this.totalMannaUsed = 0;
@@ -33,7 +33,7 @@ public class GameState implements Cloneable {
 		this.magicCast = List.empty();
 	}
 
-	public GameState(GameState previousGameState) {
+	GameState(GameState previousGameState) {
 		this.turn = previousGameState.turn;
 		this.heroManna = previousGameState.heroManna;
 		this.totalMannaUsed = previousGameState.totalMannaUsed;

@@ -1,13 +1,13 @@
 package eu.janvdb.util;
 
-import javaslang.Function2;
-import javaslang.Tuple;
-import javaslang.Tuple2;
-import javaslang.Tuple3;
-import javaslang.collection.Map;
-import javaslang.collection.Seq;
-import javaslang.collection.Set;
-import javaslang.collection.Stream;
+import io.vavr.Function2;
+import io.vavr.Tuple;
+import io.vavr.Tuple2;
+import io.vavr.Tuple3;
+import io.vavr.collection.Map;
+import io.vavr.collection.Seq;
+import io.vavr.collection.Set;
+import io.vavr.collection.Stream;
 
 public class Matrix<KeyType, ValueType> {
 

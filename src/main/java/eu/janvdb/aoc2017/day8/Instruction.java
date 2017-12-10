@@ -1,6 +1,6 @@
 package eu.janvdb.aoc2017.day8;
 
-import javaslang.collection.Map;
+import io.vavr.collection.Map;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

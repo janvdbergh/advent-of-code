@@ -1,7 +1,7 @@
 package eu.janvdb.aoc2016.day17;
 
-import javaslang.collection.List;
-import javaslang.control.Option;
+import io.vavr.collection.List;
+import io.vavr.control.Option;
 
 import static eu.janvdb.aoc2016.day17.Position.START;
 

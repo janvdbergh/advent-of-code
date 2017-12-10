@@ -1,6 +1,6 @@
 package eu.janvdb.util;
 
-import javaslang.collection.*;
+import io.vavr.collection.*;
 
 public class Permutations {
 
