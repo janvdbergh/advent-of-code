@@ -21,4 +21,17 @@ public class InputReader {
 	public static Stream<String> readInput(URL url) {
 		return readInput(new File(url.getFile()));
 	}
+
+	private static String readInputFully(File file) {
+		try {
+			return FileUtils.readFileToString(file, "UTF-8");
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static String readInputFully(URL url) {
+		File file = new File(url.getFile());
+		return readInputFully(file);
+	}
 }
