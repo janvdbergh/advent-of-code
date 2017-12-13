@@ -43,7 +43,7 @@ public class Puzzle {
 	private static class Location {
 		private final int x, y;
 
-		public Location(int x, int y) {
+		Location(int x, int y) {
 			this.x = x;
 			this.y = y;
 		}
@@ -65,19 +65,19 @@ public class Puzzle {
 			return result;
 		}
 
-		public Location right() {
+		Location right() {
 			return new Location(x + 1, y);
 		}
 
-		public Location left() {
+		Location left() {
 			return new Location(x - 1, y);
 		}
 
-		public Location up() {
+		Location up() {
 			return new Location(x, y + 1);
 		}
 
-		public Location down() {
+		Location down() {
 			return new Location(x, y - 1);
 		}
 	}

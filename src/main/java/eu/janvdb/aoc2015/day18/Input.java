@@ -1,6 +1,6 @@
 package eu.janvdb.aoc2015.day18;
 
-public class Input {
+class Input {
 
 	public static final String[] INPUT0 = {
 			".#.#.#",

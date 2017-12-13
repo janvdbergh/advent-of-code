@@ -53,7 +53,7 @@ public class Puzzle {
 			}
 		}
 
-		public boolean matches(String name, Function1<Integer, Boolean> evaluator) {
+		boolean matches(String name, Function1<Integer, Boolean> evaluator) {
 			return properties.get(name)
 					.map(evaluator)
 					.getOrElse(true);

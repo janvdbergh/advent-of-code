@@ -50,7 +50,7 @@ public class Puzzle {
 		System.out.println(max);
 	}
 
-	public static class Reindeer {
+	static class Reindeer {
 
 		private static final Pattern PATTERN = Pattern.compile("(\\w+) can fly (\\d+) km/s for (\\d+) seconds, but then must rest for (\\d+) seconds.");
 

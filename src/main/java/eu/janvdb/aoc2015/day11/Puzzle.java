@@ -2,7 +2,7 @@ package eu.janvdb.aoc2015.day11;
 
 public class Puzzle {
 
-	public static final String START = "vzbxkghb";
+	private static final String START = "vzbxkghb";
 
 	public static void main(String[] args) {
 		String password = START;

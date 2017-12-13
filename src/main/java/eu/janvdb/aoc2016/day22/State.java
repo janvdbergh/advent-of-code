@@ -7,7 +7,7 @@ import io.vavr.collection.Seq;
 import io.vavr.collection.Stream;
 import io.vavr.collection.Vector;
 
-public class State {
+class State {
 
 	private final Map<Location, Node> nodeMap;
 	private final Location dataLocation, emptyLocation;
@@ -29,7 +29,7 @@ public class State {
 	}
 
 
-	public State(Map<Location, Node> nodeMap, Location dataLocation, Location emptyLocation, Vector<Tuple2<Node, Node>> moves) {
+	private State(Map<Location, Node> nodeMap, Location dataLocation, Location emptyLocation, Vector<Tuple2<Node, Node>> moves) {
 		this.nodeMap = nodeMap;
 		this.dataLocation = dataLocation;
 		this.emptyLocation = emptyLocation;

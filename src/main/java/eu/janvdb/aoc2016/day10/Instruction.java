@@ -1,6 +1,6 @@
 package eu.janvdb.aoc2016.day10;
 
-public class Instruction {
+class Instruction {
 
 	private final Receiver receiverLow;
 	private final Receiver receiverHigh;

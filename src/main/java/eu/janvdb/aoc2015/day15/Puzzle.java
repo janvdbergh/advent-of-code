@@ -43,7 +43,7 @@ public class Puzzle {
 		System.out.println(max);
 	}
 
-	public static class Ingredient {
+	static class Ingredient {
 
 		private static final Pattern PATTERN = Pattern.compile(
 				"(\\w+): capacity (-?\\d+), durability (-?\\d+), flavor (-?\\d+), texture (-?\\d+), calories (-?\\d+)"
@@ -75,23 +75,23 @@ public class Puzzle {
 			return name;
 		}
 
-		public int getCapacity() {
+		int getCapacity() {
 			return capacity;
 		}
 
-		public int getDurability() {
+		int getDurability() {
 			return durability;
 		}
 
-		public int getFlavor() {
+		int getFlavor() {
 			return flavor;
 		}
 
-		public int getTexture() {
+		int getTexture() {
 			return texture;
 		}
 
-		public int getCalories() {
+		int getCalories() {
 			return calories;
 		}
 
@@ -110,7 +110,7 @@ public class Puzzle {
 		}
 	}
 
-	public static class Recipe {
+	static class Recipe {
 
 		private Map<Ingredient, Integer> amounts;
 

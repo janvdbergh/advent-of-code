@@ -1,8 +1,8 @@
 package eu.janvdb.aoc2015.day22;
 
-public abstract class MagicItem {
+abstract class MagicItem {
 
-	public abstract int getCost();
+	protected abstract int getCost();
 
 	public boolean canBeCast(GameState gameState) {
 		return gameState.getHeroManna() >= getCost();

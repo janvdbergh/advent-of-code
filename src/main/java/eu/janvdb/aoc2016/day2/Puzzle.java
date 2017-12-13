@@ -20,7 +20,7 @@ public class Puzzle {
 	private static final int A = 10, B = 11, C = 12, D = 13;
 
 	private static final int[][] MOVE_MATRIX = {
-			/******* U  R  D  L */
+			/*       U  R  D  L */
 			/* 1 */ {1, 1, 3, 1},
 			/* 2 */ {2, 3, 6, 2},
 			/* 3 */ {1, 4, 7, 2},

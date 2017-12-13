@@ -2,7 +2,7 @@ package eu.janvdb.aoc2015.day22;
 
 public abstract class DurableMagicItem extends MagicItem {
 
-	public abstract int getDuration();
+	protected abstract int getDuration();
 
 	@Override
 	public boolean canBeCast(GameState gameState) {
@@ -15,14 +15,14 @@ public abstract class DurableMagicItem extends MagicItem {
 		doIfActive(gameState, () -> doActionAtStartIfActive(gameState));
 	}
 
-	public abstract void doActionAtStartIfActive(GameState gameState);
+	protected abstract void doActionAtStartIfActive(GameState gameState);
 
 	@Override
 	public void doActionAtEnd(GameState gameState) {
 		doIfActive(gameState, () -> doActionAtEndIfActive(gameState));
 	}
 
-	public abstract void doActionAtEndIfActive(GameState gameState);
+	protected abstract void doActionAtEndIfActive(GameState gameState);
 
 	private void doIfActive(GameState gameState, Runnable action) {
 		gameState.getTurnsSinceMagicItemCast(this)

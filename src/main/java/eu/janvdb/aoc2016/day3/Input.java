@@ -1,6 +1,6 @@
 package eu.janvdb.aoc2016.day3;
 
-public class Input {
+class Input {
 
 	static final int[][] INPUT = {
 			{785, 516, 744},

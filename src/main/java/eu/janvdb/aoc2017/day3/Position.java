@@ -97,14 +97,15 @@ public class Position {
 		LEFT(-1, 0),
 		DOWN(0, -1);
 
-		public final int dx, dy;
+		final int dx;
+		final int dy;
 
 		Direction(int dx, int dy) {
 			this.dx = dx;
 			this.dy = dy;
 		}
 
-		public Direction next() {
+		Direction next() {
 			Direction[] values = Direction.values();
 			return values[(this.ordinal() + 1) % values.length];
 		}

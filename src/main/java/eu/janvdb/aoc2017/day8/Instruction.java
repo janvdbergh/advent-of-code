@@ -5,7 +5,7 @@ import io.vavr.collection.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Instruction {
+class Instruction {
 
 	private static final Pattern PATTERN = Pattern.compile("(\\w+) (inc|dec) (-?\\d+) if (\\w+) (>|>=|<|<=|==|!=) (-?\\d+)");
 

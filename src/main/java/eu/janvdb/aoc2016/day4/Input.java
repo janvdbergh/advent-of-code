@@ -1,6 +1,6 @@
 package eu.janvdb.aoc2016.day4;
 
-public class Input {
+class Input {
 
 	public static final String[] ROOM_NAMES0 = {
 			"aaaaa-bbb-z-y-x-123[abxyz]",

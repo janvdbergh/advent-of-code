@@ -1,6 +1,6 @@
 package eu.janvdb.aoc2016.day8;
 
-public class Display {
+class Display {
 
 	private final int width;
 	private final int height;
@@ -31,8 +31,8 @@ public class Display {
 
 	public int countPixels() {
 		int count = 0;
-		for (int i = 0; i < pixels.length; i++) {
-			if (pixels[i]) {
+		for (boolean pixel : pixels) {
+			if (pixel) {
 				count++;
 			}
 		}

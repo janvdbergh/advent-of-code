@@ -25,7 +25,7 @@ public class Puzzle {
 		new Puzzle().execute();
 	}
 
-	public Puzzle() throws Exception {
+	private Puzzle() throws Exception {
 		md5 = MessageDigest.getInstance("MD5");
 	}
 

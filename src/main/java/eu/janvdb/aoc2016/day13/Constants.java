@@ -1,6 +1,6 @@
 package eu.janvdb.aoc2016.day13;
 
-public class Constants {
+class Constants {
 	static final int NOT_CONNECTED = Integer.MAX_VALUE / 2;
 
 	public static final Coord START = new Coord(1, 1);

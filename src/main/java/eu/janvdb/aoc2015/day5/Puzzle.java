@@ -1007,7 +1007,7 @@ public class Puzzle {
 			"cqfikbgxvjmnfncy"
 	};
 
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) {
 		System.out.println(isNice("qjhvhtzxzqqjkmpb"));
 		System.out.println(isNice("xxyxx"));
 		System.out.println(isNice("uurcxstgmygtbstg"));
@@ -1021,7 +1021,7 @@ public class Puzzle {
 		System.out.println(count);
 	}
 
-	public static boolean isNice(String s) {
+	private static boolean isNice(String s) {
 		boolean x1 = s.matches(".*([a-z][a-z]).*\\1.*");
 		boolean x2 = s.matches(".*([a-z])[a-z]\\1.*");
 		return x1 && x2;

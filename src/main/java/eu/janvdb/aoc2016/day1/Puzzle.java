@@ -50,7 +50,7 @@ public class Puzzle {
 
 		NORTH, EAST, SOUTH, WEST;
 
-		public Direction left() {
+		Direction left() {
 			switch (this) {
 				case NORTH:
 					return WEST;
@@ -65,7 +65,7 @@ public class Puzzle {
 			}
 		}
 
-		public Direction right() {
+		Direction right() {
 			switch (this) {
 				case SOUTH:
 					return WEST;

@@ -129,7 +129,7 @@ public class Puzzle {
 			return from;
 		}
 
-		public String getTo() {
+		String getTo() {
 			return to;
 		}
 

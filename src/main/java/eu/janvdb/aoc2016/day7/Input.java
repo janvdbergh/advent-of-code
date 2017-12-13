@@ -1,6 +1,6 @@
 package eu.janvdb.aoc2016.day7;
 
-public class Input {
+class Input {
 	public static final String[] INPUT = {
 			"rhamaeovmbheijj[hkwbkqzlcscwjkyjulk]ajsxfuemamuqcjccbc",
 			"gdlrknrmexvaypu[crqappbbcaplkkzb]vhvkjyadjsryysvj[nbvypeadikilcwg]jwxlimrgakadpxu[dgoanojvdvwfabtt]yqsalmulblolkgsheo",

@@ -1,6 +1,6 @@
 package eu.janvdb.aoc2015.day13;
 
-public class Input {
+class Input {
 
 	public static final String[] INPUT0 = {
 			"Alice would gain 54 happiness units by sitting next to Bob.",

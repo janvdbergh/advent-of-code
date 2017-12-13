@@ -1,6 +1,6 @@
 package eu.janvdb.aoc2015.day16;
 
-public class Input {
+class Input {
 
 	public static final String[] INPUT = {
 			"Sue 1: goldfish: 6, trees: 9, akitas: 0",

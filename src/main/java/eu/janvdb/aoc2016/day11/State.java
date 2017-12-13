@@ -16,7 +16,7 @@ public class State {
 	private final int elevatorFloor;
 	private final List<Floors> floorsList;
 
-	public State(int elevatorFloor, List<Floors> floorsList) {
+	private State(int elevatorFloor, List<Floors> floorsList) {
 		this.elevatorFloor = elevatorFloor;
 
 		this.floorsList = floorsList

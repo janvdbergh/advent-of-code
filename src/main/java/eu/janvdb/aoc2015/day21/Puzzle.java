@@ -73,19 +73,19 @@ public class Puzzle {
 			this.armor = armor;
 		}
 
-		public String getName() {
+		String getName() {
 			return name;
 		}
 
-		public int getCost() {
+		int getCost() {
 			return cost;
 		}
 
-		public int getDamage() {
+		int getDamage() {
 			return damage;
 		}
 
-		public int getArmor() {
+		int getArmor() {
 			return armor;
 		}
 	}
@@ -97,7 +97,7 @@ public class Puzzle {
 			this.items = List.of(items);
 		}
 
-		public String getName() {
+		String getName() {
 			return items.toStream()
 					.map(Item::getName)
 					.mkString("/");

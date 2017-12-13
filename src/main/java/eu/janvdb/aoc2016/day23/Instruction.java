@@ -4,15 +4,15 @@ import java.util.regex.Matcher;
 
 public abstract class Instruction {
 
-	protected final Matcher matcher;
+	final Matcher matcher;
 
-	protected Instruction(Matcher matcher) {
+	Instruction(Matcher matcher) {
 		this.matcher = matcher;
 	}
 
 	public abstract State execute(State state);
 
-	public abstract Instruction toggle();
+	protected abstract Instruction toggle();
 
 	@Override
 	public String toString() {

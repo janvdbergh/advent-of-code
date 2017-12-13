@@ -1,6 +1,6 @@
 package eu.janvdb.aoc2016.day6;
 
-public class Input {
+class Input {
 
 	public static final String[] WORDS = {
 			"hgxcejbh",

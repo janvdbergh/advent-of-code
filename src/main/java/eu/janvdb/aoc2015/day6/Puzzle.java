@@ -313,7 +313,7 @@ public class Puzzle {
 
 	private static Light[] lights;
 
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) {
 		initialize();
 
 		for (String step : INPUT) {
@@ -374,19 +374,19 @@ public class Puzzle {
 	private static class Light {
 		private int brightness;
 
-		public int getBrightness() {
+		int getBrightness() {
 			return brightness;
 		}
 
-		public void turnOn() {
+		void turnOn() {
 			brightness += 1;
 		}
 
-		public void turnOff() {
+		void turnOff() {
 			brightness = Math.max(0, brightness - 1);
 		}
 
-		public void toggle() {
+		void toggle() {
 			brightness += 2;
 		}
 	}

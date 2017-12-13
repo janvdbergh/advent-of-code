@@ -7,7 +7,7 @@ import io.vavr.collection.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Program {
+class Program {
 
 	private static final Pattern PATTERN = Pattern.compile("(\\d+) <-> (.*)");
 

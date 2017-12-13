@@ -4,7 +4,7 @@ import io.vavr.collection.List;
 
 public class Puzzle {
 
-	public static final int START = 14146;
+	private static final int START = 14146;
 
 	public static void main(String[] args) {
 		List<Integer> numbersFound = List.empty();

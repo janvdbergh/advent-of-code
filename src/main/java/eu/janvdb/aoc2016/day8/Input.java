@@ -1,6 +1,6 @@
 package eu.janvdb.aoc2016.day8;
 
-public class Input {
+class Input {
 
 	public static final String[] INPUT0 = {
 			"rect 3x2",

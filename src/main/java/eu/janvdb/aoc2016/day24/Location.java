@@ -1,6 +1,6 @@
 package eu.janvdb.aoc2016.day24;
 
-public class Location {
+class Location {
 
 	private final int row, column;
 
