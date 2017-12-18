@@ -2,7 +2,10 @@ package eu.janvdb.aoc2017.day13;
 
 import eu.janvdb.util.Holder;
 import io.vavr.Tuple;
-import io.vavr.collection.*;
+import io.vavr.collection.HashMap;
+import io.vavr.collection.Map;
+import io.vavr.collection.Stream;
+import io.vavr.collection.Vector;
 
 public class Puzzle {
 
