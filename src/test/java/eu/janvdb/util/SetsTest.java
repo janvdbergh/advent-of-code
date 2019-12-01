@@ -2,9 +2,9 @@ package eu.janvdb.util;
 
 import io.vavr.collection.List;
 import io.vavr.collection.Stream;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class SetsTest {
 
@@ -12,7 +12,7 @@ public class SetsTest {
 	public void returnsCorrectSets() {
 		Stream<List<Integer>> sets = Sets.sets(List.of(1, 2, 3));
 
-		assertEquals(8, sets.size());
+		assertThat(sets).hasSize(8);
 	}
 
 }
