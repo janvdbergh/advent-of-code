@@ -1,5 +1,7 @@
 package eu.janvdb.aoc2019.day2;
 
+import eu.janvdb.aoc2019.common.Computer;
+
 public class Day2 {
 
 	private static final int[] INPUT = {
@@ -10,23 +12,28 @@ public class Day2 {
 			13, 119, 123, 1, 123, 6, 127, 1, 127, 5, 131, 2, 10, 131, 135, 2, 135, 10, 139, 1, 13, 139, 143, 1, 10, 143,
 			147, 1, 2, 147, 151, 1, 6, 151, 0, 99, 2, 14, 0, 0
 	};
+
 	private static final int EXPECTED_RESULT = 19690720;
 
 	public static void main(String[] args) {
+		new Day2().run();
+	}
+
+	private void run() {
 		part1();
 		part2();
 	}
 
-	private static void part1() {
-		System.out.println(runWithInput(12, 2));
+	private void part1() {
+		System.out.println(new Computer(INPUT).runWithInput(12, 2));
 	}
 
-	private static void part2() {
+	private void part2() {
 		int verb = 0;
 		while (true) {
 			int noun = 0;
 			while (noun <= verb) {
-				int result = runWithInput(verb, noun);
+				int result = new Computer(INPUT).runWithInput(verb, noun);
 				if (result == EXPECTED_RESULT) {
 					System.out.printf("%d/%d -> %d", verb, noun, 100 * verb + noun);
 					return;
@@ -35,33 +42,5 @@ public class Day2 {
 			}
 			verb++;
 		}
-	}
-
-	private static int runWithInput(int verb, int noun) {
-		int[] state = INPUT.clone();
-		state[1] = verb;
-		state[2] = noun;
-		return runProgram(state);
-	}
-
-	private static int runProgram(int[] state) {
-		int pc = 0;
-		while (state[pc] != 99) {
-			switch (state[pc]) {
-				case 1:
-					state[state[pc + 3]] = state[state[pc + 1]] + state[state[pc + 2]];
-					break;
-				case 2:
-					state[state[pc + 3]] = state[state[pc + 1]] * state[state[pc + 2]];
-					break;
-				case 99:
-					break;
-				default:
-					throw new IllegalStateException();
-			}
-			pc += 4;
-		}
-
-		return state[0];
 	}
 }
