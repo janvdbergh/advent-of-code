@@ -1,6 +1,7 @@
 package eu.janvdb.aoc2019.day5;
 
 import eu.janvdb.aoc2019.common.Computer;
+import io.reactivex.Observable;
 
 public class Day5 {
 
@@ -42,12 +43,12 @@ public class Day5 {
 	}
 
 	private void part1() {
-		new Computer(INPUT, () -> 1,  this::print).run();
+		new Computer(INPUT, Observable.just(1),  this::print).run();
 		System.out.println();
 	}
 
 	private void part2() {
-		new Computer(INPUT, () -> 5,  this::print).run();
+		new Computer(INPUT, Observable.just(5),  this::print).run();
 		System.out.println();
 	}
 

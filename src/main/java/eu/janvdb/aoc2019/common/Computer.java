@@ -1,7 +1,12 @@
 package eu.janvdb.aoc2019.common;
 
+import io.reactivex.Observable;
+import io.reactivex.subjects.ReplaySubject;
+import io.reactivex.subjects.Subject;
+
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 public class Computer {
 
@@ -20,19 +25,43 @@ public class Computer {
 	private static final int EQUALS = 8;
 
 	private final int[] state;
-	private final Supplier<Integer> input;
-	private final Consumer<Integer> output;
+	private final Subject<Integer> output = ReplaySubject.create();
+	private final Queue<Integer> inputQueue = new LinkedList<>();
 
 	private int pc;
 
-	public Computer(int[] state, Supplier<Integer> input, Consumer<Integer> output) {
+	public Computer(int[] state) {
 		this.state = state.clone();
-		this.input = input;
-		this.output = output;
 	}
 
-	public Computer(int[] state) {
-		this(state, () -> 0, System.out::println);
+	public Computer(int[] state, Observable<Integer> input, Consumer<Integer> outputConsumer) {
+		this(state);
+		connectInput(input);
+		getOutput().subscribe(outputConsumer::accept);
+	}
+
+	public void connectInput(Observable<Integer> source) {
+		source.subscribe(this::addInputValue);
+	}
+
+	public Subject<Integer> getOutput() {
+		return output;
+	}
+
+	private synchronized void addInputValue(int integer) {
+		inputQueue.add(integer);
+		notifyAll();
+	}
+
+	private synchronized int getNextInputValue() {
+		while (inputQueue.isEmpty()) {
+			try {
+				wait();
+			} catch (InterruptedException e) {
+				throw new RuntimeException("Interrupted");
+			}
+		}
+		return inputQueue.remove();
 	}
 
 	public int runWithInput(int verb, int noun) {
@@ -54,11 +83,11 @@ public class Computer {
 					pc += 4;
 					break;
 				case INPUT:
-					setArgument(0, input.get());
+					setArgument(0, getNextInputValue());
 					pc += 2;
 					break;
 				case OUTPUT:
-					output.accept(getArgument(0));
+					output.onNext(getArgument(0));
 					pc += 2;
 					break;
 				case JUMP_IF_TRUE:
@@ -84,6 +113,7 @@ public class Computer {
 					pc += 4;
 					break;
 				case 99:
+					output.onComplete();
 					break;
 				default:
 					throw new IllegalStateException();

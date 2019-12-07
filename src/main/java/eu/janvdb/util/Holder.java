@@ -6,6 +6,10 @@ public class Holder<T> {
 
 	private T value;
 
+	public Holder() {
+		this.value = null;
+	}
+
 	public Holder(T value) {
 		this.value = value;
 	}

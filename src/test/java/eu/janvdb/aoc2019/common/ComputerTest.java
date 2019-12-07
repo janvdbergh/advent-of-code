@@ -1,12 +1,12 @@
 package eu.janvdb.aoc2019.common;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import io.reactivex.Observable;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class ComputerTest {
 
@@ -65,9 +65,8 @@ class ComputerTest {
 	}
 
 	private void runComputerTest(int[] program, List<Integer> inputs, List<Integer> expectedOutputs) {
-		Iterator<Integer> inputIterator = inputs.iterator();
 		List<Integer> results = new ArrayList<>();
-		new Computer(program, inputIterator::next, results::add).run();
+		new Computer(program, Observable.fromIterable(inputs), results::add).run();
 		assertThat(results).isEqualTo(expectedOutputs);
 	}
 
