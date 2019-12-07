@@ -1,10 +1,13 @@
 package eu.janvdb.aoc2019.common;
 
 import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.subjects.ReplaySubject;
 import io.reactivex.subjects.Subject;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import java.util.function.Consumer;
 
@@ -25,10 +28,12 @@ public class Computer {
 	private static final int EQUALS = 8;
 
 	private final int[] state;
+	private int pc;
+
 	private final Subject<Integer> output = ReplaySubject.create();
 	private final Queue<Integer> inputQueue = new LinkedList<>();
+	private final List<Disposable> subscriptions = new ArrayList<>();
 
-	private int pc;
 
 	public Computer(int[] state) {
 		this.state = state.clone();
@@ -37,11 +42,11 @@ public class Computer {
 	public Computer(int[] state, Observable<Integer> input, Consumer<Integer> outputConsumer) {
 		this(state);
 		connectInput(input);
-		getOutput().subscribe(outputConsumer::accept);
+		subscriptions.add(getOutput().subscribe(outputConsumer::accept));
 	}
 
 	public void connectInput(Observable<Integer> source) {
-		source.subscribe(this::addInputValue);
+		subscriptions.add( source.subscribe(this::addInputValue));
 	}
 
 	public Subject<Integer> getOutput() {
@@ -114,6 +119,7 @@ public class Computer {
 					break;
 				case 99:
 					output.onComplete();
+					subscriptions.forEach(Disposable::dispose);
 					break;
 				default:
 					throw new IllegalStateException();
