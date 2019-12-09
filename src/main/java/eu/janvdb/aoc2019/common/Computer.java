@@ -1,15 +1,17 @@
 package eu.janvdb.aoc2019.common;
 
-import io.reactivex.Observable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.subjects.ReplaySubject;
-import io.reactivex.subjects.Subject;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.function.Consumer;
+
+import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.subjects.ReplaySubject;
+import io.reactivex.subjects.Subject;
 
 public class Computer {
 
@@ -17,6 +19,7 @@ public class Computer {
 
 	private static final int POSITION = 0;
 	private static final int IMMEDIATE = 1;
+	private static final int RELATIVE = 2;
 
 	private static final int ADD = 1;
 	private static final int MUL = 2;
@@ -26,39 +29,45 @@ public class Computer {
 	private static final int JUMP_IF_FALSE = 6;
 	private static final int LESS_THAN = 7;
 	private static final int EQUALS = 8;
+	private static final int ADJUST_RELATIVE_BASE = 9;
+	private static final int HALT = 99;
 
-	private final int[] state;
+	private final SortedMap<Integer, Long> state;
 	private int pc;
+	private int relativeBase;
 
-	private final Subject<Integer> output = ReplaySubject.create();
-	private final Queue<Integer> inputQueue = new LinkedList<>();
+	private final Subject<Long> output = ReplaySubject.create();
+	private final Queue<Long> inputQueue = new LinkedList<>();
 	private final List<Disposable> subscriptions = new ArrayList<>();
 
 
-	public Computer(int[] state) {
-		this.state = state.clone();
+	public Computer(long[] state) {
+		this.state = new TreeMap<>();
+		for (int i = 0; i < state.length; i++) {
+			write(i, state[i]);
+		}
 	}
 
-	public Computer(int[] state, Observable<Integer> input, Consumer<Integer> outputConsumer) {
+	public Computer(long[] state, Observable<Long> input, Consumer<Long> outputConsumer) {
 		this(state);
 		connectInput(input);
 		subscriptions.add(getOutput().subscribe(outputConsumer::accept));
 	}
 
-	public void connectInput(Observable<Integer> source) {
-		subscriptions.add( source.subscribe(this::addInputValue));
+	public void connectInput(Observable<Long> source) {
+		subscriptions.add(source.subscribe(this::addInputValue));
 	}
 
-	public Subject<Integer> getOutput() {
+	public Subject<Long> getOutput() {
 		return output;
 	}
 
-	private synchronized void addInputValue(int integer) {
+	private synchronized void addInputValue(long integer) {
 		inputQueue.add(integer);
 		notifyAll();
 	}
 
-	private synchronized int getNextInputValue() {
+	private synchronized long getNextInputValue() {
 		while (inputQueue.isEmpty()) {
 			try {
 				wait();
@@ -69,15 +78,15 @@ public class Computer {
 		return inputQueue.remove();
 	}
 
-	public int runWithInput(int verb, int noun) {
-		state[1] = verb;
-		state[2] = noun;
+	public long runWithInput(int verb, int noun) {
+		write(1, verb);
+		write(2, noun);
 		return run();
 	}
 
-	public int run() {
+	public long run() {
 		pc = 0;
-		while (state[pc] != 99) {
+		while (read(pc) != 99) {
 			switch (getCurrentOpcode()) {
 				case ADD:
 					setArgument(2, getArgument(0) + getArgument(1));
@@ -97,14 +106,14 @@ public class Computer {
 					break;
 				case JUMP_IF_TRUE:
 					if (getArgument(0) != 0) {
-						pc = getArgument(1);
+						pc = (int) getArgument(1);
 					} else {
 						pc += 3;
 					}
 					break;
 				case JUMP_IF_FALSE:
 					if (getArgument(0) == 0) {
-						pc = getArgument(1);
+						pc = (int) getArgument(1);
 					} else {
 						pc += 3;
 					}
@@ -117,7 +126,11 @@ public class Computer {
 					setArgument(2, getArgument(0) == getArgument(1) ? 1 : 0);
 					pc += 4;
 					break;
-				case 99:
+				case ADJUST_RELATIVE_BASE:
+					relativeBase += getArgument(0);
+					pc += 2;
+					break;
+				case HALT:
 					output.onComplete();
 					subscriptions.forEach(Disposable::dispose);
 					break;
@@ -126,38 +139,47 @@ public class Computer {
 			}
 		}
 
-		return state[0];
+		return read(0);
+	}
+
+	public void dump() {
+		state.forEach((key, value) -> System.out.printf("%d=%d; ", key, value));
 	}
 
 	private int getCurrentOpcode() {
-		return state[pc] % 100;
+		return (int) read(pc) % 100;
 	}
 
-	private int getArgument(int index) {
-		switch (getMode(index)) {
-			case POSITION:
-				return state[state[pc + index + 1]];
-			case IMMEDIATE:
-				return state[pc + index + 1];
-			default:
-				throw new IllegalArgumentException(pc + "/" + state[pc]);
-		}
+	private long getArgument(int index) {
+		return read(getAddress(index));
 	}
 
-	private void setArgument(int index, int value) {
+	private void setArgument(int index, long value) {
+		write(getAddress(index), value);
+	}
+
+	private int getAddress(int index) {
 		switch (getMode(index)) {
 			case POSITION:
-				state[state[pc + index + 1]] = value;
-				break;
+				return (int) read(pc + index + 1);
 			case IMMEDIATE:
-				state[pc + index + 1] = value;
-				break;
+				return pc + index + 1;
+			case RELATIVE:
+				return (int) read(pc + index + 1) + relativeBase;
 			default:
-				throw new IllegalArgumentException(pc + "/" + state[pc]);
+				throw new IllegalArgumentException(pc + "/" + read(pc));
 		}
 	}
 
 	private int getMode(int index) {
-		return (state[pc] / MODE_DIVIDERS[index]) % 10;
+		return (int) (read(pc) / MODE_DIVIDERS[index]) % 10;
+	}
+
+	private long read(int address) {
+		return state.getOrDefault(address, 0L);
+	}
+
+	private void write(int address, long value) {
+		state.put(address, value);
 	}
 }

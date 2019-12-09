@@ -5,7 +5,7 @@ import io.reactivex.Observable;
 
 public class Day5 {
 
-	private static final int[] INPUT = {
+	private static final long[] INPUT = {
 			3,225,1,225,6,6,1100,1,238,225,104,0,1002,114,46,224,1001,224,-736,224,4,224,1002,223,8,223,1001,224,3,224,
 			1,223,224,223,1,166,195,224,1001,224,-137,224,4,224,102,8,223,223,101,5,224,224,1,223,224,223,1001,169,83,
 			224,1001,224,-90,224,4,224,102,8,223,223,1001,224,2,224,1,224,223,223,101,44,117,224,101,-131,224,224,4,224,
@@ -43,16 +43,16 @@ public class Day5 {
 	}
 
 	private void part1() {
-		new Computer(INPUT, Observable.just(1),  this::print).run();
+		new Computer(INPUT, Observable.just(1L),  this::print).run();
 		System.out.println();
 	}
 
 	private void part2() {
-		new Computer(INPUT, Observable.just(5),  this::print).run();
+		new Computer(INPUT, Observable.just(5L),  this::print).run();
 		System.out.println();
 	}
 
-	private void print(int number) {
+	private void print(long number) {
 		System.out.printf("%d ", number);
 	}
 

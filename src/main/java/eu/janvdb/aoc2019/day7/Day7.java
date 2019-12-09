@@ -8,12 +8,12 @@ import io.vavr.collection.List;
 
 public class Day7 {
 
-	private final int[] TEST_PROGRAM = {
+	private final long[] TEST_PROGRAM = {
 			3, 23, 3, 24, 1002, 24, 10, 24, 1002, 23, -1, 23,
 			101, 5, 23, 23, 1, 24, 23, 23, 4, 23, 99, 0, 0
 	};
 
-	private final int[] PROGRAM = {
+	private final long[] PROGRAM = {
 			3, 8, 1001, 8, 10, 8, 105, 1, 0, 0, 21, 38, 63, 88, 97, 118, 199, 280, 361, 442, 99999, 3, 9, 1002, 9, 3, 9,
 			101, 2, 9, 9, 1002, 9, 4, 9, 4, 9, 99, 3, 9, 101, 3, 9, 9, 102, 5, 9, 9, 101, 3, 9, 9, 1002, 9, 3, 9, 101,
 			3, 9, 9, 4, 9, 99, 3, 9, 1002, 9, 2, 9, 1001, 9, 3, 9, 102, 3, 9, 9, 101, 2, 9, 9, 1002, 9, 4, 9, 4, 9, 99,
@@ -45,18 +45,18 @@ public class Day7 {
 	private void part1() {
 		final List<Integer> phaseSettings1 = List.range(0, 5);
 
-		int result = Permutations.getAllPermutations(phaseSettings1)
+		Long result = Permutations.getAllPermutations(phaseSettings1)
 				.map(phaseSettings -> getOutput1(phaseSettings, PROGRAM))
 				.max().get();
 
 		System.out.println(result);
 	}
 
-	private int getOutput1(List<Integer> phaseSettings, int[] program) {
-		Observable<Integer> current = Observable.just(0);
+	private Long getOutput1(List<Integer> phaseSettings, long[] program) {
+		Observable<Long> current = Observable.just(0L);
 		for (int phaseSetting : phaseSettings) {
 			Computer computer = new Computer(program);
-			computer.connectInput(Observable.just(phaseSetting).mergeWith(current));
+			computer.connectInput(Observable.just((long) phaseSetting).mergeWith(current));
 			computer.run();
 
 			current = computer.getOutput();
@@ -68,18 +68,18 @@ public class Day7 {
 	private void part2() {
 		final List<Integer> phaseSettings2 = List.range(5, 10);
 
-		int result = Permutations.getAllPermutations(phaseSettings2)
+		Long result = Permutations.getAllPermutations(phaseSettings2)
 				.map(phaseSettings -> getOutput2(phaseSettings, PROGRAM))
 				.max().get();
 
 		System.out.println(result);
 	}
 
-	private int getOutput2(List<Integer> phaseSettings, int[] program) {
+	private Long getOutput2(List<Integer> phaseSettings, long[] program) {
 		List<Computer> computers = createComputers(phaseSettings, program);
 		connectComputers(phaseSettings, computers);
 
-		Holder<Integer> lastValueHolder = new Holder<>();
+		Holder<Long> lastValueHolder = new Holder<>();
 		computers.last().getOutput().subscribe(lastValueHolder::setValue);
 
 		runComputers(computers);
@@ -89,11 +89,11 @@ public class Day7 {
 	private void connectComputers(List<Integer> phaseSettings, List<Computer> computers) {
 		for (int i = 1; i < computers.length(); i++) {
 			Computer previousComputer = computers.get(i - 1);
-			Integer phaseSetting = phaseSettings.get(i);
+			long phaseSetting = phaseSettings.get(i);
 			computers.get(i).connectInput(Observable.just(phaseSetting).mergeWith(previousComputer.getOutput()));
 		}
 		Computer lastComputer = computers.get(computers.length() - 1);
-		computers.get(0).connectInput(Observable.just(phaseSettings.get(0), 0).mergeWith(lastComputer.getOutput()));
+		computers.get(0).connectInput(Observable.just((long) phaseSettings.get(0), 0L).mergeWith(lastComputer.getOutput()));
 	}
 
 	private void runComputers(List<Computer> computers) {
@@ -102,7 +102,7 @@ public class Day7 {
 		threads.forEach(this::joinThread);
 	}
 
-	private List<Computer> createComputers(List<Integer> phaseSettings, int[] program) {
+	private List<Computer> createComputers(List<Integer> phaseSettings, long[] program) {
 		List<Computer> computers = List.empty();
 		for (int ignored : phaseSettings) {
 			computers = computers.append(new Computer(program));
