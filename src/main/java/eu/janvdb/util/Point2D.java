@@ -44,4 +44,8 @@ public class Point2D {
 	public int hashCode() {
 		return Objects.hash(x, y);
 	}
+
+	public Direction getDirectionFrom(Point2D other) {
+		return Direction.create(other, this);
+	}
 }
