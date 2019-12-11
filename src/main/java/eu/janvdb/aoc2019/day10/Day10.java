@@ -1,6 +1,6 @@
 package eu.janvdb.aoc2019.day10;
 
-import eu.janvdb.util.Direction;
+import eu.janvdb.util.DirectionVector;
 import eu.janvdb.util.Point2D;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
@@ -187,11 +187,11 @@ public class Day10 {
 				.forEach(System.out::println);
 	}
 
-	private double getWeight(Direction direction, Integer index) {
-		return direction.getAngleInDegreesWithZeroOnTop() + 1000.0 * index;
+	private double getWeight(DirectionVector directionVector, Integer index) {
+		return directionVector.getAngleInDegreesWithZeroOnTop() + 1000.0 * index;
 	}
 
-	private Stream<Tuple2<Point2D, Direction>> mapToRelativeLocations(List<Point2D> asteroids, Point2D source) {
+	private Stream<Tuple2<Point2D, DirectionVector>> mapToRelativeLocations(List<Point2D> asteroids, Point2D source) {
 		return Stream.ofAll(asteroids.toStream()
 				.filter(destination -> !source.equals(destination))
 				.map(destination -> Tuple.of(destination, destination.getDirectionFrom(source)))

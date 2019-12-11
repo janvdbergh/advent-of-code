@@ -23,6 +23,21 @@ public class Point2D {
 		return new Point2D(x + dx, y + dy);
 	}
 
+	public Point2D step(Direction direction, int steps) {
+		switch (direction) {
+			case NORTH:
+				return new Point2D(x, y - steps);
+			case WEST:
+				return new Point2D(x - steps, y);
+			case SOUTH:
+				return new Point2D(x, y + steps);
+			case EAST:
+				return new Point2D(x + steps, y);
+			default:
+				throw new IllegalStateException();
+		}
+	}
+
 	public int getManhattanDistance() {
 		return Math.abs(x) + Math.abs(y);
 	}
@@ -45,7 +60,7 @@ public class Point2D {
 		return Objects.hash(x, y);
 	}
 
-	public Direction getDirectionFrom(Point2D other) {
-		return Direction.create(other, this);
+	public DirectionVector getDirectionFrom(Point2D other) {
+		return DirectionVector.create(other, this);
 	}
 }

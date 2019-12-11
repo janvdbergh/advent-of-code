@@ -58,7 +58,7 @@ public class Computer {
 		subscriptions.add(source.subscribe(this::addInputValue));
 	}
 
-	public Subject<Long> getOutput() {
+	public Observable<Long> getOutput() {
 		return output;
 	}
 
