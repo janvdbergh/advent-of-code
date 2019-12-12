@@ -18,7 +18,7 @@ public class DirectionVector {
 			return new DirectionVector(dx / Math.abs(dx), 0);
 		}
 
-		int gcd = gcd(dx, dy);
+		int gcd = (int) MathUtil.gcd(dx, dy);
 		return new DirectionVector(dx / gcd, dy / gcd);
 	}
 
@@ -53,17 +53,6 @@ public class DirectionVector {
 	@Override
 	public int hashCode() {
 		return Objects.hash(x, y);
-	}
-
-	private static int gcd(int x, int y) {
-		x = Math.abs(x);
-		y = Math.abs(y);
-		while (y != 0) {
-			int remainder = x % y;
-			x = y;
-			y = remainder;
-		}
-		return x;
 	}
 
 	public double getAngleInDegreesWithZeroOnTop() {
