@@ -63,8 +63,8 @@ public class Day11 {
 		Computer computer = new Computer(PROGRAM);
 		Robot robot = new Robot(startValue);
 
-		computer.connectInput(robot.getOutput());
-		robot.connectInput(computer.getOutput());
+		computer.reconnectInput(robot.getOutput());
+		robot.connectInput(computer.reconnectOutput());
 
 		Thread computerThread = new Thread(computer::run);
 		computerThread.start();

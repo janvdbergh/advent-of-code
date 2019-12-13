@@ -88,7 +88,9 @@ class ComputerTest {
 
 	private void runComputerTest(long[] program, List<Long> inputs, List<Long> expectedOutputs) {
 		List<Long> results = new ArrayList<>();
-		new Computer(program, Observable.fromIterable(inputs), results::add).run();
+		Computer computer = new Computer(program);
+		computer.reconnectInput(Observable.fromIterable(inputs));
+		computer.reconnectOutput(results::add);
 		assertThat(results).isEqualTo(expectedOutputs);
 	}
 }

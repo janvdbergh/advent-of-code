@@ -56,10 +56,10 @@ public class Day7 {
 		Observable<Long> current = Observable.just(0L);
 		for (int phaseSetting : phaseSettings) {
 			Computer computer = new Computer(program);
-			computer.connectInput(Observable.just((long) phaseSetting).mergeWith(current));
+			computer.reconnectInput(Observable.just((long) phaseSetting).mergeWith(current));
 			computer.run();
 
-			current = computer.getOutput();
+			current = computer.reconnectOutput();
 		}
 
 		return current.blockingFirst();
@@ -80,7 +80,7 @@ public class Day7 {
 		connectComputers(phaseSettings, computers);
 
 		Holder<Long> lastValueHolder = new Holder<>();
-		computers.last().getOutput().subscribe(lastValueHolder::setValue);
+		computers.last().reconnectOutput().subscribe(lastValueHolder::setValue);
 
 		runComputers(computers);
 		return lastValueHolder.getValue();
@@ -90,10 +90,10 @@ public class Day7 {
 		for (int i = 1; i < computers.length(); i++) {
 			Computer previousComputer = computers.get(i - 1);
 			long phaseSetting = phaseSettings.get(i);
-			computers.get(i).connectInput(Observable.just(phaseSetting).mergeWith(previousComputer.getOutput()));
+			computers.get(i).reconnectInput(Observable.just(phaseSetting).mergeWith(previousComputer.reconnectOutput()));
 		}
 		Computer lastComputer = computers.get(computers.length() - 1);
-		computers.get(0).connectInput(Observable.just((long) phaseSettings.get(0), 0L).mergeWith(lastComputer.getOutput()));
+		computers.get(0).reconnectInput(Observable.just((long) phaseSettings.get(0), 0L).mergeWith(lastComputer.reconnectOutput()));
 	}
 
 	private void runComputers(List<Computer> computers) {

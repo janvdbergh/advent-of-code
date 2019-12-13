@@ -25,7 +25,9 @@ public class Day2 {
 	}
 
 	private void part1() {
-		System.out.println(new Computer(INPUT).runWithInput(12, 2));
+		Computer computer = new Computer(INPUT);
+		runComputerWithInput(12, 2);
+		System.out.println(computer.run());
 	}
 
 	private void part2() {
@@ -33,7 +35,7 @@ public class Day2 {
 		while (true) {
 			int noun = 0;
 			while (noun <= verb) {
-				long result = new Computer(INPUT).runWithInput(verb, noun);
+				long result = runComputerWithInput(verb, noun);
 				if (result == EXPECTED_RESULT) {
 					System.out.printf("%d/%d -> %d", verb, noun, 100 * verb + noun);
 					return;
@@ -42,5 +44,12 @@ public class Day2 {
 			}
 			verb++;
 		}
+	}
+
+	private long runComputerWithInput(int verb, int noun) {
+		Computer computer = new Computer(INPUT);
+		computer.write(1, verb);
+		computer.write(2, noun);
+		return computer.run();
 	}
 }

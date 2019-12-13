@@ -1,16 +1,15 @@
 package eu.janvdb.aoc2019.common;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.subjects.ReplaySubject;
+import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
 
 public class Computer {
@@ -36,52 +35,53 @@ public class Computer {
 	private int pc;
 	private int relativeBase;
 
-	private final Subject<Long> output = ReplaySubject.create();
-	private final Queue<Long> inputQueue = new LinkedList<>();
-	private final List<Disposable> subscriptions = new ArrayList<>();
-
+	private Consumer<Long> output;
+	private Supplier<Long> input;
+	private Disposable inputDisposable = null;
 
 	public Computer(long[] state) {
+		this(state, () -> 0L, System.out::println);
+	}
+
+	public Computer(long[] state, Supplier<Long> input, Consumer<Long> output) {
 		this.state = new TreeMap<>();
 		for (int i = 0; i < state.length; i++) {
 			write(i, state[i]);
 		}
+
+		this.input = input;
+		this.output = output;
 	}
 
-	public Computer(long[] state, Observable<Long> input, Consumer<Long> outputConsumer) {
-		this(state);
-		connectInput(input);
-		subscriptions.add(getOutput().subscribe(outputConsumer::accept));
+	public void reconnectInput(Supplier<Long> input) {
+		this.input = input;
 	}
 
-	public void connectInput(Observable<Long> source) {
-		subscriptions.add(source.subscribe(this::addInputValue));
-	}
-
-	public Observable<Long> getOutput() {
-		return output;
-	}
-
-	private synchronized void addInputValue(long integer) {
-		inputQueue.add(integer);
-		notifyAll();
-	}
-
-	private synchronized long getNextInputValue() {
-		while (inputQueue.isEmpty()) {
-			try {
-				wait();
-			} catch (InterruptedException e) {
-				throw new RuntimeException("Interrupted");
-			}
+	public void reconnectInput(Observable<Long> source) {
+		if (inputDisposable != null) {
+			inputDisposable.dispose();
 		}
-		return inputQueue.remove();
+
+		BlockingQueue<Long> currentValues = new LinkedBlockingQueue<>();
+		inputDisposable = source.subscribe(currentValues::put);
+
+		this.input = () -> {
+			try {
+				return currentValues.take();
+			} catch (InterruptedException e) {
+				throw new RuntimeException(e);
+			}
+		};
 	}
 
-	public long runWithInput(int verb, int noun) {
-		write(1, verb);
-		write(2, noun);
-		return run();
+	public void reconnectOutput(Consumer<Long> output) {
+		this.output = output;
+	}
+
+	public Observable<Long> reconnectOutput() {
+		Subject<Long> subject = PublishSubject.create();
+		this.output = subject::onNext;
+		return subject;
 	}
 
 	public long run() {
@@ -97,11 +97,11 @@ public class Computer {
 					pc += 4;
 					break;
 				case INPUT:
-					setArgument(0, getNextInputValue());
+					setArgument(0, input.get());
 					pc += 2;
 					break;
 				case OUTPUT:
-					output.onNext(getArgument(0));
+					output.accept(getArgument(0));
 					pc += 2;
 					break;
 				case JUMP_IF_TRUE:
@@ -131,8 +131,6 @@ public class Computer {
 					pc += 2;
 					break;
 				case HALT:
-					output.onComplete();
-					subscriptions.forEach(Disposable::dispose);
 					break;
 				default:
 					throw new IllegalStateException();
@@ -140,10 +138,6 @@ public class Computer {
 		}
 
 		return read(0);
-	}
-
-	public void dump() {
-		state.forEach((key, value) -> System.out.printf("%d=%d; ", key, value));
 	}
 
 	private int getCurrentOpcode() {
@@ -179,7 +173,7 @@ public class Computer {
 		return state.getOrDefault(address, 0L);
 	}
 
-	private void write(int address, long value) {
+	public void write(int address, long value) {
 		state.put(address, value);
 	}
 }
