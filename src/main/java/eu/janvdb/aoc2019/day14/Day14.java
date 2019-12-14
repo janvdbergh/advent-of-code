@@ -6,7 +6,6 @@ import io.vavr.collection.List;
 public class Day14 {
 
 	private static final long ORE = 1_000_000_000_000L;
-	public static final ProductQuantity ONE_FUEL = new ProductQuantity("FUEL", 1);
 
 	public static void main(String[] args) {
 		new Day14().run();
@@ -17,18 +16,35 @@ public class Day14 {
 				.map(Reaction::parse)
 				.toList();
 
-		part1(reactions);
-		part2(reactions);
+		Reactor reactor = new Reactor(reactions);
+		part1(reactor);
+		part2(reactor);
 	}
 
-	private void part1(List<Reaction> reactions) {
-		Reactor reactor = new Reactor(reactions);
-		long oreRequired = reactor.oreRequiredFor(ONE_FUEL);
-		System.out.println(oreRequired);
+	private void part1(Reactor reactor) {
+		getRequiredOreForFuel(reactor, 1L);
 	}
 
-	private void part2(List<Reaction> reactions) {
-		Reactor reactor = new Reactor(reactions);
-		System.out.println(reactor.maxProductForOre(ORE, ONE_FUEL));
+	private void part2(Reactor reactor) {
+		long min = 1L;
+		long max = 1_000_000_000L;
+
+		while (min < max) {
+			long middle = (min + max) / 2;
+			long ore = getRequiredOreForFuel(reactor, middle);
+
+			if (ore < ORE) {
+				min = middle + 1;
+			} else {
+				max = middle - 1;
+			}
+		}
+		getRequiredOreForFuel(reactor, min);
+	}
+
+	private long getRequiredOreForFuel(Reactor reactor, long fuel) {
+		long ore = reactor.oreRequiredFor(new ProductQuantity("FUEL", fuel));
+		System.out.printf("%d fuel => %d ore\n", fuel, ore);
+		return ore;
 	}
 }

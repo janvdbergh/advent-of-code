@@ -11,7 +11,7 @@ import static eu.janvdb.aoc2019.day14.Constants.PRODUCT_ORE;
 public class Reactor {
 	private final Map<String, Reaction> reactionsByProduct;
 	private Map<String, Long> reactorState = new HashMap<>();
-	public static final long INITIAL_VALUE = 1_000_000_000L;
+	private Map<String, Long> totalsProduced = new HashMap<>();
 
 	public Reactor(List<Reaction> reactions) {
 		this.reactionsByProduct = reactions
@@ -20,48 +20,30 @@ public class Reactor {
 	}
 
 	public long oreRequiredFor(ProductQuantity required) {
-		initializeReactor(INITIAL_VALUE);
+		totalsProduced.clear();
+		reactorState.clear();
+
 		getProductQuantity(required);
-		return INITIAL_VALUE - getCurrentStock(PRODUCT_ORE);
-	}
-
-	public long maxProductForOre(long ore, ProductQuantity product) {
-		initializeReactor(ore);
-
-		long itemsProduced = 0L;
-		long start = System.currentTimeMillis();
-		while (true) {
-			try {
-				getProductQuantity(product);
-				itemsProduced++;
-				if (itemsProduced % 25000 == 0) {
-					System.out.printf("[%d] %s%% left.\n", (System.currentTimeMillis() - start) / 1000, 100L * getCurrentStock(PRODUCT_ORE) / ore);
-				}
-			} catch (NotEnoughOreException e) {
-				return itemsProduced;
-			}
-		}
+		return totalsProduced.get(PRODUCT_ORE);
 	}
 
 	private void getProductQuantity(ProductQuantity required) {
-		while (getCurrentStock(required.getProduct()) < required.getQuantity()) {
-			produce(required.getProduct());
+		if (getCurrentStock(required.getProduct()) < required.getQuantity()) {
+			produce(required.getProduct(), required.getQuantity() - getCurrentStock(required.getProduct()));
 		}
 
 		updateCurrentStock(required.getProduct(), -required.getQuantity());
 	}
 
-	private void produce(String product) {
-		if (product.equals(PRODUCT_ORE)) throw new NotEnoughOreException();
-
-		Reaction reaction = reactionsByProduct.get(product);
-		reaction.getInputs().forEach(this::getProductQuantity);
-		updateCurrentStock(reaction.getOutput().getProduct(), reaction.getOutput().getQuantity());
-	}
-
-	private void initializeReactor(long ore) {
-		reactorState.clear();
-		reactorState.put(PRODUCT_ORE, ore);
+	private void produce(String product, long quantity) {
+		if (product.equals(PRODUCT_ORE)) {
+			updateCurrentStock(product, quantity);
+		} else {
+			Reaction reaction = reactionsByProduct.get(product);
+			long requiredAmount = (quantity + reaction.getOutput().getQuantity() - 1) / reaction.getOutput().getQuantity();
+			reaction.getInputs().map(productQuantity -> productQuantity.multiply(requiredAmount)).forEach(this::getProductQuantity);
+			updateCurrentStock(reaction.getOutput().getProduct(), requiredAmount * reaction.getOutput().getQuantity());
+		}
 	}
 
 	private long getCurrentStock(String product) {
@@ -70,5 +52,8 @@ public class Reactor {
 
 	private void updateCurrentStock(String product, long delta) {
 		reactorState.put(product, getCurrentStock(product) + delta);
+		if (delta > 0) {
+			totalsProduced.put(product, totalsProduced.getOrDefault(product, 0L) + delta);
+		}
 	}
 }
