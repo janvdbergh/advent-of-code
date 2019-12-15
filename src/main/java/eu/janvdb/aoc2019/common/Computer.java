@@ -1,16 +1,16 @@
 package eu.janvdb.aoc2019.common;
 
+import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.subjects.PublishSubject;
+import io.reactivex.subjects.Subject;
+
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-
-import io.reactivex.Observable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.subjects.PublishSubject;
-import io.reactivex.subjects.Subject;
 
 public class Computer {
 
@@ -86,55 +86,59 @@ public class Computer {
 
 	public long run() {
 		pc = 0;
-		while (read(pc) != 99) {
-			switch (getCurrentOpcode()) {
-				case ADD:
-					setArgument(2, getArgument(0) + getArgument(1));
-					pc += 4;
-					break;
-				case MUL:
-					setArgument(2, getArgument(0) * getArgument(1));
-					pc += 4;
-					break;
-				case INPUT:
-					setArgument(0, input.get());
-					pc += 2;
-					break;
-				case OUTPUT:
-					output.accept(getArgument(0));
-					pc += 2;
-					break;
-				case JUMP_IF_TRUE:
-					if (getArgument(0) != 0) {
-						pc = (int) getArgument(1);
-					} else {
-						pc += 3;
-					}
-					break;
-				case JUMP_IF_FALSE:
-					if (getArgument(0) == 0) {
-						pc = (int) getArgument(1);
-					} else {
-						pc += 3;
-					}
-					break;
-				case LESS_THAN:
-					setArgument(2, getArgument(0) < getArgument(1) ? 1 : 0);
-					pc += 4;
-					break;
-				case EQUALS:
-					setArgument(2, getArgument(0) == getArgument(1) ? 1 : 0);
-					pc += 4;
-					break;
-				case ADJUST_RELATIVE_BASE:
-					relativeBase += getArgument(0);
-					pc += 2;
-					break;
-				case HALT:
-					break;
-				default:
-					throw new IllegalStateException();
+		try {
+			while (read(pc) != 99) {
+				switch (getCurrentOpcode()) {
+					case ADD:
+						setArgument(2, getArgument(0) + getArgument(1));
+						pc += 4;
+						break;
+					case MUL:
+						setArgument(2, getArgument(0) * getArgument(1));
+						pc += 4;
+						break;
+					case INPUT:
+						setArgument(0, input.get());
+						pc += 2;
+						break;
+					case OUTPUT:
+						output.accept(getArgument(0));
+						pc += 2;
+						break;
+					case JUMP_IF_TRUE:
+						if (getArgument(0) != 0) {
+							pc = (int) getArgument(1);
+						} else {
+							pc += 3;
+						}
+						break;
+					case JUMP_IF_FALSE:
+						if (getArgument(0) == 0) {
+							pc = (int) getArgument(1);
+						} else {
+							pc += 3;
+						}
+						break;
+					case LESS_THAN:
+						setArgument(2, getArgument(0) < getArgument(1) ? 1 : 0);
+						pc += 4;
+						break;
+					case EQUALS:
+						setArgument(2, getArgument(0) == getArgument(1) ? 1 : 0);
+						pc += 4;
+						break;
+					case ADJUST_RELATIVE_BASE:
+						relativeBase += getArgument(0);
+						pc += 2;
+						break;
+					case HALT:
+						break;
+					default:
+						throw new IllegalStateException();
+				}
 			}
+		} catch (RuntimeException e) {
+			System.err.println("Computer terminated: " + e.getMessage());
 		}
 
 		return read(0);
