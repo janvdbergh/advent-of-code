@@ -1,5 +1,9 @@
 package eu.janvdb.aoc2019.day15;
 
+import eu.janvdb.util.Maze;
+import eu.janvdb.util.MazeMapper;
+import eu.janvdb.util.Point2D;
+
 public class Day15 {
 
 	private static final long[] PROGRAM = {
@@ -52,10 +56,18 @@ public class Day15 {
 	}
 
 	private void run() {
-		MazeWalker mazeWalker = new MazeWalker(PROGRAM);
-		Maze maze = mazeWalker.walkMaze();
+		Maze maze = createMaze();
 		maze.print();
-		System.out.println(maze.shortestPathFromOriginToOxygen());
-		System.out.println(maze.timeToFillWithOxygen());
+
+		Point2D oxygen = maze.find(Maze.Type.TREASURE).getOrElseThrow(IllegalStateException::new);
+		System.out.println(maze.shortestPath(new Point2D(0, 0), oxygen));
+		System.out.println(maze.stepsToPaint(oxygen));
+	}
+
+	private Maze createMaze() {
+		ComputerMazeStepper stepper = new ComputerMazeStepper(PROGRAM);
+		Maze maze = new MazeMapper(stepper).createMaze();
+		stepper.stopComputer();
+		return maze;
 	}
 }

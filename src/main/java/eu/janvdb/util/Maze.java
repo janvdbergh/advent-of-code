@@ -1,11 +1,10 @@
-package eu.janvdb.aoc2019.day15;
+package eu.janvdb.util;
 
-import eu.janvdb.util.Direction;
-import eu.janvdb.util.Point2D;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.Map;
+import io.vavr.collection.Set;
 import io.vavr.collection.Stream;
 
 public class Maze {
@@ -39,20 +38,22 @@ public class Maze {
 		System.out.println();
 	}
 
-	public int shortestPathFromOriginToOxygen() {
-		Map<Point2D, Integer> shortestPathToOrigin = buildShortestPathMap(new Point2D(0, 0));
-		Point2D oxygen = getOxygenLocation();
-		return shortestPathToOrigin.get(oxygen).getOrElseThrow(IllegalStateException::new);
+	public int shortestPath(Point2D from, Point2D to) {
+		return buildShortestPathMap(from)
+				.get(to)
+				.getOrElseThrow(IllegalStateException::new);
 	}
 
-	public int timeToFillWithOxygen() {
-		Map<Point2D, Integer> shortestPathToOxygen = buildShortestPathMap(findOxygen());
-		return shortestPathToOxygen.values().max().getOrElseThrow(IllegalStateException::new);
+	public int stepsToPaint(Point2D from) {
+		return buildShortestPathMap(from)
+				.values()
+				.max()
+				.getOrElseThrow(IllegalStateException::new);
 	}
 
 	private Map<Point2D, Integer> buildShortestPathMap(Point2D origin) {
 		Map<Point2D, Integer> shortestPathToOrigin = maze.keySet().toStream()
-				.filter(point2D -> getTypeAt(point2D) == Type.EMPTY || getTypeAt(point2D) == Type.OXYGEN)
+				.filter(point2D -> getTypeAt(point2D) == Type.EMPTY || getTypeAt(point2D) == Type.TREASURE)
 				.toMap(point2D -> Tuple.of(point2D, maze.length() + 1))
 				.put(origin, 0);
 
@@ -67,10 +68,6 @@ public class Maze {
 		return shortestPathToOrigin;
 	}
 
-	private Point2D getOxygenLocation() {
-		return maze.keySet().find(point2D -> getTypeAt(point2D) == Type.OXYGEN).getOrElseThrow(IllegalStateException::new);
-	}
-
 	private int findShortest(Map<Point2D, Integer> shortestMap, Tuple2<Point2D, Integer> current) {
 		Integer shortestViaNeighbour = Stream.of(Direction.values())
 				.map(direction -> current._1().step(direction, 1))
@@ -80,15 +77,15 @@ public class Maze {
 		return Math.min(current._2, shortestViaNeighbour + 1);
 	}
 
-	public Point2D findOxygen() {
-		return maze.find(entry -> entry._2 == Type.OXYGEN).getOrElseThrow(IllegalStateException::new)._1;
+	public Set<Point2D> find(Type type) {
+		return maze.keySet().filter(point2D -> getTypeAt(point2D) == type);
 	}
 
 	public enum Type {
 		UNKNOWN('?'),
 		WALL('#'),
 		EMPTY(' '),
-		OXYGEN('.');
+		TREASURE('.');
 
 		private char displayChar;
 
