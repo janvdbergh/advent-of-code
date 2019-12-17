@@ -23,6 +23,10 @@ public class Point2D {
 		return new Point2D(x + dx, y + dy);
 	}
 
+	public Point2D step(Direction direction) {
+		return step(direction, 1);
+	}
+
 	public Point2D step(Direction direction, int steps) {
 		switch (direction) {
 			case NORTH:
