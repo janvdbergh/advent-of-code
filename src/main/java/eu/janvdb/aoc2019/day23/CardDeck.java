@@ -1,5 +1,7 @@
 package eu.janvdb.aoc2019.day23;
 
+import java.math.BigInteger;
+
 public class CardDeck implements Permutable<CardDeck> {
 
 	private final int[] cards;
@@ -30,24 +32,24 @@ public class CardDeck implements Permutable<CardDeck> {
 	}
 
 	@Override
-	public CardDeck cut(int numberToCut) {
-		numberToCut = numberToCut % numberOfCards;
-		if (numberToCut<0) numberToCut += numberOfCards;
+	public CardDeck cut(BigInteger cut) {
+		int myNumberToCut = cut.intValue() % numberOfCards;
+		if (myNumberToCut < 0) myNumberToCut += numberOfCards;
 
 		int[] newCards = new int[numberOfCards];
-		System.arraycopy(cards, 0, newCards, numberOfCards - numberToCut, numberToCut);
-		System.arraycopy(cards, numberToCut, newCards, 0, numberOfCards - numberToCut);
+		System.arraycopy(cards, 0, newCards, numberOfCards - myNumberToCut, myNumberToCut);
+		System.arraycopy(cards, myNumberToCut, newCards, 0, numberOfCards - myNumberToCut);
 		return new CardDeck(newCards);
 	}
 
 	@Override
-	public CardDeck dealWithIncrement(int increment) {
+	public CardDeck dealWithIncrement(BigInteger increment) {
 		int[] newCards = new int[numberOfCards];
 		int position = 0;
-		for(int i=0; i<numberOfCards; i++) {
+		for (int i = 0; i < numberOfCards; i++) {
 			newCards[position] = cards[i];
-			position = (position + increment) % numberOfCards;
-			if (position<0) position += numberOfCards;
+			position = (position + increment.intValue()) % numberOfCards;
+			if (position < 0) position += numberOfCards;
 		}
 
 		return new CardDeck(newCards);
@@ -58,15 +60,15 @@ public class CardDeck implements Permutable<CardDeck> {
 	}
 
 	public int findPositionOf(int card) {
-		for(int i=0; i<numberOfCards; i++) {
-			if (cards[i]==card) return i;
+		for (int i = 0; i < numberOfCards; i++) {
+			if (cards[i] == card) return i;
 		}
 		throw new IllegalArgumentException();
 	}
 
 	public void print() {
-		for(int i=0; i<numberOfCards; i++) {
-			if (i!=0) System.out.print(", ");
+		for (int i = 0; i < numberOfCards; i++) {
+			if (i != 0) System.out.print(", ");
 			System.out.print(cards[i]);
 		}
 		System.out.println();
