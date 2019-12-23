@@ -14,6 +14,6 @@ public class Day20 {
 		MazeWithBypasses maze = new MazeWithBypasses(input.toList());
 
 		maze.print(System.out);
-		System.out.println(maze.shortestPathNoRecursiveMaze());
+		System.out.println(maze.shortestPathUsingBypasses());
 	}
 }
