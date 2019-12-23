@@ -1,17 +1,14 @@
 package eu.janvdb.aoc2019.day13;
 
-import eu.janvdb.aoc2019.common.Computer;
+import eu.janvdb.aoc2019.common.ReactiveComputer;
 
-public class SmartConsole {
+public class SmartConsole extends AbstractConsole {
 
-	private final Screen screen;
-
-	public SmartConsole(Computer computer, Screen screen) {
-		this.screen = screen;
-		computer.reconnectInput(this::getNextStep);
+	protected SmartConsole(ReactiveComputer computer, Screen screen) {
+		super(computer, screen);
 	}
 
-	private Long getNextStep() {
+	protected Long getNextStep() {
 		int locationOfBall = screen.find(Tile.BALL).getX();
 		int locationOfPaddle = screen.find(Tile.PADDLE).getX();
 

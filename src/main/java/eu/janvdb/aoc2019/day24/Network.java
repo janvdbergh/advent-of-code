@@ -1,7 +1,6 @@
 package eu.janvdb.aoc2019.day24;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,8 +19,8 @@ public class Network {
 		this.monitors.add(monitor);
 	}
 
-	private synchronized void messageSent(NetworkMessage message) {
-		monitors.forEach(networkMonitor -> networkMonitor.receiveMessage(message));
+	private void messageSent(NetworkMessage message) {
+		monitors.forEach(networkMonitor -> networkMonitor.monitorMessage(message));
 		NetworkDevice recipient = devices.get(message.getRecipient());
 		if (recipient != null) {
 			recipient.receiveMessage(message);
@@ -30,9 +29,5 @@ public class Network {
 
 	public void start() {
 		this.devices.values().forEach(NetworkDevice::start);
-	}
-
-	public Collection<NetworkDevice> getDevices() {
-		return devices.values();
 	}
 }

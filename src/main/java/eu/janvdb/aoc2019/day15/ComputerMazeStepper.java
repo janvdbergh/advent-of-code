@@ -1,7 +1,6 @@
 package eu.janvdb.aoc2019.day15;
 
-import eu.janvdb.aoc2019.common.Computer;
-import eu.janvdb.aoc2019.common.InputOutputExchanger;
+import eu.janvdb.aoc2019.common.ValueExchangeComputer;
 import eu.janvdb.util.Direction;
 import eu.janvdb.util.maze.MazeMapper;
 
@@ -9,30 +8,22 @@ public class ComputerMazeStepper implements MazeMapper.Stepper {
 
 	public static final char OXYGEN = 'o';
 
-	private final Thread computerThread;
-	private final InputOutputExchanger inputOutputExchanger;
+	private final ValueExchangeComputer valueExchangeComputer;
 
 	public ComputerMazeStepper(long[] program) {
-		Computer computer = new Computer(program);
-		inputOutputExchanger = new InputOutputExchanger(computer);
-		computerThread = new Thread(computer::run, "computer");
-		computerThread.start();
+		valueExchangeComputer = new ValueExchangeComputer(program);
+		valueExchangeComputer.start();
 	}
 
 	public void stopComputer() {
-		try {
-			computerThread.interrupt();
-			computerThread.join();
-		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
-		}
+		valueExchangeComputer.stop();
 	}
 
 	@Override
 	public char step(Direction direction) {
 		try {
 			int input = mapDirectionToValue(direction);
-			int output = (int) inputOutputExchanger.exchange(input);
+			int output = (int) valueExchangeComputer.exchange(input);
 			return mapResultToType(output);
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);

@@ -1,12 +1,12 @@
 package eu.janvdb.aoc2019.day19;
 
-import java.util.function.Supplier;
-
-import eu.janvdb.aoc2019.common.Computer;
+import eu.janvdb.aoc2019.common.BasicComputer;
 import eu.janvdb.util.Holder;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
 import io.vavr.collection.Iterator;
+
+import java.util.function.Supplier;
 
 public class Day19 {
 
@@ -80,7 +80,7 @@ public class Day19 {
 
 	private boolean isLit(int x, int y) {
 		Holder<Long> outputHolder = new Holder<>();
-		Computer computer = new Computer(PROGRAM, new IterableSupplier(x, y), outputHolder::setValue);
+		BasicComputer computer = new BasicComputer(PROGRAM, new IterableSupplier(x, y), outputHolder::setValue);
 		computer.run();
 		return outputHolder.getValue() == 1L;
 	}

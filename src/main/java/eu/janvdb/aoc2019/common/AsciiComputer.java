@@ -4,17 +4,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class AsciiConsole {
+public class AsciiComputer {
 
 	private InputStream input;
 	private final OutputStream output;
 	private final Thread computerThread;
 
-	public AsciiConsole(long[] program, InputStream input, OutputStream output) {
+	public AsciiComputer(long[] program, InputStream input, OutputStream output) {
 		this.input = input;
 		this.output = output;
 
-		Computer computer = new Computer(program, this::read, this::write);
+		BasicComputer computer = new BasicComputer(program, this::read, this::write);
 		computerThread = new Thread(computer::run, "computer");
 	}
 

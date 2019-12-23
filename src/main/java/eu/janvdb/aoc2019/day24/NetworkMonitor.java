@@ -2,6 +2,6 @@ package eu.janvdb.aoc2019.day24;
 
 public interface NetworkMonitor {
 
-	void receiveMessage(NetworkMessage message);
+	void monitorMessage(NetworkMessage message);
 
 }

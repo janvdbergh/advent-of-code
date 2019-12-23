@@ -1,24 +1,24 @@
 package eu.janvdb.aoc2019.day13;
 
-import java.util.function.Predicate;
-
-import eu.janvdb.aoc2019.common.Computer;
+import eu.janvdb.aoc2019.common.ReactiveComputer;
 import eu.janvdb.util.Point2D;
 import io.vavr.Tuple2;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.Map;
+
+import java.util.function.Predicate;
 
 public class Screen {
 
 	private Map<Point2D, Tile> values = HashMap.empty();
 	private int score;
 
-	public Screen(Computer computer) {
+	public Screen(ReactiveComputer computer) {
 		connectComputer(computer);
 	}
 
-	private void connectComputer(Computer computer) {
-		computer.reconnectOutput()
+	private void connectComputer(ReactiveComputer computer) {
+		computer.getOutput()
 				.buffer(3)
 				.subscribe(values -> write(values.get(0).intValue(), values.get(1).intValue(), values.get(2).intValue()));
 	}

@@ -1,6 +1,6 @@
 package eu.janvdb.aoc2019.day5;
 
-import eu.janvdb.aoc2019.common.Computer;
+import eu.janvdb.aoc2019.common.BasicComputer;
 
 public class Day5 {
 
@@ -42,12 +42,12 @@ public class Day5 {
 	}
 
 	private void part1() {
-		new Computer(INPUT, () -> 1L, this::print).run();
+		new BasicComputer(INPUT, () -> 1L, this::print).run();
 		System.out.println();
 	}
 
 	private void part2() {
-		new Computer(INPUT, () -> 5L, this::print).run();
+		new BasicComputer(INPUT, () -> 5L, this::print).run();
 		System.out.println();
 	}
 

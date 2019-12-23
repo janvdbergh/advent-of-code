@@ -117,7 +117,8 @@ public class Day24 {
 			if (message.getRecipient() == 0 && message.getSender() == 255) {
 				long value = message.getY();
 				if (previousValue.getValue() == value) {
-					System.out.println(value);
+					System.out.printf("*** %d", value);
+					System.exit(0);
 				}
 				previousValue.setValue(value);
 			}

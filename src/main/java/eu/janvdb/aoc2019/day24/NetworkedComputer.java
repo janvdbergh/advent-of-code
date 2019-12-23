@@ -1,51 +1,61 @@
 package eu.janvdb.aoc2019.day24;
 
+import eu.janvdb.aoc2019.common.ThreadedComputer;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.Consumer;
 
-import eu.janvdb.aoc2019.common.Computer;
-import io.reactivex.subjects.BehaviorSubject;
-import io.reactivex.subjects.Subject;
+public class NetworkedComputer extends ThreadedComputer implements NetworkDevice {
 
-public class NetworkedComputer implements NetworkDevice {
-
+	private final BlockingQueue<Long> inputQueue = new LinkedBlockingQueue<>();
+	private final List<Long> outputs = new ArrayList<>();
 	private final int address;
-	private final Computer computer;
-	private final Subject<Long> computerInput;
+	private Consumer<NetworkMessage> messageConsumer;
 
 	public NetworkedComputer(int address, long[] program) {
+		super(program);
 		this.address = address;
-		this.computer = new Computer(program);
-		this.computerInput = BehaviorSubject.create();
-
-		this.computer.reconnectInput(computerInput, -1L);
-		computerInput.onNext((long) address);
+		this.inputQueue.add((long) address);
 	}
-	
+
+	@Override
+	protected Long produceInput() {
+		try {
+			if (inputQueue.isEmpty()) {
+				return -1L;
+			}
+			return inputQueue.take();
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
+	protected synchronized void handleOutput(Long value) {
+		outputs.add(value);
+		if (outputs.size() == 3) {
+			NetworkMessage message = new NetworkMessage(address, outputs.get(0).intValue(), outputs.get(1), outputs.get(2));
+			outputs.clear();
+			messageConsumer.accept(message);
+		}
+	}
+
 	@Override
 	public int getAddress() {
 		return address;
 	}
 
 	@Override
-	public boolean isIdle() {
-		return computer.isIdle();
-	}
-
-	@Override
 	public void registerNetworkSender(Consumer<NetworkMessage> messageConsumer) {
-		computer.reconnectOutput().buffer(3)
-				.map(values -> new NetworkMessage(address, values.get(0).intValue(), values.get(1), values.get(2)))
-				.subscribe(messageConsumer::accept);
+		this.messageConsumer = messageConsumer;
 	}
 
 	@Override
 	public void receiveMessage(NetworkMessage networkMessage) {
-		computerInput.onNext(networkMessage.getX());
-		computerInput.onNext(networkMessage.getY());
-	}
-
-	@Override
-	public void start() {
-		new Thread(computer::run, "Computer " + address).start();
+		inputQueue.add(networkMessage.getX());
+		inputQueue.add(networkMessage.getY());
 	}
 }

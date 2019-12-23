@@ -1,6 +1,7 @@
 package eu.janvdb.aoc2019.day7;
 
-import eu.janvdb.aoc2019.common.Computer;
+import eu.janvdb.aoc2019.common.ReactiveComputer;
+import eu.janvdb.aoc2019.common.ThreadedComputer;
 import eu.janvdb.util.Holder;
 import eu.janvdb.util.Permutations;
 import io.reactivex.Observable;
@@ -55,11 +56,10 @@ public class Day7 {
 	private Long getOutput1(List<Integer> phaseSettings, long[] program) {
 		Observable<Long> current = Observable.just(0L);
 		for (int phaseSetting : phaseSettings) {
-			Computer computer = new Computer(program);
-			computer.reconnectInput(Observable.just((long) phaseSetting).mergeWith(current));
-			computer.run();
-
-			current = computer.reconnectOutput();
+			ReactiveComputer computer = new ReactiveComputer(program);
+			computer.setInput(Observable.just((long) phaseSetting).mergeWith(current));
+			computer.start();
+			current = computer.getOutput();
 		}
 
 		return current.blockingFirst();
@@ -76,45 +76,36 @@ public class Day7 {
 	}
 
 	private Long getOutput2(List<Integer> phaseSettings, long[] program) {
-		List<Computer> computers = createComputers(phaseSettings, program);
+		List<ReactiveComputer> computers = createComputers(phaseSettings, program);
 		connectComputers(phaseSettings, computers);
 
 		Holder<Long> lastValueHolder = new Holder<>();
-		computers.last().reconnectOutput().subscribe(lastValueHolder::setValue);
+		computers.last().getOutput().subscribe(lastValueHolder::setValue);
 
 		runComputers(computers);
 		return lastValueHolder.getValue();
 	}
 
-	private void connectComputers(List<Integer> phaseSettings, List<Computer> computers) {
+	private void connectComputers(List<Integer> phaseSettings, List<ReactiveComputer> computers) {
 		for (int i = 1; i < computers.length(); i++) {
-			Computer previousComputer = computers.get(i - 1);
+			ReactiveComputer previousComputer = computers.get(i - 1);
 			long phaseSetting = phaseSettings.get(i);
-			computers.get(i).reconnectInput(Observable.just(phaseSetting).mergeWith(previousComputer.reconnectOutput()));
+			computers.get(i).setInput(Observable.just(phaseSetting).mergeWith(previousComputer.getOutput()));
 		}
-		Computer lastComputer = computers.get(computers.length() - 1);
-		computers.get(0).reconnectInput(Observable.just((long) phaseSettings.get(0), 0L).mergeWith(lastComputer.reconnectOutput()));
+		ReactiveComputer lastComputer = computers.get(computers.length() - 1);
+		computers.get(0).setInput(Observable.just((long) phaseSettings.get(0), 0L).mergeWith(lastComputer.getOutput()));
 	}
 
-	private void runComputers(List<Computer> computers) {
-		List<Thread> threads = computers.map(computer -> new Thread(computer::run));
-		threads.forEach(Thread::start);
-		threads.forEach(this::joinThread);
+	private void runComputers(List<ReactiveComputer> computers) {
+		computers.forEach(ThreadedComputer::start);
+		computers.forEach(ThreadedComputer::join);
 	}
 
-	private List<Computer> createComputers(List<Integer> phaseSettings, long[] program) {
-		List<Computer> computers = List.empty();
+	private List<ReactiveComputer> createComputers(List<Integer> phaseSettings, long[] program) {
+		List<ReactiveComputer> computers = List.empty();
 		for (int ignored : phaseSettings) {
-			computers = computers.append(new Computer(program));
+			computers = computers.append(new ReactiveComputer(program));
 		}
 		return computers;
-	}
-
-	private void joinThread(Thread thread) {
-		try {
-			thread.join();
-		} catch (InterruptedException e) {
-			throw new RuntimeException("Interrupted");
-		}
 	}
 }

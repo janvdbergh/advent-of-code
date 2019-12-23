@@ -2,26 +2,17 @@ package eu.janvdb.aoc2019.day24;
 
 import java.util.function.Consumer;
 
-public class NAT implements NetworkDevice {
+public class NAT implements NetworkDevice, NetworkMonitor {
 
 	private static final int NAT_ADDRESS = 255;
-	private final Network network;
 
 	private Consumer<NetworkMessage> messageConsumer;
 	private NetworkMessage lastMessage;
-
-	public NAT(Network network) {
-		this.network = network;
-	}
+	private long lastMessageTimeStamp = System.currentTimeMillis() + 2000L;
 
 	@Override
 	public int getAddress() {
 		return NAT_ADDRESS;
-	}
-
-	@Override
-	public boolean isIdle() {
-		return true;
 	}
 
 	@Override
@@ -31,9 +22,12 @@ public class NAT implements NetworkDevice {
 
 	@Override
 	public void receiveMessage(NetworkMessage networkMessage) {
-		if (networkMessage.getRecipient() == 255) {
-			this.lastMessage = networkMessage;
-		}
+		this.lastMessage = networkMessage;
+	}
+
+	@Override
+	public void monitorMessage(NetworkMessage message) {
+		this.lastMessageTimeStamp = System.currentTimeMillis();
 	}
 
 	@Override
@@ -44,10 +38,8 @@ public class NAT implements NetworkDevice {
 	private void run() {
 		try {
 			while (true) {
-				Thread.sleep(125);
-
-				boolean allIdle = network.getDevices().stream().allMatch(NetworkDevice::isIdle);
-				if (allIdle && lastMessage != null) {
+				Thread.sleep(250);
+				if (System.currentTimeMillis() - lastMessageTimeStamp > 250) {
 					messageConsumer.accept(new NetworkMessage(NAT_ADDRESS, 0, lastMessage.getX(), lastMessage.getY()));
 				}
 			}

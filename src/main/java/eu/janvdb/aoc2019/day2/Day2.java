@@ -1,6 +1,6 @@
 package eu.janvdb.aoc2019.day2;
 
-import eu.janvdb.aoc2019.common.Computer;
+import eu.janvdb.aoc2019.common.BasicComputer;
 
 public class Day2 {
 
@@ -25,7 +25,7 @@ public class Day2 {
 	}
 
 	private void part1() {
-		Computer computer = new Computer(INPUT);
+		BasicComputer computer = new BasicComputer(INPUT);
 		runComputerWithInput(12, 2);
 		System.out.println(computer.run());
 	}
@@ -47,7 +47,7 @@ public class Day2 {
 	}
 
 	private long runComputerWithInput(int verb, int noun) {
-		Computer computer = new Computer(INPUT);
+		BasicComputer computer = new BasicComputer(INPUT);
 		computer.write(1, verb);
 		computer.write(2, noun);
 		return computer.run();

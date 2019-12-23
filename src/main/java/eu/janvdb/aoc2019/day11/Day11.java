@@ -1,10 +1,10 @@
 package eu.janvdb.aoc2019.day11;
 
-import java.util.Scanner;
-
-import eu.janvdb.aoc2019.common.Computer;
+import eu.janvdb.aoc2019.common.ReactiveComputer;
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
+
+import java.util.Scanner;
 
 public class Day11 {
 
@@ -60,17 +60,15 @@ public class Day11 {
 	}
 
 	private void runRobot(long startValue) throws InterruptedException {
-		Computer computer = new Computer(PROGRAM);
+		ReactiveComputer computer = new ReactiveComputer(PROGRAM);
 		Robot robot = new Robot(startValue);
 
-		computer.reconnectInput(robot.getOutput());
-		robot.connectInput(computer.reconnectOutput());
+		computer.setInput(robot.getOutput());
+		robot.connectInput(computer.getOutput());
 
-		Thread computerThread = new Thread(computer::run);
-		computerThread.start();
+		computer.start();
 		robot.start();
-
-		computerThread.join();
+		computer.join();
 
 		System.out.println(robot.getColors().length()); // <9511
 		robot.print(System.out);

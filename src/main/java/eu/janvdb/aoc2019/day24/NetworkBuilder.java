@@ -7,7 +7,7 @@ public class NetworkBuilder {
 		for (int address = 0; address < numberOfComputers; address++) {
 			network.addDevice(new NetworkedComputer(address, program));
 		}
-		network.addDevice(new NAT(network));
+		network.addDevice(new NAT());
 
 		return network;
 	}

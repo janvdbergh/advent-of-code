@@ -1,6 +1,6 @@
 package eu.janvdb.aoc2019.day21;
 
-import eu.janvdb.aoc2019.common.AsciiConsole;
+import eu.janvdb.aoc2019.common.AsciiComputer;
 
 public class Day21 {
 
@@ -121,7 +121,7 @@ public class Day21 {
 	}
 
 	private void run() {
-		new AsciiConsole(PROGRAM, System.in, System.out).start();
+		new AsciiComputer(PROGRAM, System.in, System.out).start();
 	}
 
 

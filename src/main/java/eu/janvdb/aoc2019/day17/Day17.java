@@ -1,6 +1,7 @@
 package eu.janvdb.aoc2019.day17;
 
-import eu.janvdb.aoc2019.common.Computer;
+import eu.janvdb.aoc2019.common.BasicComputer;
+import eu.janvdb.aoc2019.common.ReactiveComputer;
 import io.reactivex.subjects.ReplaySubject;
 import io.vavr.collection.List;
 import io.vavr.collection.Stream;
@@ -70,11 +71,11 @@ public class Day17 {
 			50, 1, 50, 9, 24
 	};
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		new Day17().run();
 	}
 
-	private void run() {
+	private void run() throws InterruptedException {
 		Map map = readMap();
 		part1(map);
 		part2(map);
@@ -82,7 +83,7 @@ public class Day17 {
 
 	private Map readMap() {
 		StringBuilder stringBuilder = new StringBuilder();
-		Computer computer = new Computer(PROGRAM, () -> 0L, value -> stringBuilder.append((char) value.intValue()));
+		BasicComputer computer = new BasicComputer(PROGRAM, () -> 0L, value -> stringBuilder.append((char) value.intValue()));
 		computer.run();
 
 		String mapStr = stringBuilder.toString();
@@ -97,26 +98,28 @@ public class Day17 {
 		System.out.println(sum);
 	}
 
-	private void part2(Map map) {
+	private void part2(Map map) throws InterruptedException {
 		System.out.println(map.getWalkInstructions());
 
 		// Reduced output from above by hand to the following
 		String inputs = "A,B,A,C,B,C,A,C,B,C\nL,8,R,10,L,10\nR,10,L,8,L,8,L,10\nL,4,L,6,L,8,L,8\nn\n";
 		List<Long> inputAsLongList = Stream.ofAll(inputs.toCharArray()).map(ch -> (long) ch).toList();
 
-		Computer computer = new Computer(PROGRAM);
-		computer.write(0, 2L);
-		computer.reconnectInput(ReplaySubject.fromIterable(inputAsLongList));
-		computer.reconnectOutput(this::robotOutput);
-		computer.run();
+		long[] updatedProgram = PROGRAM.clone();
+		updatedProgram[0] = 2L;
+		ReactiveComputer computer = new ReactiveComputer(updatedProgram);
+		computer.setInput(ReplaySubject.fromIterable(inputAsLongList));
+		computer.getOutput().subscribe(this::robotOutput);
+		computer.start();
+		computer.join();
 	}
 
 	private void robotOutput(Long x) {
-		if (x==10) {
+		if (x == 10) {
 			System.out.println();
-		}  else if (x<128) {
+		} else if (x < 128) {
 			System.out.print((char) x.intValue());
-		}else
+		} else
 			System.out.println(x);
 	}
 }

@@ -2,17 +2,10 @@ package eu.janvdb.aoc2019.common;
 
 import java.util.SortedMap;
 import java.util.TreeMap;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import io.reactivex.Observable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.subjects.PublishSubject;
-import io.reactivex.subjects.Subject;
-
-public class Computer {
+public class BasicComputer {
 
 	private static final int[] MODE_DIVIDERS = {100, 1000, 10000};
 
@@ -37,14 +30,12 @@ public class Computer {
 
 	private Consumer<Long> output;
 	private Supplier<Long> input;
-	private boolean idle;
-	private Disposable inputDisposable = null;
 
-	public Computer(long[] state) {
+	public BasicComputer(long[] state) {
 		this(state, () -> 0L, System.out::println);
 	}
 
-	public Computer(long[] state, Supplier<Long> input, Consumer<Long> output) {
+	public BasicComputer(long[] state, Supplier<Long> input, Consumer<Long> output) {
 		this.state = new TreeMap<>();
 		for (int i = 0; i < state.length; i++) {
 			write(i, state[i]);
@@ -52,45 +43,6 @@ public class Computer {
 
 		this.input = input;
 		this.output = output;
-	}
-
-	public void reconnectInput(Supplier<Long> input) {
-		this.input = input;
-	}
-
-	public void reconnectInput(Observable<Long> source) {
-		reconnectInput(source, null);
-	}
-
-	public void reconnectInput(Observable<Long> source, Long valueIfNoInput) {
-		if (inputDisposable != null) {
-			inputDisposable.dispose();
-		}
-
-		BlockingQueue<Long> currentValues = new LinkedBlockingQueue<>();
-		inputDisposable = source.subscribe(currentValues::put);
-
-		this.input = () -> {
-			try {
-				idle = currentValues.isEmpty();
-				if (valueIfNoInput != null && idle) {
-					return valueIfNoInput;
-				}
-				return currentValues.take();
-			} catch (InterruptedException e) {
-				throw new RuntimeException(e);
-			}
-		};
-	}
-
-	public void reconnectOutput(Consumer<Long> output) {
-		this.output = output;
-	}
-
-	public Observable<Long> reconnectOutput() {
-		Subject<Long> subject = PublishSubject.create();
-		this.output = subject::onNext;
-		return subject;
 	}
 
 	public long run() {
@@ -188,9 +140,5 @@ public class Computer {
 
 	public void write(int address, long value) {
 		state.put(address, value);
-	}
-
-	public boolean isIdle() {
-		return idle;
 	}
 }

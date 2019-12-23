@@ -1,6 +1,6 @@
 package eu.janvdb.aoc2019.day13;
 
-import eu.janvdb.aoc2019.common.Computer;
+import eu.janvdb.aoc2019.common.ReactiveComputer;
 
 public class Day13 {
 
@@ -88,38 +88,39 @@ public class Day13 {
 			88, 6, 51, 848142
 	};
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		new Day13().run();
 	}
 
-	private void run() {
+	private void run() throws InterruptedException {
 		runWithSmartConsole();
 	}
 
-	private void runNormally() {
-		Computer computer = new Computer(Day13.PROGRAM);
+	private void runNormally() throws InterruptedException {
+		ReactiveComputer computer = new ReactiveComputer(Day13.PROGRAM);
 		Screen screen = new Screen(computer);
 		new Console(computer, screen);
 
 		run(computer, screen);
 	}
 
-	private void runWithSmartConsole() {
-		Computer computer = new Computer(Day13.PROGRAM);
+	private void runWithSmartConsole() throws InterruptedException {
+		ReactiveComputer computer = new ReactiveComputer(Day13.PROGRAM);
 		Screen screen = new Screen(computer);
-		new SmartConsole(computer, screen);
+		SmartConsole smartConsole = new SmartConsole(computer, screen);
+		new Thread(smartConsole::run).start();
 
 		run(computer, screen);
 	}
 
-	private void run(Computer computer, Screen screen) {
-		computer.run();
+	private void run(ReactiveComputer computer, Screen screen) throws InterruptedException {
+		computer.start();
+		computer.join();
 		System.out.println(screen.countMatching(value -> value == Tile.BLOCK));
 
 		computer.write(0, 2);
-		computer.run();
+		computer.start();
+		computer.join();
 		screen.print();
 	}
-
-
 }
