@@ -1,4 +1,4 @@
-package eu.janvdb.aoc2019.day23;
+package eu.janvdb.aoc2019.day22;
 
 import org.junit.jupiter.api.Test;
 

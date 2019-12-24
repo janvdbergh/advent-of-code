@@ -1,4 +1,4 @@
-package eu.janvdb.aoc2019.day24;
+package eu.janvdb.aoc2019.day23;
 
 public interface NetworkMonitor {
 
