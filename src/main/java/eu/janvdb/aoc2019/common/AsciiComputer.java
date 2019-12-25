@@ -47,4 +47,7 @@ public class AsciiComputer {
 		computerThread.join();
 	}
 
+	public void join() throws InterruptedException {
+		computerThread.join();
+	}
 }
