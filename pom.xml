@@ -8,5 +8,6 @@
 
 	<modules>
 		<module>advent-of-code-201x</module>
+		<module>advent-of-code-2020</module>
 	</modules>
 </project>
