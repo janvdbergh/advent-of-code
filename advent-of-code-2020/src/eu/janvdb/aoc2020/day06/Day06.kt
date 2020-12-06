@@ -1,6 +1,7 @@
 package eu.janvdb.aoc2020.day06
 
-import java.io.File
+import eu.janvdb.aoc2020.util.groupLines
+import eu.janvdb.aoc2020.util.readLines
 
 fun main() {
 	val groups = readGroups()
@@ -9,25 +10,9 @@ fun main() {
 	println(groups.map(Group::combineAnd).map(Answers::count).sum())
 }
 
-private fun readGroups(): MutableList<Group> {
-	val groups = mutableListOf<Group>()
-
-	val lines = File("inputs/input06.txt").readLines()
-	var currentLines = mutableListOf<Answers>()
-	for (line in lines) {
-		if (line.isBlank() && !currentLines.isEmpty()) {
-			groups.add(Group(currentLines))
-			currentLines = mutableListOf()
-		} else {
-			currentLines.add(Answers(line))
-		}
-	}
-
-	if (!currentLines.isEmpty()) {
-		groups.add(Group(currentLines))
-	}
-
-	return groups
+private fun readGroups(): List<Group> {
+	val lines = readLines("input06.txt")
+	return groupLines(lines) { Group(it.map(::Answers))	}
 }
 
 class Answers {

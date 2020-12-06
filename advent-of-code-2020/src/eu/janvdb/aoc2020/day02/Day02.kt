@@ -1,10 +1,10 @@
 package eu.janvdb.aoc2020.day02
 
-import java.io.File
+import eu.janvdb.aoc2020.util.readLines
 import kotlin.system.exitProcess
 
 fun main() {
-	val lines = File("inputs/input02.txt").readLines()
+	val lines = readLines("input02.txt")
 
 	// 1-13 f: ffffffffffdfzfffff
 	val regexp = Regex(pattern = "^([0-9]+)-([0-9]+) ([a-z]): ([a-z]+)$")

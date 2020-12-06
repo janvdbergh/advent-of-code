@@ -1,13 +1,13 @@
 package eu.janvdb.aoc2020.day05
 
-import java.io.File
+import eu.janvdb.aoc2020.util.readLines
 
 // Format: [FB]{8}[LR]{3} with B and R meaning 1
 private val REGEX_ZEROES = Regex("[FL]", RegexOption.IGNORE_CASE)
 val REGEX_ONES = Regex("[BR]", RegexOption.IGNORE_CASE)
 
 fun main() {
-	val list = File("inputs/input05.txt").readLines()
+	val list = readLines("input05.txt")
 			.map (::getSeatNumber)
 			.sorted()
 

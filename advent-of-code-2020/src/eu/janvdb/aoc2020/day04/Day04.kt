@@ -1,6 +1,7 @@
 package eu.janvdb.aoc2020.day04
 
-import java.io.File
+import eu.janvdb.aoc2020.util.groupLines
+import eu.janvdb.aoc2020.util.readLines
 
 val fieldRegex = Regex("(\\S+):(\\S+)")
 val yearRegex = Regex("^\\d{4}$")
@@ -10,20 +11,10 @@ val eyeColorRegex = Regex("^amb|blu|brn|gry|grn|hzl|oth$")
 val passportIdRegex = Regex("^\\d{9}$")
 
 fun main() {
-	val lines = File("inputs/input04.txt").readLines()
-
-	val subLines = mutableListOf<String>()
-	var correctPassports = 0
-	lines.forEach {
-		if (it.isBlank()) {
-			if (processPassport(subLines)) correctPassports++
-			subLines.clear()
-		} else {
-			subLines += it
-		}
-	}
-
-	if (processPassport(subLines)) correctPassports++
+	val lines = readLines("input04.txt")
+	val correctPassports = groupLines(lines, ::processPassport)
+			.filter { it }
+			.count()
 
 	println(correctPassports)
 }

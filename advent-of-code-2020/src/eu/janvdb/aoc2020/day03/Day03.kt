@@ -1,9 +1,9 @@
 package eu.janvdb.aoc2020.day03
 
-import java.io.File
+import eu.janvdb.aoc2020.util.readLines
 
 fun main() {
-	val lines = File("inputs/input03.txt").readLines()
+	val lines = readLines("input03.txt")
 	val width = lines[0].length
 	val height = lines.size
 
