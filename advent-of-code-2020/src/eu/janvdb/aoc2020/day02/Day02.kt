@@ -1,6 +1,6 @@
 package eu.janvdb.aoc2020.day02
 
-import eu.janvdb.aoc2020.util.readLines
+import eu.janvdb.aoc2020.common.readLines
 import kotlin.system.exitProcess
 
 fun main() {

@@ -1,6 +1,6 @@
 package eu.janvdb.aoc2020.day09
 
-import eu.janvdb.aoc2020.util.readLines
+import eu.janvdb.aoc2020.common.readLines
 
 const val PREAMBLE_SIZE = 25
 const val INPUT_FILE = "input09.txt"

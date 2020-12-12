@@ -1,7 +1,7 @@
 package eu.janvdb.aoc2020.day06
 
-import eu.janvdb.aoc2020.util.groupLines
-import eu.janvdb.aoc2020.util.readLines
+import eu.janvdb.aoc2020.common.groupLines
+import eu.janvdb.aoc2020.common.readLines
 
 fun main() {
 	val groups = readGroups()

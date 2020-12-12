@@ -1,6 +1,6 @@
 package eu.janvdb.aoc2020.day05
 
-import eu.janvdb.aoc2020.util.readLines
+import eu.janvdb.aoc2020.common.readLines
 
 // Format: [FB]{8}[LR]{3} with B and R meaning 1
 private val REGEX_ZEROES = Regex("[FL]", RegexOption.IGNORE_CASE)

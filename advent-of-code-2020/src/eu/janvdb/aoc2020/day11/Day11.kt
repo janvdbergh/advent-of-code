@@ -1,6 +1,6 @@
 package eu.janvdb.aoc2020.day11
 
-import eu.janvdb.aoc2020.util.readLines
+import eu.janvdb.aoc2020.common.readLines
 
 const val INPUT = "input11.txt"
 

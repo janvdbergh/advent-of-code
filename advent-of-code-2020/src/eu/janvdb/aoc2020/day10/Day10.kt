@@ -1,6 +1,6 @@
 package eu.janvdb.aoc2020.day10
 
-import eu.janvdb.aoc2020.util.readLines
+import eu.janvdb.aoc2020.common.readLines
 
 fun main() {
 	val numbers = readLines("input10.txt").map(String::toInt)

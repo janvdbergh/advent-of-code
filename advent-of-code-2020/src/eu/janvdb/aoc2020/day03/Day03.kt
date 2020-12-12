@@ -1,6 +1,6 @@
 package eu.janvdb.aoc2020.day03
 
-import eu.janvdb.aoc2020.util.readLines
+import eu.janvdb.aoc2020.common.readLines
 
 fun main() {
 	val lines = readLines("input03.txt")

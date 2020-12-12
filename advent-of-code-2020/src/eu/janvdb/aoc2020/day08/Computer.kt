@@ -1,6 +1,6 @@
 package eu.janvdb.aoc2020.day08
 
-import eu.janvdb.aoc2020.util.readLines
+import eu.janvdb.aoc2020.common.readLines
 import java.util.function.BiConsumer
 import java.util.function.Consumer
 
@@ -18,7 +18,7 @@ class ExitState(val endState: ComputerState, val endCondition: EndCondition)
 enum class InstructionType(var action: BiConsumer<ComputerState, Long>) {
 	ACC({ state, operand -> state.accumulator += operand }),
 	JMP({ state, operand -> state.programCounter += operand.toInt() - 1 }),
-	NOP({ state, operand -> })
+	NOP({ _, _ -> })
 }
 
 class Instruction(val instructionType: InstructionType, val operand: Long): Consumer<ComputerState> {

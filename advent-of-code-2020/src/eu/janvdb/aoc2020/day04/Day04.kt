@@ -1,7 +1,7 @@
 package eu.janvdb.aoc2020.day04
 
-import eu.janvdb.aoc2020.util.groupLines
-import eu.janvdb.aoc2020.util.readLines
+import eu.janvdb.aoc2020.common.groupLines
+import eu.janvdb.aoc2020.common.readLines
 
 val fieldRegex = Regex("(\\S+):(\\S+)")
 val yearRegex = Regex("^\\d{4}$")

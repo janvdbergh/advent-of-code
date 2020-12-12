@@ -1,6 +1,6 @@
 package eu.janvdb.aoc2020.day07
 
-import eu.janvdb.aoc2020.util.readLines
+import eu.janvdb.aoc2020.common.readLines
 
 val SHINY_GOLD = "shiny gold"
 fun main() {

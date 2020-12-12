@@ -1,4 +1,4 @@
-package eu.janvdb.aoc2020.util
+package eu.janvdb.aoc2020.common
 
 import java.io.File
 
