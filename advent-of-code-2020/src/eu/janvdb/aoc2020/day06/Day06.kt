@@ -11,12 +11,11 @@ fun main() {
 }
 
 private fun readGroups(): List<Group> {
-	val lines = readLines("input06.txt")
-	return groupLines(lines) { Group(it.map(::Answers))	}
+	return readLines("input06.txt").groupLines().map { Group(it.map(::Answers))	}
 }
 
 class Answers {
-	val values: List<Boolean>
+	private val values: List<Boolean>
 
 	constructor(line: String) {
 		values = CharRange('a', 'z').map(line::contains)
@@ -41,7 +40,7 @@ class Answers {
 	}
 }
 
-class Group(val answers: List<Answers>) {
+class Group(private val answers: List<Answers>) {
 
 	fun combineOr(): Answers {
 		return answers.reduce { a1, a2 -> a1.or(a2) }

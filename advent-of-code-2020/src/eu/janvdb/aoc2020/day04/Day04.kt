@@ -11,8 +11,7 @@ val eyeColorRegex = Regex("^amb|blu|brn|gry|grn|hzl|oth$")
 val passportIdRegex = Regex("^\\d{9}$")
 
 fun main() {
-	val lines = readLines("input04.txt")
-	val correctPassports = groupLines(lines, ::processPassport)
+	val correctPassports = readLines("input04.txt").groupLines().map(::processPassport)
 			.filter { it }
 			.count()
 
@@ -52,14 +51,13 @@ fun processPassport(subLines: List<String>): Boolean {
 fun validYear(value: String?, min: Int, max: Int): Boolean {
 	if (value == null || !value.matches(yearRegex)) return false
 	val yearValue = value.toInt()
-	return yearValue >= min && yearValue <= max
+	return yearValue in min..max
 }
 
 fun validHeight(value: String?): Boolean {
 	if (value == null) return false
 
-	val matchResult = heightRegex.matchEntire(value)
-	if (matchResult == null) return false
+	val matchResult = heightRegex.matchEntire(value) ?: return false
 
 	val height = matchResult.groupValues[1].toInt()
 	val unit = matchResult.groupValues[2]
