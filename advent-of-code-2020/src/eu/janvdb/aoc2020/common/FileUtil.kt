@@ -6,11 +6,15 @@ fun readLines(fileName: String): List<String> {
 	return File("advent-of-code-2020/inputs/${fileName}").readLines()
 }
 
-fun List<String>.groupLines(): List<List<String>> {
+fun readGroupedLines(fileName: String): List<List<String>> {
+	return groupLines(readLines(fileName))
+}
+
+private fun groupLines(lines: List<String>): List<List<String>> {
 	val result = mutableListOf<List<String>>()
 
 	var subLines = mutableListOf<String>()
-	this.forEach {
+	lines.forEach {
 		if (it.isBlank() && subLines.isNotEmpty()) {
 			result.add(subLines)
 			subLines = mutableListOf()

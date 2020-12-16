@@ -1,7 +1,6 @@
 package eu.janvdb.aoc2020.day06
 
-import eu.janvdb.aoc2020.common.groupLines
-import eu.janvdb.aoc2020.common.readLines
+import eu.janvdb.aoc2020.common.readGroupedLines
 
 fun main() {
 	val groups = readGroups()
@@ -11,7 +10,7 @@ fun main() {
 }
 
 private fun readGroups(): List<Group> {
-	return readLines("input06.txt").groupLines().map { Group(it.map(::Answers))	}
+	return readGroupedLines("input06.txt").map { Group(it.map(::Answers))	}
 }
 
 class Answers {

@@ -1,8 +1,7 @@
 package eu.janvdb.aoc2020.day13
 
 import eu.janvdb.aoc2020.common.ChineseRemainderTheoremEquation
-import eu.janvdb.aoc2020.common.minusModN
-import eu.janvdb.aoc2020.common.solveChineseRemainderTheorem
+import eu.janvdb.aoc2020.common.ModuloMath
 import java.math.BigInteger
 
 //const val TIME_ = 939L
@@ -36,12 +35,12 @@ private fun part2() {
 	// Or: t = 0 (mod 7), t = 12 (mod 13), t = 54 (mod 59), t = 25 (mod 31), t = 12 (mod 19)
 	// Since the values are pairwise coprime, this can be solved with the Chinese Remainder Theorem.
 	val equations = startTimes.map(StartTime::asChineseTheoremEquation)
-	val solution = solveChineseRemainderTheorem(equations)
+	val solution = ModuloMath.solveChineseRemainderTheorem(equations)
 	println(solution)
 }
 
 data class StartTime(val busNumber: BigInteger, val startTime: BigInteger) {
 	fun asChineseTheoremEquation() : ChineseRemainderTheoremEquation {
-		return ChineseRemainderTheoremEquation(minusModN(busNumber, startTime, busNumber), busNumber)
+		return ChineseRemainderTheoremEquation(ModuloMath.minusModN(busNumber, startTime, busNumber), busNumber)
 	}
 }

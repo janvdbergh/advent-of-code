@@ -1,7 +1,6 @@
 package eu.janvdb.aoc2020.day04
 
-import eu.janvdb.aoc2020.common.groupLines
-import eu.janvdb.aoc2020.common.readLines
+import eu.janvdb.aoc2020.common.readGroupedLines
 
 val fieldRegex = Regex("(\\S+):(\\S+)")
 val yearRegex = Regex("^\\d{4}$")
@@ -11,9 +10,9 @@ val eyeColorRegex = Regex("^amb|blu|brn|gry|grn|hzl|oth$")
 val passportIdRegex = Regex("^\\d{9}$")
 
 fun main() {
-	val correctPassports = readLines("input04.txt").groupLines().map(::processPassport)
-			.filter { it }
-			.count()
+	val correctPassports = readGroupedLines("input04.txt").map(::processPassport)
+		.filter { it }
+		.count()
 
 	println(correctPassports)
 }
@@ -21,9 +20,9 @@ fun main() {
 fun processPassport(subLines: List<String>): Boolean {
 	val fields = mutableMapOf<String, String>()
 	subLines.flatMap(fieldRegex::findAll)
-			.forEach {
-				fields[it.groupValues[1]] = it.groupValues[2]
-			}
+		.forEach {
+			fields[it.groupValues[1]] = it.groupValues[2]
+		}
 
 	/*
 	byr (Birth Year)
