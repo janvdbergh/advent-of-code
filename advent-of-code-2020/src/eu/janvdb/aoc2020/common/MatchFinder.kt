@@ -6,38 +6,38 @@ object MatchFinder {
 	 * Finds a unique matching value for each key, so that the match function is true.
 	 * This assumes there is only one assignment.
 	 */
-	fun <KeyType, ValueType> findMatch(keys: List<KeyType>, values: List<ValueType>,
-									   matchFunction: (key: KeyType, value: ValueType) -> Boolean): Map<KeyType, ValueType> {
+	fun <KeyType, ValueType> findMatch(
+		keys: List<KeyType>, values: List<ValueType>,
+		matchFunction: (key: KeyType, value: ValueType) -> Boolean
+	): Map<KeyType, ValueType> {
 		val possibleValues = keys.asSequence().map { key ->
 			Pair(key, values.filter { value -> matchFunction.invoke(key, value) })
 		}.toMap()
 
-		return findMatch(possibleValues)
+		return findMatch(keys, setOf(), possibleValues)!!
 	}
 
 	/**
-	 * Finds a unique matching value for each key.
+	 * Finds a unique matching value for each key, so that the match function is true.
 	 * This assumes there is only one assignment.
 	 */
-	fun <KeyType, ValueType> findMatch(possibleValues: Map<KeyType, List<ValueType>>): Map<KeyType, ValueType> {
-		val remainingValues: MutableMap<KeyType, MutableList<ValueType>> = possibleValues.map { Pair(it.key, it.value.toMutableList()) }.toMap().toMutableMap()
-		val valuesToAssign = possibleValues.values.asSequence().flatMap { it }.toMutableSet()
-		val assignedValues = mutableMapOf<KeyType, ValueType>()
+	private fun <KeyType, ValueType> findMatch(
+		keys: List<KeyType>,
+		assignedValues: Set<ValueType>,
+		possibleValues: Map<KeyType, List<ValueType>>
+	): Map<KeyType, ValueType>? {
+		if (keys.isEmpty()) return mapOf()
 
-		// FIXME implement a smarter solution that can try solutions and backtrack
-		var toAssignCount = valuesToAssign.size
-		while (toAssignCount != 0) {
-			remainingValues.filterValues { it.size == 1 }.forEach { key, values ->
-				val value = values[0]
-				assignedValues[key] = value
-				valuesToAssign.remove(value)
-				remainingValues.values.forEach { list -> list.remove(value) }
+		val key = keys.minByOrNull { possibleValues[it]!!.minus(assignedValues).size }!!
+		val remainingKeys = keys.minus(key)
+
+		for (value in possibleValues[key]!!.minus(assignedValues)) {
+			val match = findMatch(remainingKeys, assignedValues + value, possibleValues)
+			if (match != null) {
+				return match.plus(Pair(key, value))
 			}
-			val newCount = valuesToAssign.size
-			if (newCount == toAssignCount) throw RuntimeException("No solution found!")
-			toAssignCount = newCount
 		}
 
-		return assignedValues
+		return null
 	}
 }
