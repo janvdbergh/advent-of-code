@@ -2,8 +2,8 @@ package eu.janvdb.aoc2020.common
 
 import java.lang.Math.abs
 
-data class Coordinate(val x: Long, val y: Long) {
-	fun manhattanDistance(): Long {
+data class Coordinate(val x: Int, val y: Int) {
+	fun manhattanDistance(): Int {
 		return abs(x) + abs(y)
 	}
 
