@@ -64,7 +64,7 @@ class Actor {
 	}
 
 	private void move(Set<Point2D> enemyOpenSquares) {
-		ShortestPath shortestPath = ShortestPathBuilder.build(new ActorMapDescription());
+		ShortestPath<Point2D> shortestPath = ShortestPathBuilder.build(new ActorMapDescription());
 		Map<Point2D, Integer> distanceToEnemyOpenSquares = enemyOpenSquares.stream()
 				.filter(point -> shortestPath.stepTo(point) != null)
 				.collect(Collectors.toMap(point -> point, shortestPath::distanceTo));
@@ -110,7 +110,7 @@ class Actor {
 		return String.format("%s at %s", type, location);
 	}
 
-	private class ActorMapDescription implements MapDescription {
+	private class ActorMapDescription implements MapDescription<Point2D> {
 		@Override
 		public Point2D getOrigin() {
 			return location;

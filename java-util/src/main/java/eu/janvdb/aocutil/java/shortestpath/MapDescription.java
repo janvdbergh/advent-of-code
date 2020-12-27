@@ -1,14 +1,12 @@
 package eu.janvdb.aocutil.java.shortestpath;
 
-import eu.janvdb.aocutil.java.Point2D;
-
 import java.util.List;
 
-public interface MapDescription {
+public interface MapDescription<T> {
 
-	Point2D getOrigin();
+	T getOrigin();
 
-	List<Point2D> getNeighbours(Point2D point);
+	List<T> getNeighbours(T point);
 
-	int getDistance(Point2D from, Point2D to);
+	int getDistance(T from, T to);
 }

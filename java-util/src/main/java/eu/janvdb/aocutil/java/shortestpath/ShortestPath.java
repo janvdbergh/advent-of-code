@@ -1,17 +1,15 @@
 package eu.janvdb.aocutil.java.shortestpath;
 
-import eu.janvdb.aocutil.java.Point2D;
-
 import java.util.Set;
 
-public interface ShortestPath {
+public interface ShortestPath<T> {
 
-	Point2D getOrigin();
+	T getOrigin();
 
-	Set<Point2D> getReachablePoints();
+	Set<T> getReachablePoints();
 
-	int distanceTo(Point2D point);
+	int distanceTo(T point);
 
-	Point2D stepTo(Point2D point);
+	T stepTo(T point);
 
 }
