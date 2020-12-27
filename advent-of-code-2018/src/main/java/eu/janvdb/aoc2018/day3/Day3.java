@@ -1,7 +1,7 @@
 package eu.janvdb.aoc2018.day3;
 
 import eu.janvdb.aoc2018.util.FileReader;
-import eu.janvdb.aoc2018.util.Pair;
+import eu.janvdb.aocutil.java.Pair;
 
 import java.io.IOException;
 import java.util.Collection;

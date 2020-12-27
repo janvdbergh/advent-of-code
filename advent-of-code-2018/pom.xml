@@ -12,6 +12,11 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>eu.janvdb.advent-of-code</groupId>
+			<artifactId>java-util</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 		</dependency>

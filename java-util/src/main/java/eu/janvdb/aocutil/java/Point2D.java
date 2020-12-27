@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class Point2D {
 
-	private final int x, y;
+	protected final int x, y;
 
 	public Point2D(int x, int y) {
 		this.x = x;

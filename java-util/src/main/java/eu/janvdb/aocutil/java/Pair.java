@@ -1,4 +1,4 @@
-package eu.janvdb.aoc2018.util;
+package eu.janvdb.aocutil.java;
 
 import java.util.Objects;
 
