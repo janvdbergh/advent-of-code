@@ -1,21 +1,18 @@
 package eu.janvdb.aoc2018.day22;
 
-public enum Terrain {
+import eu.janvdb.aocutil.java.Point2D;
 
-	ROCKY(0),
-	WET(1),
-	NARROW(2);
+public class Terrain {
 
-	private final int type;
+	private final Point2D location;
+	private final TerrainType type;
 
-	Terrain(int type) {
-		this.type = type;
+	public Terrain(Point2D location) {
+		this.location = location;
+		this.type = TerrainType.getTerrainType(location);
 	}
 
-	static Terrain byType(int type) {
-		for (Terrain terrain : Terrain.values()) {
-			if (terrain.type == type) return terrain;
-		}
-		throw new IllegalStateException();
+	public TerrainType getType() {
+		return type;
 	}
 }

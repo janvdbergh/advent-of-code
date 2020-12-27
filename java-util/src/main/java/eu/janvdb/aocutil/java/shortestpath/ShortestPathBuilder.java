@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
+import java.util.Stack;
 
 public class ShortestPathBuilder {
 
@@ -56,16 +57,24 @@ public class ShortestPathBuilder {
 	}
 
 	private static <T> void optimizeShortestPath(ShortestPathImpl<T> shortestPath, MapDescription<T> mapDescription, Map<T, List<T>> neighbours) {
-		Queue<T> toDo = new LinkedList<>(shortestPath.reachablePoints);
+		Stack<T> toDo = new Stack<>();
+		toDo.addAll(shortestPath.reachablePoints);
+		Set<T> toDoSet = new HashSet<>(shortestPath.reachablePoints);
 		while (!toDo.isEmpty()) {
-			T from = toDo.remove();
+			T from = toDo.pop();
+			toDoSet.remove(from);
+
 			for (T to : neighbours.get(from)) {
 				int currentDistance = shortestPath.distanceMap.get(to);
 				int newDistance = shortestPath.distanceMap.get(from) + mapDescription.getDistance(from, to);
 				if (newDistance < currentDistance) {
 					shortestPath.distanceMap.put(to, newDistance);
 					shortestPath.stepMap.put(to, from);
-					if (!toDo.contains(to)) toDo.add(to);
+
+					if (!toDoSet.contains(to)) {
+						toDo.add(to);
+						toDoSet.add(to);
+					}
 				}
 			}
 		}
@@ -100,6 +109,14 @@ public class ShortestPathBuilder {
 		@Override
 		public T stepTo(T point) {
 			return stepMap.get(point);
+		}
+
+		@Override
+		public void printRouteTo(T point) {
+			if (!point.equals(origin)) {
+				printRouteTo(stepTo(point));
+			}
+			System.out.println(point);
 		}
 
 		private void registerPoint(T toPoint, T fromPoint, int distance) {

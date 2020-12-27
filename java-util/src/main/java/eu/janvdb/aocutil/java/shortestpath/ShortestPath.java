@@ -12,4 +12,5 @@ public interface ShortestPath<T> {
 
 	T stepTo(T point);
 
+	void printRouteTo(T point);
 }

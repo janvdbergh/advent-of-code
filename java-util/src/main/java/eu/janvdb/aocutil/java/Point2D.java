@@ -4,6 +4,8 @@ import java.util.Objects;
 
 public class Point2D {
 
+	public final static Point2D ORIGIN = new Point2D(0, 0);
+
 	protected final int x, y;
 
 	public Point2D(int x, int y) {
