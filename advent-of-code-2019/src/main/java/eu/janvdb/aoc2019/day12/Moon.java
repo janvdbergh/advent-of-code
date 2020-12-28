@@ -44,7 +44,7 @@ class Moon {
 	}
 
 	public int getEnergy() {
-		return getPosition().getEnergy() * getVelocity().getEnergy();
+		return getPosition().getManhattanDistanceFromOrigin() * getVelocity().getManhattanDistanceFromOrigin();
 	}
 
 	public Moon update(List<Moon> allMoons) {

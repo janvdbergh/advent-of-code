@@ -1,6 +1,6 @@
 package eu.janvdb.aoc2018.day13;
 
-import eu.janvdb.aoc2018.util.FileReader;
+import eu.janvdb.aocutil.java.FileReader;
 
 import java.io.IOException;
 import java.util.List;

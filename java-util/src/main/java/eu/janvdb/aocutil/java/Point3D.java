@@ -24,8 +24,12 @@ public class Point3D {
 		return z;
 	}
 
-	public int getEnergy() {
+	public int getManhattanDistanceFromOrigin() {
 		return Math.abs(x) + Math.abs(y) + Math.abs(z);
+	}
+
+	public int getManhattanDistance(Point3D other) {
+		return Math.abs(x - other.x) + Math.abs(y - other.y) + Math.abs(z - other.z);
 	}
 
 	@Override
@@ -46,7 +50,15 @@ public class Point3D {
 		return Objects.hash(x, y, z);
 	}
 
-	public Point3D add(Point3D vector) {
-		return new Point3D(x + vector.x, y + vector.y, z + vector.z);
+	public Point3D add(Point3D other) {
+		return new Point3D(x + other.x, y + other.y, z + other.z);
+	}
+
+	public Point3D add(int x1, int y1, int z1) {
+		return new Point3D(x + x1, y + y1, z + z1);
+	}
+
+	public Point3D minus(Point3D other) {
+		return new Point3D(x - other.x, y - other.y, z - other.z);
 	}
 }

@@ -1,6 +1,6 @@
 package eu.janvdb.aoc2018.day15;
 
-import eu.janvdb.aoc2018.util.FileReader;
+import eu.janvdb.aocutil.java.FileReader;
 
 import java.io.IOException;
 
@@ -19,7 +19,7 @@ public class Day15 {
 		// != 10
 	}
 
-	private static int runAndReportDeadElves() throws IOException {
+	private static int runAndReportDeadElves() {
 		Maze maze = Maze.parse(FileReader.readStringFile(Day15.class, "day15.txt"));
 		int initialNumberOfElves = maze.getElves().size();
 		maze.print();

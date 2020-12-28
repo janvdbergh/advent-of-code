@@ -1,6 +1,6 @@
 package eu.janvdb.aoc2018.day7;
 
-import eu.janvdb.aoc2018.util.FileReader;
+import eu.janvdb.aocutil.java.FileReader;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -56,7 +56,7 @@ public class Day7 {
 				.findAny();
 	}
 
-	private static void readStepOrderings() throws IOException {
+	private static void readStepOrderings() {
 		FileReader.readStringFile(Day7.class, FILE)
 				.forEach(Day7::processStepOrdering);
 	}

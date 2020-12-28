@@ -1,4 +1,4 @@
-package eu.janvdb.aoc2018.util;
+package eu.janvdb.aocutil.java;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -12,12 +12,16 @@ import java.util.stream.Collectors;
 
 public class FileReader {
 
-	public static List<String> readStringFile(Class<?> clazz, String name) throws IOException {
-		InputStream inputStream = clazz.getResource(name).openStream();
-		return IOUtils.readLines(inputStream, Charset.defaultCharset());
+	public static List<String> readStringFile(Class<?> clazz, String name) {
+		try {
+			InputStream inputStream = clazz.getResource(name).openStream();
+			return IOUtils.readLines(inputStream, Charset.defaultCharset());
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
-	public static List<Integer> readIntFile(Class<?> clazz, String name) throws IOException {
+	public static List<Integer> readIntFile(Class<?> clazz, String name) {
 		return readStringFile(clazz, name).stream()
 				.flatMap(s -> Arrays.stream(s.split("\\s+")))
 				.filter(StringUtils::isNotBlank)

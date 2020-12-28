@@ -1,6 +1,6 @@
 package eu.janvdb.aoc2018.day4;
 
-import eu.janvdb.aoc2018.util.FileReader;
+import eu.janvdb.aocutil.java.FileReader;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ public class Day4 {
 		System.out.println(guardMostAsleepAtCertainMinute);
 	}
 
-	private static List<SleepPeriod> readData() throws IOException {
+	private static List<SleepPeriod> readData() {
 		List<SleepPeriod> result = new ArrayList<>();
 		Integer currentGuard = null;
 		Integer sleepStart = null;
