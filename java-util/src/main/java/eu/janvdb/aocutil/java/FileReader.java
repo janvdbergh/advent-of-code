@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,5 +28,22 @@ public class FileReader {
 				.filter(StringUtils::isNotBlank)
 				.map(Integer::parseInt)
 				.collect(Collectors.toList());
+	}
+
+	public static List<List<String>> groupLines(List<String> lines) {
+		List<List<String>> result = new ArrayList<>();
+
+		List<String> subLines = new ArrayList<>();
+		for (String line : lines) {
+			if (line.isBlank()) {
+				if (!subLines.isEmpty()) result.add(subLines);
+				subLines = new ArrayList<>();
+			} else {
+				subLines.add(line);
+			}
+		}
+		if (!subLines.isEmpty()) result.add(subLines);
+
+		return result;
 	}
 }
