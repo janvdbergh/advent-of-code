@@ -8,9 +8,13 @@ import java.util.Map;
 public class Day18 {
 
 	public static void main(String[] args) {
-		List<String> lines = FileReader.readStringFile(Day18.class, "input.txt");
+		solveMaze("input.txt");
+	}
+
+	private static void solveMaze(String fileName) {
+		List<String> lines = FileReader.readStringFile(Day18.class, fileName);
 		Maze1 maze1 = Maze1.parse(lines);
-		Map<Character, Map<Character, Integer>> distances = maze1.getDistances();
+		Map<MapLocation, Map<MapLocation, Integer>> distances = maze1.getDistances();
 
 		Maze2 maze2 = new Maze2(distances);
 		System.out.println(maze2.getTotalDistance());

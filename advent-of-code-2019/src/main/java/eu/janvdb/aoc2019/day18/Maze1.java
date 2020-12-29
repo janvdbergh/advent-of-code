@@ -1,5 +1,6 @@
 package eu.janvdb.aoc2019.day18;
 
+import eu.janvdb.aoc2019.day18.MapLocation.Type;
 import eu.janvdb.aocutil.java.Point2D;
 import eu.janvdb.aocutil.java.shortestpath.MapDescription;
 import eu.janvdb.aocutil.java.shortestpath.ShortestPath;
@@ -9,7 +10,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -20,14 +20,20 @@ public class Maze1 {
 		int width = lines.get(0).length();
 
 		boolean[][] walls = new boolean[height][];
-		Map<Character, Point2D> symbols = new HashMap<>();
+		Map<Point2D, MapLocation> symbols = new HashMap<>();
+
+		char currentStartSymbol = '1';
 
 		for (int y = 0; y < height; y++) {
 			walls[y] = new boolean[width];
 			for (int x = 0; x < width; x++) {
 				char ch = lines.get(y).charAt(x);
 				walls[y][x] = ch == '#';
-				if (ch != '#' && ch != '.') symbols.put(ch, new Point2D(x, y));
+				Point2D location = new Point2D(x, y);
+				if (ch == '@') symbols.put(location, new MapLocation(Type.START, currentStartSymbol++));
+				if (ch >= 'a' && ch <= 'z') symbols.put(location, new MapLocation(Type.KEY, ch));
+				if (ch >= 'A' && ch <= 'Z')
+					symbols.put(location, new MapLocation(Type.DOOR, Character.toLowerCase(ch)));
 			}
 		}
 
@@ -35,90 +41,51 @@ public class Maze1 {
 	}
 
 	private final boolean[][] walls;
-	private final Map<Character, Point2D> symbols;
+	private final Map<Point2D, MapLocation> symbolsByLocation;
 
-	private Maze1(boolean[][] walls, Map<Character, Point2D> symbols) {
+	private Maze1(boolean[][] walls, Map<Point2D, MapLocation> symbolsByLocation) {
 		this.walls = walls;
-		this.symbols = symbols;
+		this.symbolsByLocation = symbolsByLocation;
 	}
 
-	public Map<Character, Map<Character, Integer>> getDistances() {
-		return symbols.keySet().stream().collect(Collectors.toMap(key -> key, this::getDistances));
+	public Map<MapLocation, Map<MapLocation, Integer>> getDistances() {
+		return symbolsByLocation.entrySet().stream()
+				.collect(Collectors.toMap(Map.Entry::getValue, entry -> getDistances(entry.getKey())));
 	}
 
-	private Map<Character, Integer> getDistances(char from) {
-		ShortestPath<Maze1MapState> shortestPath = ShortestPathBuilder.build(new Maze1MapDescription(from));
+	private Map<MapLocation, Integer> getDistances(Point2D from) {
+		ShortestPath<Point2D> shortestPath = ShortestPathBuilder.build(new Maze1MapDescription(from));
 
 		return shortestPath.getReachablePoints().stream()
-				.filter(state -> state.symbol != null)
-				.collect(Collectors.toMap(state -> state.symbol, shortestPath::distanceTo));
+				.filter(symbolsByLocation::containsKey)
+				.collect(Collectors.toMap(symbolsByLocation::get, shortestPath::distanceTo));
 	}
 
-	private class Maze1MapDescription implements MapDescription<Maze1MapState> {
-		private final char symbol;
+	private class Maze1MapDescription implements MapDescription<Point2D> {
+		private final Point2D origin;
 
-		public Maze1MapDescription(char symbol) {
-			this.symbol = symbol;
+		public Maze1MapDescription(Point2D origin) {
+			this.origin = origin;
 		}
 
 		@Override
-		public Maze1MapState getOrigin() {
-			return new Maze1MapState(symbols.get(symbol), symbol);
+		public Point2D getOrigin() {
+			return origin;
 		}
 
 		@Override
-		public List<Maze1MapState> getNeighbours(Maze1MapState state) {
-			if (state.symbol != null && state.symbol != symbol) return Collections.emptyList();
-			return Stream.of(
-					getState(state, 0, -1),
-					getState(state, -1, 0),
-					getState(state, 1, 0),
-					getState(state, 0, 1)
-			)
-					.filter(newState -> !walls[newState.location.getY()][newState.location.getX()])
+		public List<Point2D> getNeighbours(Point2D location) {
+			MapLocation mapLocation = symbolsByLocation.get(location);
+
+			if (mapLocation != null && !location.equals(origin)) return Collections.emptyList();
+			return Stream.of(location.move(0, -1), location.move(-1, 0), location.move(1, 0), location.move(0, 1))
+					.filter(newLocation -> !walls[newLocation.getY()][newLocation.getX()])
 					.collect(Collectors.toList());
 		}
 
-		private Maze1MapState getState(Maze1MapState currentState, int dx, int dy) {
-			Point2D location = currentState.location.move(dx, dy);
-			Character symbol = symbols.entrySet().stream()
-					.filter(entry -> entry.getValue().equals(location))
-					.map(Map.Entry::getKey).findAny()
-					.orElse(null);
-			return new Maze1MapState(location, symbol);
-		}
-
 		@Override
-		public int getDistance(Maze1MapState from, Maze1MapState to) {
+		public int getDistance(Point2D from, Point2D to) {
 			return 1;
-		}
-	}
-
-	private static class Maze1MapState {
-		private final Point2D location;
-		private final Character symbol;
-
-		public Maze1MapState(Point2D location, Character symbol) {
-			this.location = location;
-			this.symbol = symbol;
-		}
-
-		@Override
-		public boolean equals(Object o) {
-			if (this == o) return true;
-			if (o == null || getClass() != o.getClass()) return false;
-			Maze1MapState that = (Maze1MapState) o;
-			return Objects.equals(location, that.location) && Objects.equals(symbol, that.symbol);
-		}
-
-		@Override
-		public int hashCode() {
-			return Objects.hash(location, symbol);
-		}
-
-		@Override
-		public String toString() {
-			return String.format("%s @ %s", symbol, location);
 		}
 	}
 }
