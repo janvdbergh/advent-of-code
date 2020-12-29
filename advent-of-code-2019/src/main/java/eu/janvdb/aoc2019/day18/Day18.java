@@ -8,7 +8,9 @@ import java.util.Map;
 public class Day18 {
 
 	public static void main(String[] args) {
+//		solveMaze("input_test5.txt");
 		solveMaze("input.txt");
+		solveMaze("input2.txt");
 	}
 
 	private static void solveMaze(String fileName) {
@@ -19,5 +21,4 @@ public class Day18 {
 		Maze2 maze2 = new Maze2(distances);
 		System.out.println(maze2.getTotalDistance());
 	}
-
 }

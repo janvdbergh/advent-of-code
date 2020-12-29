@@ -4,8 +4,9 @@ import eu.janvdb.aocutil.java.shortestpath.MapDescription;
 import eu.janvdb.aocutil.java.shortestpath.ShortestPath;
 import eu.janvdb.aocutil.java.shortestpath.ShortestPathBuilder;
 
-import java.util.BitSet;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -14,15 +15,15 @@ import java.util.stream.Collectors;
 public class Maze2 {
 
 	private final Map<MapLocation, Map<MapLocation, Integer>> distances;
-	private final Maze2MapState endState;
 	private final int numberOfKeys;
-	private final MapLocation startLocation;
+	private final List<MapLocation> startLocations;
+	private final FindKeysState endState;
 
 	public Maze2(Map<MapLocation, Map<MapLocation, Integer>> distances) {
 		this.distances = distances;
 		this.numberOfKeys = getLocationsOfType(MapLocation.Type.KEY).size();
-		this.startLocation = getLocationsOfType(MapLocation.Type.START).get(0);
-		this.endState = new Maze2MapState(null, allSet());
+		this.startLocations = getLocationsOfType(MapLocation.Type.START);
+		this.endState = new FindKeysState(KeyChain.all(numberOfKeys), Collections.emptyList());
 	}
 
 	private List<MapLocation> getLocationsOfType(MapLocation.Type type) {
@@ -32,105 +33,112 @@ public class Maze2 {
 	}
 
 	public int getTotalDistance() {
-		ShortestPath<Maze2MapState> shortestPath = ShortestPathBuilder.build(new Maze2MapDescription());
-		printShortestPath(shortestPath, endState);
+		FindAllKeysMapDescription mapDescription = new FindAllKeysMapDescription();
+		ShortestPath<FindKeysState> shortestPath = ShortestPathBuilder.build(mapDescription);
 
+		shortestPath.printRouteTo(endState);
 		return shortestPath.distanceTo(endState);
 	}
 
-	private void printShortestPath(ShortestPath<Maze2MapState> shortestPath, Maze2MapState to) {
-		if (to != null) {
-			printShortestPath(shortestPath, shortestPath.stepTo(to));
-			System.out.printf("%d to %s%n", shortestPath.distanceTo(to), to);
-		}
-	}
+	private class FindReachableKeysMapDescription implements MapDescription<MapLocation> {
+		private final KeyChain currentKeys;
+		private final MapLocation startLocation;
 
-	private BitSet allClear() {
-		int numberOfKeys = this.numberOfKeys;
-		return new BitSet(numberOfKeys);
-	}
-
-	private BitSet allSet() {
-		BitSet bitSet = allClear();
-		bitSet.set(0, numberOfKeys, true);
-		return bitSet;
-	}
-
-	private static String keysToString(BitSet keys) {
-		return keys.stream().mapToObj(x -> String.valueOf((char) (x + 'a'))).collect(Collectors.joining());
-	}
-
-	private class Maze2MapDescription implements MapDescription<Maze2MapState> {
-		@Override
-		public Maze2MapState getOrigin() {
-			return new Maze2MapState(startLocation, allClear());
+		public FindReachableKeysMapDescription(KeyChain currentKeys, MapLocation startLocation) {
+			this.currentKeys = currentKeys;
+			this.startLocation = startLocation;
 		}
 
 		@Override
-		public List<Maze2MapState> getNeighbours(Maze2MapState state) {
-			if (state == endState) return Collections.emptyList();
-			if (state.keys.cardinality() == numberOfKeys) return Collections.singletonList(endState);
+		public MapLocation getOrigin() {
+			return startLocation;
+		}
 
-			Map<MapLocation, Integer> thisDistances = distances.get(state.location);
-			return thisDistances.keySet().stream()
-					.filter(location -> isNotDoorWithoutKey(location, state.keys))
-					.map(symbol -> createState(symbol, state.keys))
+		@Override
+		public List<MapLocation> getNeighbours(MapLocation currentLocation) {
+			return distances.get(currentLocation).keySet().stream()
+					.filter(location -> !location.equals(currentLocation))
+					.filter(location -> !location.isDoor() || currentKeys.hasKey(location.getSymbol()))
 					.collect(Collectors.toList());
 		}
 
-		private boolean isNotDoorWithoutKey(MapLocation location, BitSet keys) {
-			if (location.getType() == MapLocation.Type.DOOR) {
-				int index = location.getSymbol() - 'a';
-				return keys.get(index);
-			}
-			return true;
-		}
-
-		private Maze2MapState createState(MapLocation location, BitSet keys) {
-			if (location.getType() == MapLocation.Type.KEY) {
-				int index = location.getSymbol() - 'a';
-				if (!keys.get(index)) {
-					keys = (BitSet) keys.clone();
-					keys.set(index);
-				}
-			}
-			return new Maze2MapState(location, keys);
-		}
-
 		@Override
-		public int getDistance(Maze2MapState from, Maze2MapState to) {
-			if (to == endState) return 0;
-			return distances.get(from.location).get(to.location);
+		public int getDistance(MapLocation from, MapLocation to) {
+			return distances.get(from).get(to);
 		}
 	}
 
-	private static class Maze2MapState {
+	private class FindAllKeysMapDescription implements MapDescription<FindKeysState> {
+		private final Map<FindKeysState, Map<FindKeysState, Integer>> distancesBetweenStates = new HashMap<>();
 
-		private final MapLocation location;
-		private final BitSet keys;
+		@Override
+		public FindKeysState getOrigin() {
+			return new FindKeysState(KeyChain.empty(numberOfKeys), startLocations);
+		}
 
-		private Maze2MapState(MapLocation location, BitSet keys) {
-			this.location = location;
-			this.keys = keys;
+		@Override
+		public List<FindKeysState> getNeighbours(FindKeysState currentState) {
+			if (currentState.equals(endState)) return Collections.emptyList();
+			if (currentState.currentKeys.isComplete()) return List.of(endState);
+
+			List<FindKeysState> result = new ArrayList<>();
+			for (int index = 0; index < currentState.locations.size(); index++) {
+				Map<FindKeysState, Integer> newReachableKeys = getNewReachableKeys(currentState, index);
+				distancesBetweenStates.computeIfAbsent(currentState, findKeysState -> new HashMap<>()).putAll(newReachableKeys);
+				result.addAll(newReachableKeys.keySet());
+			}
+			return result;
+		}
+
+		private Map<FindKeysState, Integer> getNewReachableKeys(FindKeysState currentState, int index) {
+			FindReachableKeysMapDescription mapDescription = new FindReachableKeysMapDescription(currentState.currentKeys, currentState.locations.get(index));
+			ShortestPath<MapLocation> shortestPath = ShortestPathBuilder.build(mapDescription);
+			return shortestPath.getReachablePoints().stream()
+					.filter(MapLocation::isKey)
+					.filter(location -> !currentState.currentKeys.hasKey(location.getSymbol()))
+					.collect(Collectors.toMap(
+							mapLocation -> {
+								KeyChain newKeys = currentState.currentKeys.setKey(mapLocation.getSymbol());
+								List<MapLocation> newLocations = new ArrayList<>(currentState.locations);
+								newLocations.set(index, mapLocation);
+								return new FindKeysState(newKeys, newLocations);
+							},
+							shortestPath::distanceTo)
+					);
+		}
+
+		@Override
+		public int getDistance(FindKeysState from, FindKeysState to) {
+			if (to.equals(endState)) return 0;
+			return distancesBetweenStates.get(from).get(to);
+		}
+	}
+
+	private static class FindKeysState {
+		private final KeyChain currentKeys;
+		private final List<MapLocation> locations;
+
+		public FindKeysState(KeyChain currentKeys, List<MapLocation> locations) {
+			this.currentKeys = currentKeys;
+			this.locations = locations;
 		}
 
 		@Override
 		public boolean equals(Object o) {
 			if (this == o) return true;
 			if (o == null || getClass() != o.getClass()) return false;
-			Maze2MapState that = (Maze2MapState) o;
-			return location == that.location && keys.equals(that.keys);
+			FindKeysState that = (FindKeysState) o;
+			return currentKeys.equals(that.currentKeys) && locations.equals(that.locations);
 		}
 
 		@Override
 		public int hashCode() {
-			return Objects.hash(location, keys);
+			return Objects.hash(currentKeys, locations);
 		}
 
 		@Override
 		public String toString() {
-			return String.format("%s %s", location, keysToString(keys));
+			return String.format("%s (%s)", locations, currentKeys);
 		}
 	}
-
 }

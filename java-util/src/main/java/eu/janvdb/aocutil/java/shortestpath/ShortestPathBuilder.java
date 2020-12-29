@@ -116,7 +116,7 @@ public class ShortestPathBuilder {
 			if (!point.equals(origin)) {
 				printRouteTo(stepTo(point));
 			}
-			System.out.println(point);
+			System.out.printf("%d: %s%n", distanceTo(point), point);
 		}
 
 		private void registerPoint(T toPoint, T fromPoint, int distance) {

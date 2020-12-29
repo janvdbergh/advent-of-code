@@ -11,6 +11,14 @@ public class MapLocation {
 		this.symbol = symbol;
 	}
 
+	public boolean isKey() {
+		return type == Type.KEY;
+	}
+
+	public boolean isDoor() {
+		return type == Type.DOOR;
+	}
+
 	public Type getType() {
 		return type;
 	}
@@ -38,6 +46,6 @@ public class MapLocation {
 	}
 
 	public enum Type {
-		START, KEY, DOOR
+		START, KEY, DOOR, END
 	}
 }
