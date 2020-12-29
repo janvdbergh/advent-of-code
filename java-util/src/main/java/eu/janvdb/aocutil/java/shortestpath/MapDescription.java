@@ -9,4 +9,8 @@ public interface MapDescription<T> {
 	List<T> getNeighbours(T point);
 
 	int getDistance(T from, T to);
+
+	default String getDescription(T point) {
+		return point.toString();
+	}
 }

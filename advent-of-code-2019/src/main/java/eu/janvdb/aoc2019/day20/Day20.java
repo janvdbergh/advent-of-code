@@ -1,19 +1,19 @@
 package eu.janvdb.aoc2019.day20;
 
-import eu.janvdb.aocutil.java.InputReader;
-import io.vavr.collection.Stream;
+import eu.janvdb.aocutil.java.FileReader;
+
+import java.util.Map;
 
 public class Day20 {
 
+	public static final int MAX_DEPTH = 50;
+
 	public static void main(String[] args) {
-		new Day20().run();
-	}
+		Maze1 maze1 = new MazeParser(FileReader.readStringFile(Day20.class, "input.txt")).parse();
+		Map<Portal, Map<Portal, Integer>> minimumDistances = maze1.getMinimumDistances();
 
-	private void run() {
-		Stream<String> input = InputReader.readInput(Day20.class.getResource("input.txt"));
-		MazeWithBypasses maze = new MazeWithBypasses(input.toList());
-
-		maze.print(System.out);
-		System.out.println(maze.shortestPathUsingBypasses());
+		Maze2 maze2 = new Maze2(minimumDistances);
+		System.out.println(maze2.getMinimumDistance1());
+		System.out.println(maze2.getMinimumDistance2());
 	}
 }

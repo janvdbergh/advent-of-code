@@ -40,7 +40,7 @@ public class ShortestPathBuilder {
 	}
 
 	private static <T> ShortestPathImpl<T> createInitialShortestPath(MapDescription<T> mapDescription, Map<T, List<T>> neighbours) {
-		ShortestPathImpl<T> shortestPath = new ShortestPathImpl<>(mapDescription.getOrigin());
+		ShortestPathImpl<T> shortestPath = new ShortestPathImpl<>(mapDescription);
 		Queue<Pair<T, T>> toDo = new LinkedList<>();
 		toDo.add(new Pair<>(mapDescription.getOrigin(), null));
 		while (!toDo.isEmpty()) {
@@ -82,18 +82,18 @@ public class ShortestPathBuilder {
 
 	private static class ShortestPathImpl<T> implements ShortestPath<T> {
 
-		private final T origin;
+		private final MapDescription<T> mapDescription;
 		private final Set<T> reachablePoints = new HashSet<>();
 		private final Map<T, Integer> distanceMap = new HashMap<>();
 		private final Map<T, T> stepMap = new HashMap<>();
 
-		private ShortestPathImpl(T origin) {
-			this.origin = origin;
+		private ShortestPathImpl(MapDescription<T> description) {
+			this.mapDescription = description;
 		}
 
 		@Override
 		public T getOrigin() {
-			return origin;
+			return mapDescription.getOrigin();
 		}
 
 		@Override
@@ -113,10 +113,10 @@ public class ShortestPathBuilder {
 
 		@Override
 		public void printRouteTo(T point) {
-			if (!point.equals(origin)) {
-				printRouteTo(stepTo(point));
-			}
-			System.out.printf("%d: %s%n", distanceTo(point), point);
+			if(point==null) return;
+
+			printRouteTo(stepTo(point));
+			System.out.printf("%d: %s%n", distanceTo(point), mapDescription.getDescription(point));
 		}
 
 		private void registerPoint(T toPoint, T fromPoint, int distance) {

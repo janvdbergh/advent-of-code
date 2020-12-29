@@ -61,4 +61,8 @@ public class Point3D {
 	public Point3D minus(Point3D other) {
 		return new Point3D(x - other.x, y - other.y, z - other.z);
 	}
+
+	public Point3D move(int dx, int dy, int dz) {
+		return new Point3D(x+dx, y+dy, z+dz);
+	}
 }
