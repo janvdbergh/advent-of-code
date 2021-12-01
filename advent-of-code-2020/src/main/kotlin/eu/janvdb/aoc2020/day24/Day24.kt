@@ -25,7 +25,7 @@ fun main() {
 
 fun parseLine(input: String): HexagonalCoordinate {
 	var result = HexagonalCoordinate.ORIGIN
-	val inputUpperCase = input.toUpperCase()
+	val inputUpperCase = input.uppercase()
 
 	var i = 0
 	while (i < input.length) {

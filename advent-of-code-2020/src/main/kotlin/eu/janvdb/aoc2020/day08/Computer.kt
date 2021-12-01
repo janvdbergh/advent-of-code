@@ -67,7 +67,7 @@ class Computer(private val program: Program) {
 var INSTRUCTION_REGEX = Regex("([A-Z]+) ([+-][0-9]+)")
 fun readProgram(fileName: String): Program {
 	val instructions = readLines(2020, fileName)
-		.map(String::toUpperCase)
+		.map(String::uppercase)
 		.map(INSTRUCTION_REGEX::matchEntire)
 		.map(::checkNotNull)
 		.map { Instruction(InstructionType.valueOf(it.groupValues[1]), it.groupValues[2].toLong()) }
