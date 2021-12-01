@@ -7,7 +7,7 @@ import eu.janvdb.aocutil.kotlin.readLines
 val INSTRUCTION_REGEX = Regex("([NSEWLRF])(\\d+)")
 
 fun main() {
-	val instructions = readLines("input12.txt").map(::parseInstruction)
+	val instructions = readLines(2020, "input12.txt").map(::parseInstruction)
 
 	var position1 = Position1(Coordinate(0, 0), Direction.E)
 	instructions.forEach { position1 = position1.step(it) }

@@ -6,7 +6,7 @@ const val PREAMBLE_SIZE = 25
 const val INPUT_FILE = "input09.txt"
 
 fun main() {
-	val numbers = readLines(INPUT_FILE).map(String::toLong)
+	val numbers = readLines(2020, INPUT_FILE).map(String::toLong)
 
 	var index = PREAMBLE_SIZE
 	while (index < numbers.size) {

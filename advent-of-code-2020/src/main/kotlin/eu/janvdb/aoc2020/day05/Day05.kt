@@ -7,7 +7,7 @@ private val REGEX_ZEROES = Regex("[FL]", RegexOption.IGNORE_CASE)
 val REGEX_ONES = Regex("[BR]", RegexOption.IGNORE_CASE)
 
 fun main() {
-	val list = readLines("input05.txt")
+	val list = readLines(2020, "input05.txt")
 			.map (::getSeatNumber)
 			.sorted()
 

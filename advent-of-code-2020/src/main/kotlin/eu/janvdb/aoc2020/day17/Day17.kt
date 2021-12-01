@@ -25,7 +25,7 @@ private fun run(numberOfDimensions: Int) {
 }
 
 fun readInitialState(fileName: String, numberOfDimensions: Int): Universe {
-	val lines = readLines(fileName)
+	val lines = readLines(2020, fileName)
 	val points = mutableSetOf<Point>()
 	for (y in lines.indices) {
 		for (x in lines[y].indices) {

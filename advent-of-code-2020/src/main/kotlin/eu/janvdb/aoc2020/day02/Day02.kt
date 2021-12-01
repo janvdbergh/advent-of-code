@@ -4,7 +4,7 @@ import eu.janvdb.aocutil.kotlin.readLines
 import kotlin.system.exitProcess
 
 fun main() {
-	val lines = readLines("input02.txt")
+	val lines = readLines(2020, "input02.txt")
 
 	// 1-13 f: ffffffffffdfzfffff
 	val regexp = Regex(pattern = "^([0-9]+)-([0-9]+) ([a-z]): ([a-z]+)$")

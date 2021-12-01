@@ -25,7 +25,7 @@ fun main() {
 
 fun readRecipes(): Recipes {
 	return Recipes(
-		readLines("input21.txt")
+		readLines(2020, "input21.txt")
 			.map { INGREDIENT_LIST_REGEX.matchEntire(it)!! }
 			.map { Recipe(it.groupValues[1].split(" ").toSet(), it.groupValues[2].split(", ").toSet()) }
 	)

@@ -4,7 +4,7 @@ import eu.janvdb.aocutil.kotlin.readLines
 import java.math.BigInteger
 
 fun main() {
-	val tokenizedLines = readLines("input18.txt").map(Tokenizer::tokenize)
+	val tokenizedLines = readLines(2020, "input18.txt").map(Tokenizer::tokenize)
 
 	fun executePart(parser: (List<Token>) -> Expression): BigInteger {
 		return tokenizedLines.asSequence()

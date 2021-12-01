@@ -6,7 +6,7 @@ const val MASK_PREFIX = "mask = "
 val MEMORY_REGEX = Regex("mem\\[(\\d+)] = (\\d+)")
 
 fun main() {
-	val fileData = readLines("input14.txt")
+	val fileData = readLines(2020, "input14.txt")
 	execute(fileData, ::Bitmap1)
 	execute(fileData, ::Bitmap2)
 }

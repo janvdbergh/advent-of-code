@@ -13,7 +13,7 @@ fun main() {
 }
 
 fun readSeating(): Seating {
-	return Seating(readLines(INPUT))
+	return Seating(readLines(2020, INPUT))
 }
 
 private fun executeSteps(seating: Seating, stepFunction: (Seating) -> Seating) {

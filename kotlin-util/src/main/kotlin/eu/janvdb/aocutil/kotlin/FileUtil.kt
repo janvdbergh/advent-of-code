@@ -2,12 +2,12 @@ package eu.janvdb.aocutil.kotlin
 
 import java.io.File
 
-fun readLines(fileName: String): List<String> {
-	return File("advent-of-code-2020/inputs/${fileName}").readLines()
+fun readLines(year: Int, fileName: String): List<String> {
+	return File("advent-of-code-$year/inputs/${fileName}").readLines()
 }
 
 fun readGroupedLines(fileName: String): List<List<String>> {
-	return groupLines(readLines(fileName))
+	return groupLines(readLines(2020, fileName))
 }
 
 private fun groupLines(lines: List<String>): List<List<String>> {

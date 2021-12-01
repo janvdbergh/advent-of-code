@@ -3,7 +3,7 @@ package eu.janvdb.aoc2020.day03
 import eu.janvdb.aocutil.kotlin.readLines
 
 fun main() {
-	val lines = readLines("input03.txt")
+	val lines = readLines(2020, "input03.txt")
 	val width = lines[0].length
 	val height = lines.size
 

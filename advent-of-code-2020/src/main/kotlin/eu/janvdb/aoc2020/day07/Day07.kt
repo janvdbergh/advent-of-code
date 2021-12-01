@@ -4,7 +4,7 @@ import eu.janvdb.aocutil.kotlin.readLines
 
 val SHINY_GOLD = "shiny gold"
 fun main() {
-	val bags = readLines("input07.txt")
+	val bags = readLines(2020, "input07.txt")
 		.map(::Bag)
 		.map { Pair(it.name, it) }
 		.toMap()

@@ -3,7 +3,7 @@ package eu.janvdb.aoc2020.day10
 import eu.janvdb.aocutil.kotlin.readLines
 
 fun main() {
-	val numbers = readLines("input10.txt").map(String::toInt)
+	val numbers = readLines(2020, "input10.txt").map(String::toInt)
 	val numbersIncludingStartAndEndValue = listOf(listOf(0, numbers.maxOrNull()!! + 3), numbers).flatten().sorted()
 
 	part1(numbersIncludingStartAndEndValue)

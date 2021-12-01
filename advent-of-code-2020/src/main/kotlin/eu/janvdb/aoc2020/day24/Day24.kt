@@ -10,7 +10,7 @@ const val NUMBER_OF_DAYS = 100
 
 fun main() {
 	val flippedCoordinates = mutableSetOf<HexagonalCoordinate>()
-	readLines("input24.txt")
+	readLines(2020, "input24.txt")
 		.map(::parseLine)
 		.forEach { if (flippedCoordinates.contains(it)) flippedCoordinates.remove(it) else flippedCoordinates.add(it) }
 
