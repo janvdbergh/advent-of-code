@@ -1,7 +1,7 @@
 package eu.janvdb.aoc2020.day12
 
-import eu.janvdb.aocutil.kotlin.Coordinate
-import eu.janvdb.aocutil.kotlin.Direction
+import eu.janvdb.aocutil.kotlin.point2d.Direction
+import eu.janvdb.aocutil.kotlin.point2d.Point2D
 import eu.janvdb.aocutil.kotlin.readLines
 
 val INSTRUCTION_REGEX = Regex("([NSEWLRF])(\\d+)")
@@ -9,11 +9,11 @@ val INSTRUCTION_REGEX = Regex("([NSEWLRF])(\\d+)")
 fun main() {
 	val instructions = readLines(2020, "input12.txt").map(::parseInstruction)
 
-	var position1 = Position1(Coordinate(0, 0), Direction.E)
+	var position1 = Position1(Point2D(0, 0), Direction.E)
 	instructions.forEach { position1 = position1.step(it) }
 	println("At $position1 with distance ${position1.coordinate.manhattanDistance()}")
 
-	var position2 = Position2(Coordinate(0, 0), Coordinate(10, 1))
+	var position2 = Position2(Point2D(0, 0), Point2D(10, 1))
 	instructions.forEach { position2 = position2.step(it) }
 	println("At $position2 with distance ${position2.coordinate.manhattanDistance()}")
 }
@@ -29,7 +29,7 @@ enum class InstructionType {
 
 data class Instruction(val instructionType: InstructionType, val amount: Int)
 
-data class Position1(val coordinate: Coordinate, val direction: Direction) {
+data class Position1(val coordinate: Point2D, val direction: Direction) {
 	fun step(instruction: Instruction): Position1 {
 		val amount = instruction.amount
 		return when (instruction.instructionType) {
@@ -44,7 +44,7 @@ data class Position1(val coordinate: Coordinate, val direction: Direction) {
 	}
 }
 
-data class Position2(val coordinate: Coordinate, val waypoint: Coordinate) {
+data class Position2(val coordinate: Point2D, val waypoint: Point2D) {
 	fun step(instruction: Instruction): Position2 {
 		val amount = instruction.amount
 		return when (instruction.instructionType) {

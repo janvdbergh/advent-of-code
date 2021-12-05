@@ -1,6 +1,6 @@
 package eu.janvdb.aoc2020.day20
 
-import eu.janvdb.aocutil.kotlin.Coordinate
+import eu.janvdb.aocutil.kotlin.point2d.Point2D
 
 open class Picture(val width: Int, val height: Int, val pixels: List<Boolean>) {
 
@@ -43,8 +43,8 @@ open class Picture(val width: Int, val height: Int, val pixels: List<Boolean>) {
 		)
 	}
 
-	fun findImageOccurrences(image: Picture): List<Pair<Picture, Coordinate>> {
-		fun findImage(transformedImage: Picture): MutableList<Pair<Picture, Coordinate>> {
+	fun findImageOccurrences(image: Picture): List<Pair<Picture, Point2D>> {
+		fun findImage(transformedImage: Picture): MutableList<Pair<Picture, Point2D>> {
 			fun hasImageAt(x: Int, y: Int): Boolean {
 				for (y1 in 0 until transformedImage.height) {
 					for (x1 in 0 until transformedImage.width) {
@@ -56,11 +56,11 @@ open class Picture(val width: Int, val height: Int, val pixels: List<Boolean>) {
 				return true
 			}
 
-			val result = mutableListOf<Pair<Picture, Coordinate>>()
+			val result = mutableListOf<Pair<Picture, Point2D>>()
 			for (y in 0 until height - transformedImage.height + 1) {
 				for (x in 0 until width - transformedImage.width + 1) {
 					if (hasImageAt(x, y)) {
-						result.add(Pair(transformedImage, Coordinate(x, y)))
+						result.add(Pair(transformedImage, Point2D(x, y)))
 					}
 				}
 			}
@@ -70,7 +70,7 @@ open class Picture(val width: Int, val height: Int, val pixels: List<Boolean>) {
 		return image.getAllTransformations().flatMap(::findImage)
 	}
 
-	fun removeImageOccurrence(image: Picture, coordinate: Coordinate): Picture {
+	fun removeImageOccurrence(image: Picture, coordinate: Point2D): Picture {
 		return Picture(width = width, height = height) { x, y ->
 			get(x, y) && !image.getSafe(x - coordinate.x, y - coordinate.y)
 		}

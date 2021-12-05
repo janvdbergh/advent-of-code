@@ -1,4 +1,4 @@
-package eu.janvdb.aocutil.kotlin
+package eu.janvdb.aocutil.kotlin.point2d
 
 enum class Direction {
 	N, S, E, W;
