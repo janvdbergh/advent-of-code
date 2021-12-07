@@ -1,6 +1,6 @@
 package eu.janvdb.aoc2021.day06
 
-import eu.janvdb.aocutil.kotlin.readLines
+import eu.janvdb.aocutil.kotlin.readCommaSeparatedNumbers
 
 const val FILENAME = "input06.txt"
 
@@ -51,8 +51,7 @@ data class State(val fishPerDay: Map<Int, Long>) {
 
 	companion object {
 		fun readFromInput(): State {
-			val input = readLines(2021, FILENAME)
-				.flatMap { it.split(",").map { it.toInt() } }
+			val input = readCommaSeparatedNumbers(2021, FILENAME)
 				.groupBy { it }
 				.map { Pair(it.key, it.value.size.toLong()) }
 				.toMap()
