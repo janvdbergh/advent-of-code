@@ -1,4 +1,4 @@
-package eu.janvdb.aoc2021.day8
+package eu.janvdb.aoc2021.day08
 
 import eu.janvdb.aocutil.kotlin.readLines
 

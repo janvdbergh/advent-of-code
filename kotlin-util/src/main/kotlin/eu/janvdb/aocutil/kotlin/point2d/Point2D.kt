@@ -20,6 +20,11 @@ data class Point2D(val x: Int, val y: Int) {
 		return Point2D(x + amount * direction.x, y + amount * direction.y)
 	}
 
+	fun left(amount: Int = 1) = Point2D(x - amount, y)
+	fun right(amount: Int = 1) = Point2D(x + amount, y)
+	fun up(amount: Int = 1) = Point2D(x, y - amount)
+	fun down(amount: Int = 1) = Point2D(x, y + amount)
+
 	fun rotateLeft(amount: Int): Point2D {
 		var actualAmount = amount % 360
 		if (actualAmount < 0) actualAmount += 360
