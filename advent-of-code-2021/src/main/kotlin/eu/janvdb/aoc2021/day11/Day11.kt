@@ -11,7 +11,7 @@ fun main() {
 }
 
 private fun part1() {
-	val board = Board.create(readNonSeparatedDigits(2021, FILENAME))
+	val board = Board.create()
 
 	var result = 0
 	for (i in 0 until NUMBER_OF_STEPS) {
@@ -23,7 +23,7 @@ private fun part1() {
 }
 
 private fun part2() {
-	val board = Board.create(readNonSeparatedDigits(2021, FILENAME))
+	val board = Board.create()
 
 	var step = 0
 	while (true) {
@@ -38,8 +38,7 @@ private fun part2() {
 
 data class Board(val width: Int, val height: Int, val digits: MutableList<Int>) {
 	fun step(): Int {
-		digits.indices.forEach { digits[it] = digits[it] + 1 }
-		val hasFlashed = digits.indices.map { false }.toMutableList()
+		val hasFlashed = MutableList(digits.size) { false }
 
 		fun getFlashed(i: Int, j: Int): Boolean {
 			if (i < 0 || i >= width || j < 0 || j >= height) return false
@@ -50,6 +49,8 @@ data class Board(val width: Int, val height: Int, val digits: MutableList<Int>) 
 			if (i < 0 || i >= width || j < 0 || j >= height) return
 			hasFlashed[i * width + j] = true
 		}
+
+		digits.indices.forEach { digits[it] = digits[it] + 1 }
 
 		var changed = true
 		while (changed) {
@@ -73,7 +74,7 @@ data class Board(val width: Int, val height: Int, val digits: MutableList<Int>) 
 		}
 
 		digits.indices.forEach { if (digits[it] >= 10) digits[it] = 0 }
-		return hasFlashed.count { it == true }
+		return hasFlashed.count { it }
 	}
 
 	fun print() {
@@ -97,10 +98,9 @@ data class Board(val width: Int, val height: Int, val digits: MutableList<Int>) 
 	}
 
 	companion object {
-		fun create(digits: List<List<Int>>) = Board(
-			digits[0].size,
-			digits.size,
-			digits.flatten().toMutableList()
-		)
+		fun create(): Board {
+			val digits = readNonSeparatedDigits(2021, FILENAME)
+			return Board(digits[0].size, digits.size, digits.flatten().toMutableList())
+		}
 	}
 }
