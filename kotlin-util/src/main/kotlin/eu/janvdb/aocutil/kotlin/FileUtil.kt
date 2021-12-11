@@ -12,6 +12,11 @@ fun readCommaSeparatedNumbers(year: Int, fileName: String): List<Int> {
 		.map { it.toInt() }
 }
 
+fun readNonSeparatedDigits(year: Int, fileName: String): List<List<Int>> {
+	return readLines(year, fileName)
+		.map { line -> line.toCharArray().map { ch -> ch - '0' }.toList() }
+}
+
 fun readGroupedLines(fileName: String): List<List<String>> {
 	return groupLines(readLines(2020, fileName))
 }

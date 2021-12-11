@@ -1,12 +1,11 @@
 package eu.janvdb.aoc2021.day03
 
-import eu.janvdb.aocutil.kotlin.readLines
+import eu.janvdb.aocutil.kotlin.readNonSeparatedDigits
 
 const val FILENAME = "input03.txt"
 
 fun main() {
-	val data = readLines(2021, FILENAME)
-		.map { line -> line.toCharArray().asList().map { it - '0' } }
+	val data = readNonSeparatedDigits(2021, FILENAME)
 	part1(data)
 	part2(data)
 }

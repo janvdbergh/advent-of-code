@@ -1,7 +1,7 @@
 package eu.janvdb.aoc2021.day09
 
 import eu.janvdb.aocutil.kotlin.point2d.Point2D
-import eu.janvdb.aocutil.kotlin.readLines
+import eu.janvdb.aocutil.kotlin.readNonSeparatedDigits
 import java.util.*
 
 private const val FILENAME = "input09.txt"
@@ -71,8 +71,7 @@ data class Cave(val heights: List<List<Int>>) {
 
 	companion object {
 		fun read(): Cave {
-			val heights = readLines(2021, FILENAME)
-				.map { line -> line.toCharArray().map { ch -> ch - '0' }.toList() }
+			val heights = readNonSeparatedDigits(2021, FILENAME)
 			return Cave(heights)
 		}
 	}
