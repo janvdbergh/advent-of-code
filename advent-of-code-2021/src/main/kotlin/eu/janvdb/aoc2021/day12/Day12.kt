@@ -10,10 +10,10 @@ fun main() {
 		.map { it.split('-').map(::Room) }
 		.flatMap { rooms -> listOf(Connection(rooms[0], rooms[1]), Connection(rooms[1], rooms[0])) }
 
-	val paths1 = enumeratePaths(Room.START, Room.END, connections, ::canVisit1)
+	val paths1 = enumeratePaths(connections, ::canVisit1)
 	println(paths1.size)
 
-	val paths2 = enumeratePaths(Room.START, Room.END, connections, ::canVisit2)
+	val paths2 = enumeratePaths(connections, ::canVisit2)
 	println(paths2.size)
 }
 
@@ -29,21 +29,16 @@ fun canVisit2(currentPath: Path, room: Room): Boolean {
 	return currentPath.containsSmallRoomTwice()
 }
 
-fun enumeratePaths(
-	start: Room,
-	end: Room,
-	connections: Collection<Connection>,
-	canVisitFunction: (Path, Room) -> Boolean
-): List<Path> {
+fun enumeratePaths(connections: Collection<Connection>, canVisitFunction: (Path, Room) -> Boolean): List<Path> {
 	val result = mutableListOf<Path>()
 	val pathsToVisit: Deque<Path> = LinkedList()
-	pathsToVisit.addFirst(Path(start))
+	pathsToVisit.addFirst(Path(Room.START))
 
 	while (!pathsToVisit.isEmpty()) {
 		val pathToVisit = pathsToVisit.removeFirst()
 
 		val endPoint = pathToVisit.last()
-		if (endPoint == end) {
+		if (endPoint == Room.END) {
 			result.add(pathToVisit)
 		} else {
 			connections.asSequence()
