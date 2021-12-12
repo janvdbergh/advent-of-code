@@ -7,39 +7,37 @@ const val FILENAME = "input12.txt"
 
 fun main() {
 	val connections = readLines(2021, FILENAME)
-		.map { it.split('-') }
-		.flatMap { listOf(Pair(it[0], it[1]), Pair(it[1], it[0])) }
+		.map { it.split('-').map(::Room) }
+		.flatMap { rooms -> listOf(Connection(rooms[0], rooms[1]), Connection(rooms[1], rooms[0])) }
 
-	val paths1 = determinePathsWithoutLoops("start", "end", connections, ::canVisit1)
+	val paths1 = enumeratePaths(Room.START, Room.END, connections, ::canVisit1)
 	println(paths1.size)
 
-	val paths2 = determinePathsWithoutLoops("start", "end", connections, ::canVisit2)
+	val paths2 = enumeratePaths(Room.START, Room.END, connections, ::canVisit2)
 	println(paths2.size)
 }
 
-fun canVisit1(currentPath: List<String>, cave: String): Boolean {
-	return cave.uppercase() == cave || !currentPath.contains(cave)
+fun canVisit1(currentPath: Path, room: Room): Boolean {
+	return room.isLarge() || !currentPath.contains(room)
 }
 
-fun canVisit2(currentPath: List<String>, cave: String): Boolean {
-	if (!currentPath.contains(cave)) return true
-	if (cave.uppercase() == cave) return true
-	if (cave=="start" || cave=="end") return false
+fun canVisit2(currentPath: Path, room: Room): Boolean {
+	if (!currentPath.contains(room)) return true
+	if (room.isLarge()) return true
+	if (room == Room.START || room == Room.END) return false
 
-	return currentPath.filter { it.lowercase()==it }
-		.groupBy { it }
-		.none { it.value.size>1 }
+	return currentPath.containsSmallRoomTwice()
 }
 
-fun determinePathsWithoutLoops(
-	start: String,
-	end: String,
-	connections: Collection<Pair<String, String>>,
-	canVisitFunction: (List<String>, String) -> Boolean
-): List<List<String>> {
-	val result = mutableListOf<List<String>>()
-	val pathsToVisit: Deque<List<String>> = LinkedList()
-	pathsToVisit.addFirst(listOf(start))
+fun enumeratePaths(
+	start: Room,
+	end: Room,
+	connections: Collection<Connection>,
+	canVisitFunction: (Path, Room) -> Boolean
+): List<Path> {
+	val result = mutableListOf<Path>()
+	val pathsToVisit: Deque<Path> = LinkedList()
+	pathsToVisit.addFirst(Path(start))
 
 	while (!pathsToVisit.isEmpty()) {
 		val pathToVisit = pathsToVisit.removeFirst()
@@ -49,14 +47,38 @@ fun determinePathsWithoutLoops(
 			result.add(pathToVisit)
 		} else {
 			connections.asSequence()
-				.filter { it.first == endPoint }
-				.filter { canVisitFunction(pathToVisit, it.second) }
+				.filter { it.from == endPoint }
+				.filter { canVisitFunction(pathToVisit, it.to) }
 				.forEach {
-					val newPath = pathToVisit + it.second
+					val newPath = pathToVisit.add(it.to)
 					pathsToVisit.addFirst(newPath)
 				}
 		}
 	}
 
 	return result
+}
+
+data class Room(val name: String) {
+	fun isLarge() = name.uppercase() == name
+	fun isSmall() = name.uppercase() != name
+
+	companion object {
+		val START = Room("start")
+		val END = Room("end")
+	}
+}
+
+data class Connection(val from: Room, val to: Room)
+
+data class Path(val rooms: List<Room>) {
+	constructor(room: Room) : this(listOf(room))
+
+	fun last(): Room = rooms.last()
+	fun add(room: Room) = Path(rooms + room)
+	fun contains(room: Room) = rooms.contains(room)
+	fun containsSmallRoomTwice() = rooms
+		.filter { it.isSmall() }
+		.groupBy { it }
+		.none { it.value.size > 1 }
 }
