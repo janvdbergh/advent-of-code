@@ -11,7 +11,7 @@ val MONSTER = Picture(
 )
 
 fun main() {
-	val tiles = readGroupedLines("input20.txt").map(::MapTile)
+	val tiles = readGroupedLines(2020, "input20.txt").map(::MapTile)
 
 	val topLeftCorner = getTopLeftCorner(tiles)
 	val fullPicture = buildPictureFromCornerDown(tiles, topLeftCorner)

@@ -3,7 +3,7 @@ package eu.janvdb.aoc2020.day19
 import eu.janvdb.aocutil.kotlin.readGroupedLines
 
 fun main() {
-	val groupedLines = readGroupedLines("input19b.txt")
+	val groupedLines = readGroupedLines(2020, "input19b.txt")
 	val rules = groupedLines[0].map(::parseRule).map { Pair(it.ruleNumber, it) }.toMap()
 	val regexes = calculateRegexes(rules)
 	val regex = Regex("^" + regexes[0] + "$")

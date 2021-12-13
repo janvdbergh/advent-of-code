@@ -10,7 +10,7 @@ fun main() {
 }
 
 private fun readGroups(): List<Group> {
-	return readGroupedLines("input06.txt").map { Group(it.map(::Answers))	}
+	return readGroupedLines(2020, "input06.txt").map { Group(it.map(::Answers))	}
 }
 
 class Answers {

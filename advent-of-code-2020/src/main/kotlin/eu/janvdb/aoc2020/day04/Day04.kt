@@ -10,7 +10,7 @@ val eyeColorRegex = Regex("^amb|blu|brn|gry|grn|hzl|oth$")
 val passportIdRegex = Regex("^\\d{9}$")
 
 fun main() {
-	val correctPassports = readGroupedLines("input04.txt").map(::processPassport)
+	val correctPassports = readGroupedLines(2020, "input04.txt").map(::processPassport)
 		.filter { it }
 		.count()
 

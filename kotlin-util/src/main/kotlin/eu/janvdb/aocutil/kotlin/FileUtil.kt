@@ -17,8 +17,8 @@ fun readNonSeparatedDigits(year: Int, fileName: String): List<List<Int>> {
 		.map { line -> line.toCharArray().map { ch -> ch - '0' }.toList() }
 }
 
-fun readGroupedLines(fileName: String): List<List<String>> {
-	return groupLines(readLines(2020, fileName))
+fun readGroupedLines(year: Int, fileName: String): List<List<String>> {
+	return groupLines(readLines(year, fileName))
 }
 
 private fun groupLines(lines: List<String>): List<List<String>> {

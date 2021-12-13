@@ -3,7 +3,7 @@ package eu.janvdb.aoc2020.day22
 import eu.janvdb.aocutil.kotlin.readGroupedLines
 
 fun main() {
-	val decks = readGroupedLines("input22.txt").map(::parseDeck)
+	val decks = readGroupedLines(2020, "input22.txt").map(::parseDeck)
 	val game = Game(decks[0], decks[1])
 	part1(game)
 	part2(game)

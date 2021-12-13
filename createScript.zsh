@@ -8,4 +8,4 @@ touch advent-of-code-$YEAR/inputs/input$DAY.txt
 touch advent-of-code-$YEAR/inputs/input$DAY-test.txt
 
 mkdir -p advent-of-code-$YEAR/src/main/kotlin/eu/janvdb/aoc$YEAR/day$DAY
-touch advent-of-code-$YEAR/src/main/kotlin/eu/janvdb/aoc$YEAR/day$DAY/Day12.kt
+touch advent-of-code-$YEAR/src/main/kotlin/eu/janvdb/aoc$YEAR/day$DAY/Day$DAY.kt

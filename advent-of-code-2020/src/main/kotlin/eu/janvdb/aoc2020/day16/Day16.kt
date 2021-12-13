@@ -11,7 +11,7 @@ fun main() {
 }
 
 private fun readInput(): Pair<List<TicketField>, List<Ticket>> {
-	val groupedLines = readGroupedLines("input16.txt")
+	val groupedLines = readGroupedLines(2020, "input16.txt")
 	assert(groupedLines.size == 3)
 	assert(groupedLines[1][0] == "your ticket:")
 	assert(groupedLines[2][0] == "nearby tickets:")

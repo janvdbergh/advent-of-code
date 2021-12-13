@@ -40,4 +40,11 @@ data class Point2D(val x: Int, val y: Int) {
 	fun rotateRight(amount: Int): Point2D {
 		return rotateLeft(360 - amount)
 	}
+
+	companion object {
+		fun createCommaSeparated(s: String): Point2D {
+			val pair = s.split(",")
+			return Point2D(pair[0].trim().toInt(), pair[1].trim().toInt())
+		}
+	}
 }
