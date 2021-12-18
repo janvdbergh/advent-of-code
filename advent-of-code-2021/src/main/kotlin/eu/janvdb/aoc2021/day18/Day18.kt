@@ -1,5 +1,7 @@
 package eu.janvdb.aoc2021.day18
 
+import eu.janvdb.aoc2021.day18.ExplodeResult.Companion.explosion
+import eu.janvdb.aoc2021.day18.ExplodeResult.Companion.noExplosion
 import eu.janvdb.aocutil.kotlin.readLines
 
 const val FILENAME = "input18.txt"
@@ -66,7 +68,7 @@ abstract class Number {
 }
 
 class NumberLeaf(val value: Int) : Number() {
-	override fun explode(level: Int) = ExplodeResult(this)
+	override fun explode(level: Int) = noExplosion(this)
 
 	override fun split(): Number {
 		return if (value > 9) NumberElement(NumberLeaf(value / 2), NumberLeaf((value + 1) / 2)) else this
@@ -86,7 +88,7 @@ class NumberElement(val left: Number, val right: Number) : Number() {
 		if (resultLeft.exploded) {
 			val newRight =
 				if (resultLeft.distributeRight != null) right.distributeLeft(resultLeft.distributeRight) else right
-			return ExplodeResult(NumberElement(resultLeft.number, newRight), resultLeft.distributeLeft, null)
+			return explosion(NumberElement(resultLeft.number, newRight), resultLeft.distributeLeft, null)
 		}
 
 		// Check right
@@ -94,16 +96,16 @@ class NumberElement(val left: Number, val right: Number) : Number() {
 		if (resultRight.exploded) {
 			val newLeft =
 				if (resultRight.distributeLeft != null) left.distributeRight(resultRight.distributeLeft) else left
-			return ExplodeResult(NumberElement(newLeft, resultRight.number), null, resultRight.distributeRight)
+			return explosion(NumberElement(newLeft, resultRight.number), null, resultRight.distributeRight)
 		}
 
 		// Only explode if level too high and numbers left and right
 		if (level > 3 && left is NumberLeaf && right is NumberLeaf) {
-			return ExplodeResult(NumberLeaf(0), left.value, right.value)
+			return explosion(NumberLeaf(0), left.value, right.value)
 		}
 
 		// No explosion
-		return ExplodeResult(this)
+		return noExplosion(this)
 	}
 
 	override fun split(): Number {
@@ -128,13 +130,12 @@ data class ExplodeResult(
 	val distributeRight: Int?,
 	val exploded: Boolean
 ) {
-	constructor(number: Number) : this(number, null, null, false)
-	constructor(number: Number, distributeLeft: Int?, distributeRight: Int?) : this(
-		number,
-		distributeLeft,
-		distributeRight,
-		true
-	)
+	companion object {
+		fun noExplosion(number: Number) = ExplodeResult(number, null, null, false)
+		fun explosion(number: Number, distributeLeft: Int?, distributeRight: Int?) = ExplodeResult(
+			number, distributeLeft, distributeRight, true
+		)
+	}
 }
 
 class TokenStream(private val s: String) {
