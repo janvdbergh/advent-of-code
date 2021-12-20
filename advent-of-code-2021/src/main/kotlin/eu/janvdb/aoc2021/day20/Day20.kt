@@ -26,6 +26,8 @@ fun main() {
 }
 
 class Pattern(val values: BitSet) {
+	val size = values.size()
+
 	fun print() {
 		for (i in 0 until values.size()) {
 			val ch = if (values[i]) '#' else '.'
@@ -65,7 +67,8 @@ class Image(val width: Int, val height: Int, val pixels: BitSet, val defaultValu
 			}
 		}
 
-		return Image(newWidth, newHeight, newPixels, pattern[0] xor defaultValue)
+		val nextDefaultValue = if (defaultValue) pattern[pattern.size -1] else pattern[0]
+		return Image(newWidth, newHeight, newPixels, nextDefaultValue)
 	}
 
 	fun print() {
