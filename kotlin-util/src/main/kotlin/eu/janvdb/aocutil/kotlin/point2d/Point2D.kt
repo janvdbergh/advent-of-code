@@ -1,6 +1,6 @@
 package eu.janvdb.aocutil.kotlin.point2d
 
-import java.lang.Math.abs
+import kotlin.math.abs
 
 data class Point2D(val x: Int, val y: Int) {
 	fun manhattanDistance(): Int {
@@ -8,7 +8,7 @@ data class Point2D(val x: Int, val y: Int) {
 	}
 
 	fun manhattanDistanceTo(other: Point2D): Int {
-		return abs(x-other.x) + abs(y-other.y)
+		return abs(x - other.x) + abs(y - other.y)
 	}
 
 	fun move(direction: Direction, amount: Int): Point2D {
