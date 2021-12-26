@@ -7,6 +7,10 @@ data class Point2D(val x: Int, val y: Int) {
 		return abs(x) + abs(y)
 	}
 
+	fun manhattanDistanceTo(other: Point2D): Int {
+		return abs(x-other.x) + abs(y-other.y)
+	}
+
 	fun move(direction: Direction, amount: Int): Point2D {
 		return when (direction) {
 			Direction.N -> Point2D(x, y + amount)
@@ -42,8 +46,6 @@ data class Point2D(val x: Int, val y: Int) {
 	}
 
 	companion object {
-		val ORIGIN = Point2D(0, 0)
-
 		fun createCommaSeparated(s: String): Point2D {
 			val pair = s.split(",")
 			return Point2D(pair[0].trim().toInt(), pair[1].trim().toInt())

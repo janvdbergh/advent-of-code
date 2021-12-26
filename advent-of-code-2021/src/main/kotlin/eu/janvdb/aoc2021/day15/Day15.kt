@@ -1,5 +1,7 @@
 package eu.janvdb.aoc2021.day15
 
+import eu.janvdb.aocutil.kotlin.Move
+import eu.janvdb.aocutil.kotlin.findShortestPath
 import eu.janvdb.aocutil.kotlin.point2d.Point2D
 import eu.janvdb.aocutil.kotlin.readNonSeparatedDigits
 
@@ -21,11 +23,12 @@ data class RiskMap(val riskLevels: List<List<Int>>, val factor: Int) {
 	val width = riskLevels[0].size
 
 	fun shortestPath(): Int {
-		return findShortestPath(Point2D(0, 0), Point2D(factor * width - 1, factor * height - 1)) {
+		val end = Point2D(factor * width - 1, factor * height - 1)
+		return findShortestPath(Point2D(0, 0), end, {
 			sequenceOf(it.right(), it.down(), it.left(), it.up())
-				.filter { (x,y) -> x>=0 && x<factor*width && y>=0 && y<factor*height }
-				.map { Pair(it, getRiskLevel(it)) }
-		}!!
+				.filter { (x, y) -> x >= 0 && x < factor * width && y >= 0 && y < factor * height }
+				.map { Move(it, getRiskLevel(it)) }
+		}, { 0 })!!
 	}
 
 	private fun getRiskLevel(point: Point2D): Int {
