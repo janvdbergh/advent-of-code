@@ -2,8 +2,10 @@ package eu.janvdb.aocutil.kotlin
 
 import java.io.File
 
-fun readLines(year: Int, fileName: String): List<String> {
-	return File("advent-of-code-$year/inputs/${fileName}").readLines()
+fun readLines(year: Int, fileName: String) = readLines("advent-of-code-$year", fileName)
+
+fun readLines(prefix: String, fileName: String): List<String> {
+	return File("$prefix/inputs/${fileName}").readLines()
 }
 
 fun readCommaSeparatedNumbers(year: Int, fileName: String): List<Int> {
