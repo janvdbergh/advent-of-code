@@ -10,33 +10,32 @@
 		<module>java-util</module>
 		<module>kotlin-util</module>
 
-		<module>advent-of-code-2015</module>
-		<module>advent-of-code-2016</module>
-		<module>advent-of-code-2017</module>
-		<module>advent-of-code-2018</module>
-		<module>advent-of-code-2019</module>
-		<module>advent-of-code-2020</module>
-		<module>advent-of-code-2021</module>
-
-		<module>coding-mystery</module>
+<!--		<module>advent-of-code-2015</module>-->
+<!--		<module>advent-of-code-2016</module>-->
+<!--		<module>advent-of-code-2017</module>-->
+<!--		<module>advent-of-code-2018</module>-->
+<!--		<module>advent-of-code-2019</module>-->
+<!--		<module>advent-of-code-2020</module>-->
+<!--		<module>advent-of-code-2021</module>-->
+		<module>advent-of-code-2022</module>
 	</modules>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.target>17</maven.compiler.target>
 		<maven.compiler.source>17</maven.compiler.source>
-		<kotlin.version>1.6.0</kotlin.version>
+		<kotlin.version>1.7.20</kotlin.version>
 
 		<commons-codec.version>1.15</commons-codec.version>
 		<commons-io.version>2.11.0</commons-io.version>
 		<commons-lang3.version>3.12.0</commons-lang3.version>
-		<json.version>20210307</json.version>
+		<json.version>20220924</json.version>
 		<vavr.version>0.10.4</vavr.version>
 		<rxjava.version>2.2.21</rxjava.version>
 		<commons-collections4.version>4.4</commons-collections4.version>
 
-		<junit-jupiter.version>5.8.2</junit-jupiter.version>
-		<assertj-core.version>3.21.0</assertj-core.version>
+		<junit-jupiter.version>5.9.1</junit-jupiter.version>
+		<assertj-core.version>3.23.1</assertj-core.version>
 	</properties>
 
 	<dependencyManagement>
