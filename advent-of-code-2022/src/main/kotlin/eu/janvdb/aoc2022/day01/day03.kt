@@ -2,8 +2,8 @@ package eu.janvdb.aoc2022.day01
 
 import eu.janvdb.aocutil.kotlin.readGroupedLines
 
-//val FILENAME = "input01-test.txt"
-val FILENAME = "input01.txt"
+//const val FILENAME = "input01-test.txt"
+const val FILENAME = "input01.txt"
 
 fun main() {
 	part1()
