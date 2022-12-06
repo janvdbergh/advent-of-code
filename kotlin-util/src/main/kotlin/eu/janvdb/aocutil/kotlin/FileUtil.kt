@@ -8,6 +8,12 @@ fun readLines(prefix: String, fileName: String): List<String> {
 	return File("$prefix/inputs/${fileName}").readLines()
 }
 
+fun readFile(year: Int, fileName: String) = readFile("advent-of-code-$year", fileName)
+
+fun readFile(prefix: String, fileName: String): String {
+	return File("$prefix/inputs/${fileName}").readText()
+}
+
 fun readCommaSeparatedNumbers(year: Int, fileName: String): List<Int> {
 	return readLines(year, fileName)
 		.flatMap { it.split(",") }
