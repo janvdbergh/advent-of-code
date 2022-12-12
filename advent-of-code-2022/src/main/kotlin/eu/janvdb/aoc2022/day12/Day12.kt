@@ -18,14 +18,14 @@ fun main() {
 class Map(val width: Int, val height: Int, val elevations: List<Int>, val start: Point2D, val end: Point2D) {
 
 	fun findShortestPath(): Int? {
-		return findShortestPath(start, end, this::neighbours) { 0 }
+		return findShortestPath(start, end, this::neighbours)
 	}
 
 	fun findShortestPathWithAnyStart(): Int {
 		return elevations.asSequence()
 			.mapIndexed() { index, elevation -> Pair(elevation, Point2D(index % width, index / width)) }
-			.filter { it.first==0 }
-			.map { findShortestPath(it.second, end, this::neighbours) { 0 } }
+			.filter { it.first == 0 }
+			.map { findShortestPath(it.second, end, this::neighbours) }
 			.filter { it != null }
 			.map { it!! }
 			.min()
