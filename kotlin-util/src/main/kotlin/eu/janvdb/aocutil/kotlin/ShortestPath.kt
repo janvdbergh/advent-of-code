@@ -30,7 +30,6 @@ fun <P> findShortestPath(
 				openList.add(Pair(point, newCost))
 				if (point == end) {
 					result = newCost
-					println("??$result")
 					openList.removeIf { it.second >= newCost }
 				}
 			}
