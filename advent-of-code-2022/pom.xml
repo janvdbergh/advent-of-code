@@ -18,6 +18,12 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.jetbrains.kotlinx</groupId>
+			<artifactId>kotlinx-coroutines-core-jvm</artifactId>
+			<version>${kotlinx-coroutines.version}</version>
+		</dependency>
+
+		<dependency>
 			<groupId>eu.janvdb.advent-of-code</groupId>
 			<artifactId>kotlin-util</artifactId>
 		</dependency>
