@@ -1,6 +1,6 @@
 package eu.janvdb.aoc2022.day16
 
-import eu.janvdb.aocutil.kotlin.Move
+import eu.janvdb.aocutil.kotlin.ShortestPathMove
 import eu.janvdb.aocutil.kotlin.findShortestPath
 
 const val START_VALVE = "AA"
@@ -41,8 +41,8 @@ data class Valves(val valvesMap: Map<String, Valve>, val distances: Map<String, 
 					.filter { it != valve1 }
 					.map { valve2 ->
 						val shortestPath = findShortestPath(valve1, valve2) { valve ->
-							valve.leadsTo.asSequence().map { Move(valvesMap[it]!!, 1) }
-						}
+							valve.leadsTo.asSequence().map { ShortestPathMove(valvesMap[it]!!, 1) }
+						}?.cost
 						Pair(valve2.name, shortestPath!!)
 					}
 					.toMap()

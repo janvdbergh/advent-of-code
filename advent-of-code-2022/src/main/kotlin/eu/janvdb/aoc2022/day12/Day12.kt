@@ -1,6 +1,6 @@
 package eu.janvdb.aoc2022.day12
 
-import eu.janvdb.aocutil.kotlin.Move
+import eu.janvdb.aocutil.kotlin.ShortestPathMove
 import eu.janvdb.aocutil.kotlin.findShortestPath
 import eu.janvdb.aocutil.kotlin.point2d.Point2D
 import eu.janvdb.aocutil.kotlin.readLines
@@ -18,7 +18,7 @@ fun main() {
 class Map(val width: Int, val height: Int, val elevations: List<Int>, val start: Point2D, val end: Point2D) {
 
 	fun findShortestPath(): Int? {
-		return findShortestPath(start, end, this::neighbours)
+		return findShortestPath(start, end, this::neighbours)?.cost
 	}
 
 	fun findShortestPathWithAnyStart(): Int {
@@ -28,15 +28,15 @@ class Map(val width: Int, val height: Int, val elevations: List<Int>, val start:
 			.map { findShortestPath(it.second, end, this::neighbours) }
 			.filter { it != null }
 			.map { it!! }
-			.min()
+			.minOf { it.cost }
 	}
 
-	private fun neighbours(point: Point2D): Sequence<Move<Point2D>> {
+	private fun neighbours(point: Point2D): Sequence<ShortestPathMove<Point2D>> {
 		val startElevation = elevationAt(point)
 		return sequenceOf(point.left(), point.up(), point.right(), point.down())
 			.filter { it.x in 0 until width && it.y in 0 until height }
 			.filter { elevationAt(it) - startElevation <= 1 }
-			.map { Move(it, 1) }
+			.map { ShortestPathMove(it, 1) }
 	}
 
 	private fun elevationAt(point: Point2D): Int {

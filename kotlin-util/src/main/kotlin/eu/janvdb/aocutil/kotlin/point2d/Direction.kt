@@ -1,7 +1,7 @@
 package eu.janvdb.aocutil.kotlin.point2d
 
-enum class Direction {
-	N, S, E, W;
+enum class Direction(val ch: Char) {
+	N('^'), S('v'), E('>'), W('<');
 
 	fun rotateLeft(amount: Int): Direction {
 		var actualAmount = amount % 360
@@ -32,5 +32,9 @@ enum class Direction {
 
 	fun rotateRight(amount: Int): Direction {
 		return rotateLeft(360 - amount)
+	}
+
+	companion object{
+		fun parse(ch: Char): Direction? = Direction.values().find { it.ch == ch }
 	}
 }

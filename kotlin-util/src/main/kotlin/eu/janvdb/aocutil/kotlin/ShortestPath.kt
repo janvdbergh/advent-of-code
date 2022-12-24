@@ -4,57 +4,72 @@ import java.util.*
 
 fun <P> findShortestPath(
 	start: P,
-	end: P,
-	neighboursFunction: (P) -> Sequence<Move<P>>,
+	endFunction: (P) -> Boolean,
+	neighboursFunction: (P) -> Sequence<ShortestPathMove<P>>,
 	expectedCostRemainingFunction: (P) -> Int
-): Int? {
-	val comparator = Comparator.comparingInt<Pair<P, Int>> {
-		val x = expectedCostRemainingFunction.invoke(it.first)
-		it.second + x
+): ShortestPathState<P>? {
+	val comparator = Comparator.comparingInt<ShortestPathState<P>> {
+		val x = expectedCostRemainingFunction.invoke(it.state)
+		it.cost + x
 	}
 	val openList = PriorityQueue(comparator)
 
-	return findShortestPath(start, end, openList, neighboursFunction)
+	return findShortestPath(start, endFunction, openList, neighboursFunction)
 }
 
 fun <P> findShortestPath(
 	start: P,
 	end: P,
-	neighboursFunction: (P) -> Sequence<Move<P>>
-): Int? {
-	val openList = LinkedList<Pair<P, Int>>()
-	return findShortestPath(start, end, openList, neighboursFunction)
+	neighboursFunction: (P) -> Sequence<ShortestPathMove<P>>
+): ShortestPathState<P>? {
+	val openList = LinkedList<ShortestPathState<P>>()
+	return findShortestPath(start, { it == end }, openList, neighboursFunction)
 }
+
+fun <P> findShortestPath(
+	start: P,
+	endFunction: (P) -> Boolean,
+	neighboursFunction: (P) -> Sequence<ShortestPathMove<P>>
+): ShortestPathState<P>? {
+	val openList = LinkedList<ShortestPathState<P>>()
+	return findShortestPath(start, endFunction, openList, neighboursFunction)
+}
+
+private const val LARGE_VALUE = Int.MAX_VALUE / 2
 
 private fun <P> findShortestPath(
 	start: P,
-	end: P,
-	pointsToVisit: Queue<Pair<P, Int>>,
-	neighboursFunction: (P) -> Sequence<Move<P>>
-): Int? {
+	endFunction: (P) -> Boolean,
+	pointsToVisit: Queue<ShortestPathState<P>>,
+	neighboursFunction: (P) -> Sequence<ShortestPathMove<P>>
+): ShortestPathState<P>? {
 	val bestMap = mutableMapOf(Pair(start, 0))
-	var result = Int.MAX_VALUE
-	pointsToVisit.add(Pair(start, 0))
+	var result: ShortestPathState<P>? = null
+	pointsToVisit.add(ShortestPathState(start, 0))
 
 	while (!pointsToVisit.isEmpty()) {
 		val (currentPoint, currentCost) = pointsToVisit.remove()
-		if (currentCost >= result) continue
+
+		if (result != null && currentCost >= result.cost) continue
 
 		neighboursFunction.invoke(currentPoint).forEach { (point, cost) ->
-			val currentBest = bestMap.getOrDefault(point, Int.MAX_VALUE / 2)
+			val currentBest = bestMap.getOrDefault(point, LARGE_VALUE)
 			val newCost = currentCost + cost
-			if (newCost < currentBest && newCost < result) {
+			if (newCost < currentBest && newCost < (result?.cost ?: (LARGE_VALUE))) {
 				bestMap[point] = newCost
-				pointsToVisit.add(Pair(point, newCost))
-				if (point == end) {
-					result = newCost
-					pointsToVisit.removeIf { it.second >= newCost }
+				val newState = ShortestPathState(point, newCost)
+				pointsToVisit.add(newState)
+				if (endFunction.invoke(point)) {
+					result = newState
+					pointsToVisit.removeIf { it.cost >= newCost }
 				}
 			}
 		}
 	}
 
-	return if (result != Int.MAX_VALUE) result else null
+	return result
 }
 
-data class Move<P>(val nextState: P, val cost: Int)
+data class ShortestPathMove<P>(val nextState: P, val cost: Int)
+
+data class ShortestPathState<P>(val state: P, val cost: Int)

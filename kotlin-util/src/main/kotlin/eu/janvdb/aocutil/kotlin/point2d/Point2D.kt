@@ -11,12 +11,24 @@ data class Point2D(val x: Int, val y: Int) {
 		return abs(x - other.x) + abs(y - other.y)
 	}
 
-	fun move(direction: Direction, amount: Int): Point2D {
+	fun move(direction: Direction, amount: Int) = when (direction) {
+		Direction.N -> Point2D(x, y - amount)
+		Direction.E -> Point2D(x + amount, y)
+		Direction.S -> Point2D(x, y + amount)
+		Direction.W -> Point2D(x - amount, y)
+	}
+
+	fun moveWithingBounds(direction: Direction, amount: Int, maxX: Int, maxY: Int): Point2D {
+		fun constrainTo(value: Int, max: Int): Int {
+			val result = value % max
+			return if (result < 0) result + max else result
+		}
+
 		return when (direction) {
-			Direction.N -> Point2D(x, y + amount)
-			Direction.E -> Point2D(x + amount, y)
-			Direction.S -> Point2D(x, y - amount)
-			Direction.W -> Point2D(x - amount, y)
+			Direction.N -> Point2D(x, constrainTo(y - amount, maxY))
+			Direction.E -> Point2D(constrainTo(x + amount, maxX), y)
+			Direction.S -> Point2D(x, constrainTo(y + amount, maxY))
+			Direction.W -> Point2D(constrainTo(x - amount, maxX), y)
 		}
 	}
 
