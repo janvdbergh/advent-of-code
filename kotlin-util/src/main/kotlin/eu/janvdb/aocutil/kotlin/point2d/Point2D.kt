@@ -44,7 +44,7 @@ abstract class AbstractPoint2D<X : AbstractPoint2D<X, T>, T : Number>(val x: T, 
 		}
 	}
 
-	fun move(direction: AbstractPoint2D<X, T>, amount: T): AbstractPoint2D<X, T> {
+	fun move(direction: AbstractPoint2D<X, T>, amount: T = one()): AbstractPoint2D<X, T> {
 		return instantiate(multiply(plus(x, amount), direction.x), multiply(plus(y, amount), direction.y))
 	}
 
