@@ -45,10 +45,11 @@ private fun <P> findShortestPath(
 ): ShortestPathState<P>? {
 	val bestMap = mutableMapOf(Pair(start, 0))
 	var result: ShortestPathState<P>? = null
-	pointsToVisit.add(ShortestPathState(start, 0))
+	pointsToVisit.add(ShortestPathState(null, start, 0))
 
 	while (!pointsToVisit.isEmpty()) {
-		val (currentPoint, currentCost) = pointsToVisit.remove()
+		val current = pointsToVisit.remove()
+		val (_, currentPoint, currentCost) = current
 
 		if (result != null && currentCost >= result.cost) continue
 
@@ -57,7 +58,7 @@ private fun <P> findShortestPath(
 			val newCost = currentCost + cost
 			if (newCost < currentBest && newCost < (result?.cost ?: (LARGE_VALUE))) {
 				bestMap[point] = newCost
-				val newState = ShortestPathState(point, newCost)
+				val newState = ShortestPathState(current, point, newCost)
 				pointsToVisit.add(newState)
 				if (endFunction.invoke(point)) {
 					result = newState
@@ -72,4 +73,10 @@ private fun <P> findShortestPath(
 
 data class ShortestPathMove<P>(val nextState: P, val cost: Int)
 
-data class ShortestPathState<P>(val state: P, val cost: Int)
+data class ShortestPathState<P>(val previous: ShortestPathState<P>?, val state: P, val cost: Int) {
+	override fun toString(): String {
+		val str = "${state} ($cost)"
+		if (previous == null) return str
+		return "$previous -> $str"
+	}
+}
