@@ -8,6 +8,10 @@ data class Point3D(val x: Int, val y: Int, val z: Int) {
 
 	fun manhattanDistance(other: Point3D) = abs(x - other.x) + abs(y - other.y) + abs(z - other.z)
 
+	fun move(dx: Int, dy: Int, dz: Int): Point3D {
+		return Point3D(x + dx, y + dy, z + dz)
+	}
+
 	companion object {
 		fun createCommaSeparated(s: String): Point3D {
 			val pair = s.split(",")
