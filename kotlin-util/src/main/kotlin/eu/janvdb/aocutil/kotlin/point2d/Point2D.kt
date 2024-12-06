@@ -23,7 +23,7 @@ abstract class AbstractPoint2D<X : AbstractPoint2D<X, T>, T : Number>(val x: T, 
 		return plus(abs(minus(x, other.x)), abs(minus(y, other.y)))
 	}
 
-	fun move(direction: Direction, amount: T) = when (direction) {
+	fun move(direction: Direction, amount: T = one()) = when (direction) {
 		Direction.N -> instantiate(x, minus(y, amount))
 		Direction.E -> instantiate(plus(x, amount), y)
 		Direction.S -> instantiate(x, plus(y, amount))

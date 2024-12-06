@@ -3,7 +3,7 @@ package eu.janvdb.aocutil.kotlin.point2d
 enum class Direction(val ch: Char) {
 	N('^'), S('v'), E('>'), W('<');
 
-	fun rotateLeft(amount: Int): Direction {
+	fun rotateLeft(amount: Int = 90): Direction {
 		var actualAmount = amount % 360
 		if (actualAmount < 0) actualAmount += 360
 		return when (amount) {
@@ -30,7 +30,7 @@ enum class Direction(val ch: Char) {
 		}
 	}
 
-	fun rotateRight(amount: Int): Direction {
+	fun rotateRight(amount: Int = 90): Direction {
 		return rotateLeft(360 - amount)
 	}
 
