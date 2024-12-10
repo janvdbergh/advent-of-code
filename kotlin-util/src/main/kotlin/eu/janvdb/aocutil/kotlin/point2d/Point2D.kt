@@ -53,6 +53,8 @@ abstract class AbstractPoint2D<X : AbstractPoint2D<X, T>, T : Number>(val x: T, 
 	fun up(amount: T = one()) = instantiate(x, minus(y, amount))
 	fun down(amount: T = one()) = instantiate(x, plus(y, amount))
 
+	fun horizontalNeighbors() = sequenceOf(up(), right(), down(), left())
+
 	fun rotateLeft(amount: Int): AbstractPoint2D<X, T> {
 		var actualAmount = amount % 360
 		if (actualAmount < 0) actualAmount += 360
