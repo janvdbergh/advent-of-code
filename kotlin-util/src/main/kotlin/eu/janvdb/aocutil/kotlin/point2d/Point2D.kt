@@ -53,6 +53,19 @@ abstract class AbstractPoint2D<X : AbstractPoint2D<X, T>, T : Number>(val x: T, 
 	fun up(amount: T = one()) = instantiate(x, minus(y, amount))
 	fun down(amount: T = one()) = instantiate(x, plus(y, amount))
 
+	fun allNeighbours():Sequence<X> {
+		return sequenceOf(
+			instantiate(minus(x, one()), minus(y, one())),
+			instantiate(minus(x, one()), y),
+			instantiate(minus(x, one()), plus(y, one())),
+			instantiate(x, minus(y, one())),
+			instantiate(x, plus(y, one())),
+			instantiate(plus(x, one()), minus(y, one())),
+			instantiate(plus(x, one()), y),
+			instantiate(plus(x, one()), plus(y, one())),
+		)
+	}
+
 	fun horizontalNeighbors() = sequenceOf(up(), right(), down(), left())
 
 	fun rotateLeft(amount: Int): AbstractPoint2D<X, T> {
