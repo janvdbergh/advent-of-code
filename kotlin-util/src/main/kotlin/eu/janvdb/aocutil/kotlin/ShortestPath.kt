@@ -57,23 +57,27 @@ private fun <P> findShortestPaths(
 	val result = mutableListOf<ShortestPathState<P>>()
 	pointsToVisit.add(ShortestPathState(null, start, 0))
 
-	fun currentResultCost() = result.firstOrNull()?.cost ?: LARGE_VALUE
+	fun getCurrentResultCost() = result.firstOrNull()?.cost ?: LARGE_VALUE
 
 	while (!pointsToVisit.isEmpty()) {
 		val current = pointsToVisit.remove()
 		val (_, currentPoint, currentCost) = current
 
-		if (currentCost >= currentResultCost()) continue
+		if (currentCost >= getCurrentResultCost()) continue
 
 		neighboursFunction.invoke(currentPoint).forEach { (point, cost) ->
 			val currentBest = bestMap.getOrDefault(point, LARGE_VALUE)
 			val newCost = currentCost + cost
-			if (newCost <= currentBest && newCost <= currentResultCost()) {
+			val currentResultCost = getCurrentResultCost()
+
+			val isBetterThanCurrentBest = (newCost < currentBest) || (collectAllResults && newCost == currentBest)
+			val isBetterThanCurrentResultCost = (newCost < currentResultCost) || (collectAllResults && newCost == currentResultCost)
+			if (isBetterThanCurrentBest && isBetterThanCurrentResultCost) {
 				bestMap[point] = newCost
 				val newState = ShortestPathState(current, point, newCost)
 				pointsToVisit.add(newState)
 				if (endFunction.invoke(point)) {
-					if (newCost < currentResultCost()) {
+					if (newCost < currentResultCost) {
 						result.clear()
 						result += newState
 					} else {
