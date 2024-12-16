@@ -14,7 +14,7 @@ fun <P> findShortestPath(
 	}
 	val openList = PriorityQueue(comparator)
 
-	return findShortestPath(start, endFunction, openList, neighboursFunction)
+	return findShortestPaths(start, endFunction, openList, neighboursFunction, false).firstOrNull()
 }
 
 fun <P> findShortestPath(
@@ -23,7 +23,7 @@ fun <P> findShortestPath(
 	neighboursFunction: (P) -> Sequence<ShortestPathMove<P>>
 ): ShortestPathState<P>? {
 	val openList = LinkedList<ShortestPathState<P>>()
-	return findShortestPath(start, { it == end }, openList, neighboursFunction)
+	return findShortestPaths(start, { it: P -> it == end }, openList, neighboursFunction, false).firstOrNull()
 }
 
 fun <P> findShortestPath(
@@ -32,36 +32,53 @@ fun <P> findShortestPath(
 	neighboursFunction: (P) -> Sequence<ShortestPathMove<P>>
 ): ShortestPathState<P>? {
 	val openList = LinkedList<ShortestPathState<P>>()
-	return findShortestPath(start, endFunction, openList, neighboursFunction)
+	return findShortestPaths(start, endFunction, openList, neighboursFunction, false).firstOrNull()
+}
+
+fun <P> findShortestPaths(
+	start: P,
+	endFunction: (P) -> Boolean,
+	neighboursFunction: (P) -> Sequence<ShortestPathMove<P>>
+): List<ShortestPathState<P>> {
+	val openList = LinkedList<ShortestPathState<P>>()
+	return findShortestPaths(start, endFunction, openList, neighboursFunction, true)
 }
 
 private const val LARGE_VALUE = Int.MAX_VALUE / 2
 
-private fun <P> findShortestPath(
+private fun <P> findShortestPaths(
 	start: P,
 	endFunction: (P) -> Boolean,
 	pointsToVisit: Queue<ShortestPathState<P>>,
-	neighboursFunction: (P) -> Sequence<ShortestPathMove<P>>
-): ShortestPathState<P>? {
+	neighboursFunction: (P) -> Sequence<ShortestPathMove<P>>,
+	collectAllResults: Boolean
+): List<ShortestPathState<P>> {
 	val bestMap = mutableMapOf(Pair(start, 0))
-	var result: ShortestPathState<P>? = null
+	val result = mutableListOf<ShortestPathState<P>>()
 	pointsToVisit.add(ShortestPathState(null, start, 0))
+
+	fun currentResultCost() = result.firstOrNull()?.cost ?: LARGE_VALUE
 
 	while (!pointsToVisit.isEmpty()) {
 		val current = pointsToVisit.remove()
 		val (_, currentPoint, currentCost) = current
 
-		if (result != null && currentCost >= result.cost) continue
+		if (currentCost >= currentResultCost()) continue
 
 		neighboursFunction.invoke(currentPoint).forEach { (point, cost) ->
 			val currentBest = bestMap.getOrDefault(point, LARGE_VALUE)
 			val newCost = currentCost + cost
-			if (newCost < currentBest && newCost < (result?.cost ?: (LARGE_VALUE))) {
+			if (newCost <= currentBest && newCost <= currentResultCost()) {
 				bestMap[point] = newCost
 				val newState = ShortestPathState(current, point, newCost)
 				pointsToVisit.add(newState)
 				if (endFunction.invoke(point)) {
-					result = newState
+					if (newCost < currentResultCost()) {
+						result.clear()
+						result += newState
+					} else {
+						if (collectAllResults) result += newState
+					}
 					pointsToVisit.removeIf { it.cost >= newCost }
 				}
 			}
@@ -74,6 +91,17 @@ private fun <P> findShortestPath(
 data class ShortestPathMove<P>(val nextState: P, val cost: Int)
 
 data class ShortestPathState<P>(val previous: ShortestPathState<P>?, val state: P, val cost: Int) {
+
+	fun getStates(): Sequence<P> {
+		return sequence {
+			var current: ShortestPathState<P>? = this@ShortestPathState
+			while(current != null) {
+				yield(current.state)
+				current = current.previous
+			}
+		}
+	}
+
 	override fun toString(): String {
 		val str = "${state} ($cost)"
 		if (previous == null) return str
