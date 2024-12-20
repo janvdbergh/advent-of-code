@@ -6,7 +6,8 @@ fun <P> findShortestPath(
 	start: P,
 	endFunction: (P) -> Boolean,
 	neighboursFunction: (P) -> Sequence<ShortestPathMove<P>>,
-	expectedCostRemainingFunction: (P) -> Int
+	expectedCostRemainingFunction: (P) -> Int,
+	maxLength: Int = Int.MAX_VALUE
 ): ShortestPathState<P>? {
 	val comparator = Comparator.comparingInt<ShortestPathState<P>> {
 		val x = expectedCostRemainingFunction.invoke(it.state)
@@ -14,34 +15,38 @@ fun <P> findShortestPath(
 	}
 	val openList = PriorityQueue(comparator)
 
-	return findShortestPaths(start, endFunction, openList, neighboursFunction, false).firstOrNull()
+	return findShortestPaths(start, endFunction, openList, neighboursFunction, false, maxLength).firstOrNull()
 }
 
 fun <P> findShortestPath(
 	start: P,
 	end: P,
-	neighboursFunction: (P) -> Sequence<ShortestPathMove<P>>
+	neighboursFunction: (P) -> Sequence<ShortestPathMove<P>>,
+	maxLength: Int = Int.MAX_VALUE
 ): ShortestPathState<P>? {
 	val openList = LinkedList<ShortestPathState<P>>()
-	return findShortestPaths(start, { it: P -> it == end }, openList, neighboursFunction, false).firstOrNull()
+	return findShortestPaths(start, { it: P -> it == end }, openList, neighboursFunction, false, maxLength).firstOrNull()
 }
 
 fun <P> findShortestPath(
 	start: P,
 	endFunction: (P) -> Boolean,
-	neighboursFunction: (P) -> Sequence<ShortestPathMove<P>>
+	neighboursFunction: (P) -> Sequence<ShortestPathMove<P>>,
+	maxLength: Int = Int.MAX_VALUE
+
 ): ShortestPathState<P>? {
 	val openList = LinkedList<ShortestPathState<P>>()
-	return findShortestPaths(start, endFunction, openList, neighboursFunction, false).firstOrNull()
+	return findShortestPaths(start, endFunction, openList, neighboursFunction, false, maxLength).firstOrNull()
 }
 
 fun <P> findShortestPaths(
 	start: P,
 	endFunction: (P) -> Boolean,
-	neighboursFunction: (P) -> Sequence<ShortestPathMove<P>>
+	neighboursFunction: (P) -> Sequence<ShortestPathMove<P>>,
+	maxLength: Int = Int.MAX_VALUE
 ): List<ShortestPathState<P>> {
 	val openList = LinkedList<ShortestPathState<P>>()
-	return findShortestPaths(start, endFunction, openList, neighboursFunction, true)
+	return findShortestPaths(start, endFunction, openList, neighboursFunction, true, maxLength)
 }
 
 private const val LARGE_VALUE = Int.MAX_VALUE / 2
@@ -51,8 +56,11 @@ private fun <P> findShortestPaths(
 	endFunction: (P) -> Boolean,
 	pointsToVisit: Queue<ShortestPathState<P>>,
 	neighboursFunction: (P) -> Sequence<ShortestPathMove<P>>,
-	collectAllResults: Boolean
+	collectAllResults: Boolean,
+	maxLength: Int
 ): List<ShortestPathState<P>> {
+	if (endFunction.invoke(start)) return listOf(ShortestPathState(null, start, 0))
+
 	val bestMap = mutableMapOf(Pair(start, 0))
 	val result = mutableListOf<ShortestPathState<P>>()
 	pointsToVisit.add(ShortestPathState(null, start, 0))
@@ -70,9 +78,10 @@ private fun <P> findShortestPaths(
 			val newCost = currentCost + cost
 			val currentResultCost = getCurrentResultCost()
 
-			val isBetterThanCurrentBest = (newCost < currentBest) || (collectAllResults && newCost == currentBest)
-			val isBetterThanCurrentResultCost = (newCost < currentResultCost) || (collectAllResults && newCost == currentResultCost)
-			if (isBetterThanCurrentBest && isBetterThanCurrentResultCost) {
+			if (newCost <= maxLength &&
+				((newCost < currentBest) || (collectAllResults && newCost == currentBest)) &&
+				((newCost < currentResultCost) || (collectAllResults && newCost == currentResultCost))
+			) {
 				bestMap[point] = newCost
 				val newState = ShortestPathState(current, point, newCost)
 				pointsToVisit.add(newState)
@@ -97,10 +106,14 @@ data class ShortestPathMove<P>(val nextState: P, val cost: Int)
 data class ShortestPathState<P>(val previous: ShortestPathState<P>?, val state: P, val cost: Int) {
 
 	fun getStates(): Sequence<P> {
+		return getStatesWithCost().map { it.first }
+	}
+
+	fun getStatesWithCost(): Sequence<Pair<P, Int>> {
 		return sequence {
 			var current: ShortestPathState<P>? = this@ShortestPathState
 			while(current != null) {
-				yield(current.state)
+				yield(Pair(current.state, current.cost))
 				current = current.previous
 			}
 		}

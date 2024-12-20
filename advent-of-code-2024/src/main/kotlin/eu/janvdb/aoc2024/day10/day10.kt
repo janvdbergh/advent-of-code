@@ -35,7 +35,7 @@ data class Map(val lines: List<List<Int>>) {
 
         while(currentValue != TRAIL_END) {
             currentPoints = currentPoints.asSequence()
-                .flatMap { point -> point.horizontalNeighbors() }
+                .flatMap { point -> point.horizontalAndVerticalNeighbors() }
                 .filter { point -> get(point) == currentValue + 1 }
                 .toSet()
             currentValue++
@@ -50,7 +50,7 @@ data class Map(val lines: List<List<Int>>) {
 
         while(currentValue != TRAIL_END) {
             currentPoints = currentPoints.asSequence()
-                .flatMap { point -> point.horizontalNeighbors() }
+                .flatMap { point -> point.horizontalAndVerticalNeighbors() }
                 .filter { point -> get(point) == currentValue + 1 }
                 .toList()
             currentValue++

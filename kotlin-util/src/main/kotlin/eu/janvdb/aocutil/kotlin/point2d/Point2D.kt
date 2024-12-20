@@ -66,7 +66,7 @@ abstract class AbstractPoint2D<X : AbstractPoint2D<X, T>, T : Number>(val x: T, 
 		)
 	}
 
-	fun horizontalNeighbors() = sequenceOf(up(), right(), down(), left())
+	fun horizontalAndVerticalNeighbors() = sequenceOf(up(), right(), down(), left())
 
 	fun rotateLeft(amount: Int): AbstractPoint2D<X, T> {
 		var actualAmount = amount % 360

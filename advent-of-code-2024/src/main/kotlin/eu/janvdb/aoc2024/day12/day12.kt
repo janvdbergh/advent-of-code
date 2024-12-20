@@ -36,7 +36,7 @@ data class Map(val height: Int, val width: Int, val characters: List<Char>) {
 
         while (toDo.isNotEmpty()) {
             val point = toDo.removeAt(0)
-            point.horizontalNeighbors()
+            point.horizontalAndVerticalNeighbors()
                 .filter { !result.contains(it) }
                 .filter { getType(it) == type }
                 .forEach { result.add(it); toDo.add(it) }
@@ -67,7 +67,7 @@ data class Map(val height: Int, val width: Int, val characters: List<Char>) {
     private fun getFences(area: Set<Point2D>): Set<Pair<Point2D, Point2D>> {
         val type = getType(area.first())!!
         return area.flatMap { point ->
-            point.horizontalNeighbors().filter { getType(it) != type }.map { Pair(point, it) }
+            point.horizontalAndVerticalNeighbors().filter { getType(it) != type }.map { Pair(point, it) }
         }.toSet()
     }
 
