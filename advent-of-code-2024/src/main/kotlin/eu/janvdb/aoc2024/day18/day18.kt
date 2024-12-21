@@ -59,13 +59,13 @@ private fun part2(coordinates: List<Point2D>) {
 }
 
 data class Memory(val coordinates: Set<Point2D>) {
-    fun shortestPath(): ShortestPathState<Point2D>? {
+    fun shortestPath(): ShortestPathState<Point2D, Any?>? {
         return findShortestPath(Point2D(0, 0), Point2D(SIZE, SIZE), ::neighbours)
     }
 
-    private fun neighbours(point: Point2D): Sequence<ShortestPathMove<Point2D>> {
+    private fun neighbours(point: Point2D): Sequence<ShortestPathMove<Point2D, Any?>> {
         return point.horizontalAndVerticalNeighbors()
             .filter { it.x in 0..SIZE && it.y in 0..SIZE && !coordinates.contains(it) }
-            .map { ShortestPathMove(it, 1) }
+            .map { ShortestPathMove(it, null, 1) }
     }
 }

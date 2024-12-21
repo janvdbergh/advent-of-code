@@ -1,8 +1,10 @@
 package eu.janvdb.aoc2024.day16
 
-import eu.janvdb.aocutil.kotlin.*
+import eu.janvdb.aocutil.kotlin.ShortestPathMove
+import eu.janvdb.aocutil.kotlin.findShortestPaths
 import eu.janvdb.aocutil.kotlin.point2d.Direction
 import eu.janvdb.aocutil.kotlin.point2d.Point2D
+import eu.janvdb.aocutil.kotlin.readLines
 
 //const val FILENAME = "input16-test.txt"
 //const val FILENAME = "input16-test2.txt"
@@ -19,7 +21,7 @@ fun main() {
 
 data class Maze(val width: Int, val height: Int, val walls: List<Boolean>, val start: Point2D, val end: Point2D) {
 
-    fun findShortestPaths() = findShortestPaths(
+    fun findShortestPaths() = findShortestPaths<PlayerStatus, Any?>(
         PlayerStatus(start, Direction.E),
         { status -> status.position == this.end },
         { status -> status.nextMoves().filter { !this.isWall(it.nextState.position) } }
@@ -41,11 +43,11 @@ data class Maze(val width: Int, val height: Int, val walls: List<Boolean>, val s
 }
 
 data class PlayerStatus(val position: Point2D, val direction: Direction) {
-    fun nextMoves(): Sequence<ShortestPathMove<PlayerStatus>> {
+    fun nextMoves(): Sequence<ShortestPathMove<PlayerStatus, Any?>> {
         return sequenceOf(
-            ShortestPathMove(PlayerStatus(position.move(direction), direction), 1),
-            ShortestPathMove(PlayerStatus(position, direction.rotateLeft()), 1000),
-            ShortestPathMove(PlayerStatus(position, direction.rotateRight()), 1000)
+            ShortestPathMove(PlayerStatus(position.move(direction), direction), null, 1),
+            ShortestPathMove(PlayerStatus(position, direction.rotateLeft()), null, 1000),
+            ShortestPathMove(PlayerStatus(position, direction.rotateRight()), null,1000)
         )
     }
 }

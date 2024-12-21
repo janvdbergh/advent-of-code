@@ -31,9 +31,9 @@ fun main() {
 
 data class RaceTrack(val walls: Set<Point2D>, val openSpaces: Set<Point2D>, val start: Point2D, val end: Point2D) {
 
-    fun findShortestPath(): ShortestPathState<Point2D>? {
+    fun findShortestPath(): ShortestPathState<Point2D, Nothing?>? {
         fun getNeighbours(point: Point2D) =
-            point.horizontalAndVerticalNeighbors().filter { it in openSpaces }.map { ShortestPathMove(it, 1) }
+            point.horizontalAndVerticalNeighbors().filter { it in openSpaces }.map { ShortestPathMove(it, null,1) }
 
         return findShortestPath(start, end, ::getNeighbours)
     }
