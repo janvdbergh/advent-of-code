@@ -22,3 +22,26 @@ object Combinations {
 }
 
 data class MinMax(val minInclusive: Int, val maxInclusive: Int)
+
+fun <T> findCombinations(elements: List<T>, numberOfItems: Int): Sequence<List<T>> {
+	val indices = Array(numberOfItems) { it }
+
+	fun nextValue() = indices.map { elements[it] }
+
+	fun moveToNext(): Boolean {
+		var current = numberOfItems - 1
+		while (current >= 0 && ++indices[current] == elements.size - numberOfItems + current + 1)
+			current--
+		if (current == -1) return false
+		for (i in current + 1 until numberOfItems) {
+			indices[i] = indices[i - 1] + 1
+		}
+		return true
+	}
+
+	return sequence {
+		do {
+			yield(nextValue())
+		} while (moveToNext())
+	}
+}
