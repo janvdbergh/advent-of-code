@@ -3,7 +3,6 @@ package eu.janvdb.aoc2025.day02
 import eu.janvdb.aocutil.kotlin.readFile
 
 const val FILENAME = "input02.txt"
-//const val FILENAME = "input02-test.txt"
 
 fun main() {
     validateAgainstRegex(Regex("([0-9]+)\\1"))
