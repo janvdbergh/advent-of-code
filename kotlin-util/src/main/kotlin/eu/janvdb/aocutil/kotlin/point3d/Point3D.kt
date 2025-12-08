@@ -8,6 +8,9 @@ data class Point3D(val x: Int, val y: Int, val z: Int) {
 
 	fun manhattanDistance(other: Point3D) = abs(x - other.x) + abs(y - other.y) + abs(z - other.z)
 
+    fun distanceSquared(other: Point3D) =
+        1L * (x - other.x) * (x - other.x) + 1L * (y - other.y) * (y - other.y) + 1L * (z - other.z) * (z - other.z)
+
 	fun move(dx: Int, dy: Int, dz: Int): Point3D {
 		return Point3D(x + dx, y + dy, z + dz)
 	}
